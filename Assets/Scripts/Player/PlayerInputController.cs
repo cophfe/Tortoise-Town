@@ -4,16 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Reads player input values. Can be evaluated by other scripts.
-/// </summary>
-public class PlayerInputController
+public class PlayerInputController : MonoBehaviour
 {
 	//input values
 	public Vector2 inputVector { get; private set; }
 	public Vector2 lastNonZeroInputVector { get; private set; }
 	bool jumpPressed;
-	public bool jumpCancelled;
+	bool jumpCancelled;
 	bool crouchPressed;
 	bool sprintPressed;
 
@@ -21,7 +18,7 @@ public class PlayerInputController
 	InputMaster controls;
 
 	#region init
-	public PlayerInputController()
+	public void Awake()
 	{
 		controls = new InputMaster();
 		//Move
@@ -35,11 +32,11 @@ public class PlayerInputController
 		controls.Player.Crouch.performed += _ => OnCrouchInput();
 	}
 
-	public void EnableInput()
+	public void OnEnable()
 	{
 		controls.Enable();
 	}
-	public void DisableInput()
+	public void OnDisable()
 	{
 		controls.Disable();
 	}

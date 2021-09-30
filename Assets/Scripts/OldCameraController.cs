@@ -109,6 +109,14 @@ public partial class OldCameraController : MonoBehaviour
 
 	void LateUpdate()
 	{
+		
+
+		float distance = Vector3.Distance(currentPivotPosition, target.position);
+		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
+	}
+
+	private void Update()
+	{
 		//smoothed camera movement
 		if (smoothCameraRotation)
 		{
@@ -148,14 +156,6 @@ public partial class OldCameraController : MonoBehaviour
 		{
 			transform.position += Vector3.up * (yOffset * yOffsetMagnitude);
 		}
-
-		
-	}
-
-	private void Update()
-	{
-		float distance = Vector3.Distance(currentPivotPosition, target.position);
-		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
 	}
 
 	//Called through unity input system
@@ -227,8 +227,6 @@ public partial class OldCameraController : MonoBehaviour
 	/// </summary>
 	void SetOrbitDistance()
 	{		
-		
-
 		//check if camera is obstructed
 
 		Collider[] c = Physics.OverlapBox(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, transform.rotation, obstructionLayers.value);
