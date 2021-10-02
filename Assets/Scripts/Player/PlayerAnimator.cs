@@ -35,9 +35,12 @@ public class PlayerAnimator : MonoBehaviour
     {
 		if (playerMotor.enabled)
 		{
+			//Update player rotation
+			playerMotor.UpdateRotation();
+			//Update animator values
 			float verticalSpeed = Vector3.Dot(playerMotor.TotalVelocity, Vector3.up);
 			//Set forward speed
-			float target = (playerMotor.TotalVelocity - verticalSpeed * Vector3.up).magnitude / playerMotor.maxSpeed;
+			float target = (Mathf.Max(playerMotor.minCollisionVelocity, (playerMotor.TotalVelocity - verticalSpeed * Vector3.up).magnitude)- playerMotor.minCollisionVelocity) / playerMotor.targetSpeed;
 			currentSpeed = Mathf.MoveTowards(currentSpeed, target, Time.deltaTime * speedChangeMultiplier * Mathf.Abs(target - currentSpeed));
 			playerAnimator.SetFloat(speedId, currentSpeed);
 			//set vertical speed

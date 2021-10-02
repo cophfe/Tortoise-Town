@@ -26,9 +26,6 @@ public class PhysicsPlayerMovement : MonoBehaviour
 	//input
 	Vector2 inputVector = Vector2.zero;
 	bool jumpPressed = false;
-	bool jumpCancelled = false;
-	bool crouchPressed = false;
-	bool sprintPressed = false;
 
 	//other
 	Vector3 inputPlaneNormal = Vector3.up;
@@ -149,21 +146,18 @@ public class PhysicsPlayerMovement : MonoBehaviour
 				jumpPressed = true;
 				break;
 			case InputActionPhase.Canceled:
-				jumpCancelled = true;
 				break;
 		}
 	}
 
 	public void OnSprintInput(InputAction.CallbackContext obj)
 	{
-		if (obj.started)
-			sprintPressed = true;
+		if (obj.started) { }
 	}
 
 	public void OnCrouchInput(InputAction.CallbackContext obj)
 	{
-		if (obj.started)
-			crouchPressed = true;
+		if (obj.started) { }
 	}
 	#endregion
 }

@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+//An input manager
+//warning: only one script can use any specific input at any one time (because button input is stored as 'has this button been pressed since last evaluated')
+//make another input controller if you want multiple scripts to read inputs at once
 public class PlayerInputController : MonoBehaviour
 {
 	//input values
 	public Vector2 inputVector { get; private set; }
-	public Vector2 lastNonZeroInputVector { get; private set; }
 	bool jumpPressed;
 	bool jumpCancelled;
 	bool crouchPressed;
@@ -17,7 +19,7 @@ public class PlayerInputController : MonoBehaviour
 	//control
 	InputMaster controls;
 
-	#region init
+	#region Unity
 	public void Awake()
 	{
 		controls = new InputMaster();
@@ -29,6 +31,7 @@ public class PlayerInputController : MonoBehaviour
 		controls.Player.Jump.canceled += _ => OnJumpCancelled();
 		//Sprint
 		controls.Player.Sprint.performed += _ => OnSprintInput();
+		//Crouch
 		controls.Player.Crouch.performed += _ => OnCrouchInput();
 	}
 
@@ -40,36 +43,35 @@ public class PlayerInputController : MonoBehaviour
 	{
 		controls.Disable();
 	}
+	public void LateUpdate()
+	{
+		jumpPressed = false;
+		jumpCancelled = false;
+		crouchPressed = false;
+		sprintPressed = false;
+	}
 	#endregion
 
 	#region Evaluate Functions
 
 	public bool EvaluateJumpPressed()
 	{
-		bool v = jumpPressed;
-		jumpPressed = false;
-		return v;
+		return jumpPressed;
 	}
 
 	public bool EvaluateCrouchPressed()
 	{
-		bool v = crouchPressed;
-		crouchPressed = false;
-		return v;
+		return crouchPressed;
 	}
 
 	public bool EvaluateSprintPressed()
 	{
-		bool v = sprintPressed;
-		sprintPressed = false;
-		return v;
+		return sprintPressed;
 	}
 
 	public bool EvaluateJumpCancelled()
 	{
-		bool v = jumpCancelled;
-		jumpCancelled = false;
-		return v;
+		return jumpCancelled;
 	}
 
 	#endregion
@@ -79,10 +81,6 @@ public class PlayerInputController : MonoBehaviour
 	void OnMoveInput(Vector2 val)
 	{
 		inputVector = val;
-		if (inputVector != Vector2.zero)
-		{
-			lastNonZeroInputVector = inputVector;
-		}
 	}
 
 	void OnJumpPressed()

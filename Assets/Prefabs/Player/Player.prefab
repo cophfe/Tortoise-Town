@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &247176374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247176375}
+  m_Layer: 8
+  m_Name: CameraFollowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &247176375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247176374}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3923705860234160774}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3923705859250531465
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,6 +306,7 @@ Transform:
   m_Children:
   - {fileID: 3923705860431465363}
   - {fileID: 7503726367103251196}
+  - {fileID: 247176375}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -291,8 +322,8 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 80
+  m_Radius: 0.22
+  m_SlopeLimit: 50
   m_StepOffset: 0.23
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -325,10 +356,10 @@ MonoBehaviour:
   jumpBufferTime: 0.1
   jumpCoyoteTime: 0.1
   airControlModifier: 0.273
-  slideSlopeLimit: 80
+  slideSlopeLimit: 50
   groundDetectionRadiusModifier: 0.8
   groundDetectionAdditionalOffset: 0.01
-  groundMagnetDistanceModifier: 0.5
+  groundMagnetDistanceModifier: 0.2
   ignoredGround:
     serializedVersion: 2
     m_Bits: 260
@@ -390,6 +421,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 4522383183111923846}
   speedChangeMultiplier: 20
+  verticalSpeedChangeMultiplier: 20
+  verticalMax: 20
+  verticalMin: 0
 --- !u!1 &3923705860431465368
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000023841858
+      value: -0.087
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -527,15 +561,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1290494
+      value: 1.2758259
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1290494
+      value: 1.2758259
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.1290494
+      value: 1.2758259
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3a5a47cf6c36edc43ad5d1bf2b87417d, type: 3}
       propertyPath: m_Name
