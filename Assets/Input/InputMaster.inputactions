@@ -22,14 +22,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "ReleaseJump",
-                    "type": "Button",
-                    "id": "d1273f0c-c822-41a4-acdd-55fe41c1d8f9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Sprint",
                     "type": "Button",
                     "id": "a9cfa3e6-b0fa-4b4a-8496-103765c267b0",
@@ -244,28 +236,6 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7b70556b-23af-4f8d-825b-822610e2e387",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Press(behavior=1)",
-                    "processors": "",
-                    "groups": "KBM",
-                    "action": "ReleaseJump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1ab14f0a-4f9b-4607-abfa-ebeea04cdd73",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "Press(behavior=1)",
-                    "processors": "",
-                    "groups": "Controller",
-                    "action": "ReleaseJump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
