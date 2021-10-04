@@ -215,7 +215,7 @@ public class PlayerMotor : MonoBehaviour
 			{
 				Debug.DrawRay(groundPosition + forwardIntoPlane, Vector3.up * yOffset, Color.green, Time.deltaTime, false);
 				Debug.DrawRay(groundPosition, forwardIntoPlane, Color.yellow, Time.deltaTime, false);
-				Debug.DrawRay(groundPosition, Vector3	.Cross(inputForward, groundNormal), Color.red, Time.deltaTime, false);
+				Debug.DrawRay(groundPosition, Vector3.Cross(inputForward, groundNormal), Color.red, Time.deltaTime, false);
 				Debug.DrawRay(groundPosition, inputForward, Color.red, Time.deltaTime, false);
 			}
 			

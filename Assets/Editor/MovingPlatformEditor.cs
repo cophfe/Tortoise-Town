@@ -235,16 +235,18 @@ public class MovingPlatformEditor : Editor
 					if (EditorGUI.EndChangeCheck())
 					{
 						tangents.GetArrayElementAtIndex(i).vector3Value = point - startPosition - controlPoint;
-						if (i >= tangents.arraySize - 1)
+
+						if (i >= tangents.arraySize - 1 && (MovingPlatform.LoopType)loopType.enumValueIndex == MovingPlatform.LoopType.LOOP)
 						{
 							RestrainPairedTangent(tangents.arraySize - 1, 0);
 						}
-						else if (i == 0)
+						else if (i == 0 && (MovingPlatform.LoopType)loopType.enumValueIndex == MovingPlatform.LoopType.LOOP)
 						{
 							RestrainPairedTangent(0, tangents.arraySize - 1);
 						}
 						else
 							RestrainPairedTangent(i);
+
 					}
 				}
 			}
