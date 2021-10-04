@@ -342,21 +342,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
   acceleration: 50
-  maxSpeed: 10
-  upDirection: {x: 0, y: 1, z: 0}
+  targetSpeed: 10
   gravity: 20
-  additionalSlideGravity: 3
-  bounciness: 0
+  maxVelocity: 1000
   airFriction: 5
   groundFriction: 50
-  slideFriction: 5
   jumpSpeed: 8
   jumpDuration: 0.3
   airJumps: 0
   jumpBufferTime: 0.1
   jumpCoyoteTime: 0.1
+  bounciness: 0
+  minCollisionVelocity: 0.1
+  ignoredCollision:
+    serializedVersion: 2
+    m_Bits: 0
+  movingPlatformLayers:
+    serializedVersion: 2
+    m_Bits: 512
   airControlModifier: 0.273
-  slideSlopeLimit: 50
   groundDetectionRadiusModifier: 0.8
   groundDetectionAdditionalOffset: 0.01
   groundMagnetDistanceModifier: 0.2
@@ -364,6 +368,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 260
   turnSpeed: 15
+  airTurnSpeed: 7
+  minPlayerRotation: 1
   onLeaveGround:
     m_PersistentCalls:
       m_Calls:

@@ -5,12 +5,18 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public bool enableCursorRestriction = false;
-	
+	public int targetFrameRate = -1;
+
     void Start()
     {
 		IsCursorRestricted = true;
 	}
-	
+
+	private void Update()
+	{
+		Application.targetFrameRate = targetFrameRate;
+	}
+
 	public bool IsCursorRestricted
 	{
 		get
