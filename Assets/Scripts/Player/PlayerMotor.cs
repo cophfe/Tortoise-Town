@@ -47,6 +47,10 @@ public class PlayerMotor : MonoBehaviour
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
 
+	//MOVING PLATFORM
+	[Tooltip("The layers that contain moving platforms")]
+	public LayerMask movingPlatformLayers;
+
 	//CONTROL
 	[Tooltip("The percent of acceleration applied to input while in the air")]
 	[Range(0, 1)] public float airControlModifier = 0.5f;
@@ -103,6 +107,7 @@ public class PlayerMotor : MonoBehaviour
 	Vector3 groundPosition;
 	Vector3 groundNormal;
 	float groundDistance;
+	Collider groundCollider;
 	bool enableGroundMagnet = false;
 	float groundMagnetOffset;
 	bool collisionGroundDetected = false;
@@ -113,6 +118,9 @@ public class PlayerMotor : MonoBehaviour
 	float collierRadius;
 	//ROLLING
 	bool isRolling = false;
+	//MOVING PLATFORM
+	Vector3 movingPlatformOffset = Vector3.zero;
+	bool onMovingPlatform = false;
 	//OTHER
 	CharacterController controller;
 	MovementState state = MovementState.FALLING;
@@ -150,6 +158,7 @@ public class PlayerMotor : MonoBehaviour
 	void Run()
 	{
 		ScanForGround();
+		CheckForMovingPlatform();
 		SetState();
 		EvaluateJump();
 		UpdateMovementVector();
@@ -159,7 +168,7 @@ public class PlayerMotor : MonoBehaviour
 
 		totalVelocity = inputVelocity + forcesVelocity;
 
-		controller.Move(totalVelocity * Time.deltaTime + groundMagnetOffset * Vector3.up);
+		controller.Move(totalVelocity * Time.deltaTime + movingPlatformOffset + groundMagnetOffset * Vector3.up);
 	}
 
 	void UpdateMovementVector()
@@ -356,6 +365,7 @@ public class PlayerMotor : MonoBehaviour
 			groundPosition = hit.point;
 			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
 			groundNormal = hit.normal;
+			groundCollider = hit.collider;
 			//if we need surface normal instead of collision normal:
 			//if (hit.collider.Raycast(new Ray(hit.point - direction, direction), out hit, 10) && Vector3.Angle(hit.normal, -direction) < 89.5f)
 			//{
@@ -371,6 +381,7 @@ public class PlayerMotor : MonoBehaviour
 		else
 		{
 			groundNormal = Vector3.up;
+			groundCollider = null;
 		}
 	}
 
@@ -426,6 +437,20 @@ public class PlayerMotor : MonoBehaviour
 
 	}
 
+	void CheckForMovingPlatform()
+	{
+		onMovingPlatform = groundCollider != null && ((1 << groundCollider.gameObject.layer) & movingPlatformLayers.value) != 0;
+		if (onMovingPlatform)
+		{
+			//using getcomponent isn't as slow as you would think
+			movingPlatformOffset = groundCollider.GetComponent<MovingPlatform>().GetPlayerOffset();
+		}
+		else
+		{
+			movingPlatformOffset = Vector3.zero;
+		}
+	}
+
 	void OnJump()
 	{
 		//set state
@@ -441,6 +466,12 @@ public class PlayerMotor : MonoBehaviour
 		{
 			inputVelocity -= Vector3.up * upVel;
 		}
+		//add force from leaving moving platform
+		//if (onMovingPlatform)
+		//{
+		//	float dt = Time.deltaTime == 0 ? Mathf.Infinity : Time.deltaTime;
+		//	forcesVelocity += movingPlatformOffset / dt;
+		//}
 	}
 
 	void OnLand()
@@ -494,7 +525,6 @@ public class PlayerMotor : MonoBehaviour
 		//if it is, the groundmagnet will be enabled, leading to better ground detection
 		//this is disabled while jumping
 		collisionGroundDetected = state != MovementState.JUMPING && Vector3.Angle(hit.normal, Vector3.up) < controller.slopeLimit && hit.point.y - transform.position.y < controller.radius;
-			
 	}
 
 	#region Properties
