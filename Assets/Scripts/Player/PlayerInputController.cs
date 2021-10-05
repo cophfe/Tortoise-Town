@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 //An input manager
-//warning: only one script can use any specific input at any one time (because button input is stored as 'has this button been pressed since last evaluated')
+//warning: only one script can use any specific input at any one time (because button input is stored as 'has this button been pressed since last evaluated' so that it works with fixed update)
 //make another input controller if you want multiple scripts to read inputs at once
 public class PlayerInputController : MonoBehaviour
 {
@@ -43,35 +43,36 @@ public class PlayerInputController : MonoBehaviour
 	{
 		controls.Disable();
 	}
-	public void LateUpdate()
-	{
-		jumpPressed = false;
-		jumpCancelled = false;
-		crouchPressed = false;
-		sprintPressed = false;
-	}
 	#endregion
 
 	#region Evaluate Functions
 
 	public bool EvaluateJumpPressed()
 	{
-		return jumpPressed;
+		bool val = jumpPressed;
+		jumpPressed = false;
+		return val;
 	}
 
 	public bool EvaluateCrouchPressed()
 	{
-		return crouchPressed;
+		bool val = crouchPressed;
+		crouchPressed = false;
+		return val;
 	}
 
 	public bool EvaluateSprintPressed()
 	{
-		return sprintPressed;
+		bool val = sprintPressed;
+		sprintPressed = false;
+		return val;
 	}
 
 	public bool EvaluateJumpCancelled()
 	{
-		return jumpCancelled;
+		bool val = jumpCancelled;
+		jumpCancelled = false;
+		return val;
 	}
 
 	#endregion
