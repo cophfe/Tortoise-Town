@@ -9,8 +9,7 @@ public class PlayerAnimator : MonoBehaviour
 	public Animator playerAnimator = null;
 	public float speedChangeMultiplier = 1;
 	public float verticalSpeedChangeMultiplier = 1;
-	public float verticalMax = 20;
-	public float verticalMin = 2;
+	public float verticalMaxMultiplier = 2.5f;
 
 	int speedId;
 	int verticalSpeedId;
@@ -40,11 +39,11 @@ public class PlayerAnimator : MonoBehaviour
 			//Update animator values
 			float verticalSpeed = Vector3.Dot(playerMotor.TotalVelocity, Vector3.up);
 			//Set forward speed
-			float target = (Mathf.Max(playerMotor.minCollisionVelocity, (playerMotor.TotalVelocity - verticalSpeed * Vector3.up).magnitude)- playerMotor.minCollisionVelocity) / playerMotor.targetSpeed;
+			float target = (Mathf.Max(playerMotor.minCollisionVelocity, Vector3.ProjectOnPlane(playerMotor.TotalVelocity, playerMotor.GroundNormal).magnitude)- playerMotor.minCollisionVelocity) / playerMotor.targetSpeed;
 			currentSpeed = Mathf.MoveTowards(currentSpeed, target, Time.deltaTime * speedChangeMultiplier * Mathf.Abs(target - currentSpeed));
 			playerAnimator.SetFloat(speedId, currentSpeed);
 			//set vertical speed
-			target = Mathf.Clamp01(-(verticalSpeed + verticalMin)/verticalMax);
+			target = Mathf.Clamp01(verticalSpeed/(playerMotor.jumpSpeed * verticalMaxMultiplier) + 0.5f);
 			currentVerticalSpeed = Mathf.MoveTowards(currentVerticalSpeed, target, Time.deltaTime * verticalSpeedChangeMultiplier * Mathf.Abs(target - currentVerticalSpeed));
 			playerAnimator.SetFloat(verticalSpeedId, currentVerticalSpeed);
 		}

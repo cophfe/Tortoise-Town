@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(10)]
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputController))]
 //Controls all player movement
 public class PlayerMotor : MonoBehaviour
@@ -46,10 +47,6 @@ public class PlayerMotor : MonoBehaviour
 	public float minCollisionVelocity = 0.1f;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
-
-	//MOVING PLATFORM
-	[Tooltip("The layers that contain moving platforms")]
-	public LayerMask movingPlatformLayers;
 
 	//CONTROL
 	[Tooltip("The percent of acceleration applied to input while in the air")]
@@ -98,7 +95,6 @@ public class PlayerMotor : MonoBehaviour
 	Vector3 targetVelocity;
 	Vector3 forcesVelocity;
 	//JUMP
-	bool jumpCancelledBuffer = false;
 	float jumpBufferTimer = 0;
 	float jumpCoyoteTimer = 0;
 	float jumpTimer = 0;
@@ -121,6 +117,7 @@ public class PlayerMotor : MonoBehaviour
 	bool isRolling = false;
 	//MOVING PLATFORM
 	MovingPlatform movingPlatform = null;
+	Vector3 movingPlatformOffset = Vector3.zero;
 	//OTHER
 	CharacterController controller;
 	MovementState state = MovementState.FALLING;
@@ -167,7 +164,7 @@ public class PlayerMotor : MonoBehaviour
 
 		totalVelocity = inputVelocity + forcesVelocity;
 
-		controller.Move(totalVelocity * Time.deltaTime + groundMagnetOffset * Vector3.up);
+		controller.Move(totalVelocity * Time.deltaTime + groundMagnetOffset * Vector3.up + movingPlatformOffset);
 	}
 
 	void UpdateMovementVector()
@@ -430,7 +427,6 @@ public class PlayerMotor : MonoBehaviour
 		}
 		else if (state != MovementState.GROUNDED && input.EvaluateJumpCancelled())
 		{
-			jumpCancelledBuffer = true;
 		}
 	}
 
@@ -449,12 +445,8 @@ public class PlayerMotor : MonoBehaviour
 		{
 			inputVelocity -= Vector3.up * upVel;
 		}
-		//add force from leaving moving platform
-		//if (onMovingPlatform)
-		//{
-		//	float dt = Time.deltaTime == 0 ? Mathf.Infinity : Time.deltaTime;
-		//	forcesVelocity += movingPlatformOffset / dt;
-		//}
+		
+		input.EvaluateJumpCancelled();
 	}
 
 	void OnLand()
@@ -471,12 +463,15 @@ public class PlayerMotor : MonoBehaviour
 			OnJump();
 			OnLeaveGround();
 			//cancel jump immediatly if player let go of button
-			if (jumpCancelledBuffer)
+			if (input.EvaluateJumpCancelled())
 			{
 				state = MovementState.RISING;
 			}
 		}
-		jumpCancelledBuffer = false;
+		else
+		{
+			input.EvaluateJumpCancelled();
+		}
 	}
 
 	void OnLeaveGround()
@@ -490,10 +485,16 @@ public class PlayerMotor : MonoBehaviour
 	{
 		if (newCollider == null)
 		{
+			//Disconnect from platform if no new collider
 			if (movingPlatform != null)
 			{
-				forcesVelocity += movingPlatform.GetVelocity();
-				transform.parent = null;
+				//calculate velocity gained from leaving
+				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+				Vector3 vel = movingPlatformOffset / time;
+				forcesVelocity += new Vector3(vel.x, 0, vel.z);
+
+				movingPlatform.SetConnectedPlayer(null);
+				movingPlatformOffset = Vector3.zero;
 				movingPlatform = null;
 			}
 		}
@@ -502,15 +503,23 @@ public class PlayerMotor : MonoBehaviour
 			var mp = newCollider.GetComponent<MovingPlatform>();
 			if (mp != null)
 			{
-				transform.parent = mp.transform;
 				movingPlatform = mp;
+				movingPlatform.SetConnectedPlayer(this);
 			}
 			else
 			{
+				//Disconnect from platform if new collider has no moving platform component
 				if (movingPlatform)
-					forcesVelocity += movingPlatform.GetVelocity();
-				transform.parent = null;
-				movingPlatform = null;
+				{
+					//calculate velocity gained from leaving
+					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+					Vector3 vel = movingPlatformOffset / time;
+					forcesVelocity += new Vector3(vel.x, 0, vel.z);
+
+					movingPlatform.SetConnectedPlayer(null);
+					movingPlatform = null;
+					movingPlatformOffset = Vector3.zero;
+				}
 			}
 		}
 	}
@@ -542,6 +551,9 @@ public class PlayerMotor : MonoBehaviour
 	#region Properties
 	public MovementState State { get { return state; } }
 	public Vector3 TotalVelocity { get { return totalVelocity; } }
+	public Vector3 TargetVelocity { get { return targetVelocity; } }
+	public Vector3 GroundNormal { get { return groundNormal; } }
+	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	#endregion
 
 	private void OnDrawGizmosSelected()

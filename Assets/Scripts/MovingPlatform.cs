@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[DefaultExecutionOrder(11)]
 public class MovingPlatform : MonoBehaviour
 {
 	public bool playOnAwake = true;
@@ -20,15 +21,13 @@ public class MovingPlatform : MonoBehaviour
 	[SerializeField, HideInInspector] Vector3 startPosition;
 	[SerializeField, HideInInspector] Vector3[] intermediates = null;
 	bool playing = false;
-	float totalLength;
-	float[] lengthPerLine;
 	float t = 0;
 	float iterateAmount = 0;
 	float stopTimer = 0;
 	Vector3 prevPosition;
 	int negMultiply = 1;
 	const int bezierCurveSteps = 10;
-	Vector3 velocity = Vector3.zero;
+	PlayerMotor player = null;
 
 	public enum LoopType
 	{
@@ -51,12 +50,11 @@ public class MovingPlatform : MonoBehaviour
 	void Start()
     {
 		startPosition = transform.position;
-		CalculateLength();
 		if (playOnAwake)
 			Play();
 	}
 	
-	void FixedUpdate()
+	void Update()
     {
 		if (!playing) return;
 
@@ -97,40 +95,15 @@ public class MovingPlatform : MonoBehaviour
 		float easedT = GetEasedT();
 		Vector3 position = GetPointOnSpline(easedT);
 
+		if (player != null)
+		{
+			Vector3 offset = transform.position - prevPosition;
+			offset.y = 0;
+			player.MovingPlatformOffset = offset;
+		}
+
 		prevPosition = transform.position;
 		transform.position = position;
-	}
-
-	void CalculateLength()
-	{
-		totalLength = 0;
-		lengthPerLine = new float[points.Length];
-
-		if (points.Length > 0)
-		{
-			if (useBezier)
-			{
-				lengthPerLine[0] = ApproximateBezierCurveLength(Vector3.zero, points[0], intermediates[0], intermediates[1]);
-				totalLength += lengthPerLine[0];
-
-				for (int i = 1; i < points.Length; i++)
-				{
-					lengthPerLine[i] = ApproximateBezierCurveLength(points[i - 1], points[i], intermediates[2*i], intermediates[2*i + 1]);
-					totalLength += lengthPerLine[i];
-				}
-			}
-			else 
-			{ 
-				lengthPerLine[0] = points[0].magnitude;
-				totalLength += lengthPerLine[0];
-
-				for (int i = 1; i < points.Length; i++)
-				{
-					lengthPerLine[i] = (points[i - 1] - points[i]).magnitude;
-					totalLength += lengthPerLine[i];
-				}
-			}
-		}
 	}
 
 	Vector3 GetPointOnSpline(float t)
@@ -186,7 +159,6 @@ public class MovingPlatform : MonoBehaviour
 	float GetCurrentSpeed(Vector3 start, Vector3 end)
 	{
 		Vector3 gradient = end - start;
-		velocity = gradient;
 		return speed / ((gradient).magnitude * points.Length);
 	}
 
@@ -197,15 +169,7 @@ public class MovingPlatform : MonoBehaviour
 		Vector3 b = startTangent + start;
 		Vector3 c = endTangent + end;
 		Vector3 gradient = t * t * (-3 * start + 9 * b - 9 * c + 3 * end) + t * (6 * start - 12 * b + 6 * c) + (-3 * start + 3 * b);
-		velocity = gradient / points.Length;
 		return speed / (gradient.magnitude * points.Length);
-	}
-
-	public Vector3 GetVelocity()
-	{
-		float time = Time.timeScale == 0 ? 0 : Time.fixedDeltaTime;
-		Vector3 vel = (transform.position - prevPosition) / time;
-		return new Vector3(vel.x, 0, vel.z);
 	}
 
 	public void Play()
@@ -229,4 +193,8 @@ public class MovingPlatform : MonoBehaviour
 		}
 	}
 
+	public void SetConnectedPlayer(PlayerMotor player)
+	{
+		this.player = player;
+	}
 }

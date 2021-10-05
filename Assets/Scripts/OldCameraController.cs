@@ -109,8 +109,6 @@ public partial class OldCameraController : MonoBehaviour
 
 	void LateUpdate()
 	{
-		
-
 		float distance = Vector3.Distance(currentPivotPosition, target.position);
 		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
 	}
