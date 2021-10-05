@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(10)]
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputController))]
 //Controls all player movement
 public class PlayerMotor : MonoBehaviour
@@ -46,10 +47,6 @@ public class PlayerMotor : MonoBehaviour
 	public float minCollisionVelocity = 0.1f;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
-
-	//MOVING PLATFORM
-	[Tooltip("The layers that contain moving platforms")]
-	public LayerMask movingPlatformLayers;
 
 	//CONTROL
 	[Tooltip("The percent of acceleration applied to input while in the air")]
@@ -95,9 +92,9 @@ public class PlayerMotor : MonoBehaviour
 	//VELOCITY
 	Vector3 totalVelocity;
 	Vector3 inputVelocity;
+	Vector3 targetVelocity;
 	Vector3 forcesVelocity;
 	//JUMP
-	bool jumpCancelledBuffer = false;
 	float jumpBufferTimer = 0;
 	float jumpCoyoteTimer = 0;
 	float jumpTimer = 0;
@@ -119,8 +116,8 @@ public class PlayerMotor : MonoBehaviour
 	//ROLLING
 	bool isRolling = false;
 	//MOVING PLATFORM
+	MovingPlatform movingPlatform = null;
 	Vector3 movingPlatformOffset = Vector3.zero;
-	bool onMovingPlatform = false;
 	//OTHER
 	CharacterController controller;
 	MovementState state = MovementState.FALLING;
@@ -158,7 +155,6 @@ public class PlayerMotor : MonoBehaviour
 	void Run()
 	{
 		ScanForGround();
-		CheckForMovingPlatform();
 		SetState();
 		EvaluateJump();
 		UpdateMovementVector();
@@ -168,14 +164,14 @@ public class PlayerMotor : MonoBehaviour
 
 		totalVelocity = inputVelocity + forcesVelocity;
 
-		controller.Move(totalVelocity * Time.deltaTime + movingPlatformOffset + groundMagnetOffset * Vector3.up);
+		controller.Move(totalVelocity * Time.deltaTime + groundMagnetOffset * Vector3.up + movingPlatformOffset);
 	}
 
 	void UpdateMovementVector()
 	{
 		if (state == MovementState.GROUNDED)
 		{
-			Vector3 targetVelocity = GetTargetVelocity();
+			targetVelocity = GetTargetVelocity();
 
 			float currentAcceleration = acceleration;
 
@@ -190,7 +186,7 @@ public class PlayerMotor : MonoBehaviour
 		{
 			if (input.inputVector != Vector2.zero)
 			{
-				Vector3 targetVelocity = GetTargetVelocity();
+				targetVelocity = GetTargetVelocity();
 
 				inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, airControlModifier * acceleration * Time.deltaTime);
 			}
@@ -201,11 +197,9 @@ public class PlayerMotor : MonoBehaviour
 
 		Vector3 GetTargetVelocity()
 		{
-			Vector3 forwardIntoPlane = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-			float angleToPlane = Vector3.SignedAngle(forwardIntoPlane, groundNormal, Vector3.Cross(forwardIntoPlane, Vector3.up)) + 90;
-			float yOffset = Mathf.Tan(Mathf.Deg2Rad * angleToPlane);
-			//offset the forward onto the ground plane and normalize it
-			inputForward = (forwardIntoPlane + Vector3.up * yOffset).normalized;
+			inputForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+			if (groundNormal.y != 0)
+				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z)/groundNormal.y;
 
 			Vector3 targetVelocity = Vector3.Cross(inputForward, groundNormal) * -input.inputVector.x
 				+ inputForward * input.inputVector.y;
@@ -213,8 +207,6 @@ public class PlayerMotor : MonoBehaviour
 
 			if (drawDebug)
 			{
-				Debug.DrawRay(groundPosition + forwardIntoPlane, Vector3.up * yOffset, Color.green, Time.deltaTime, false);
-				Debug.DrawRay(groundPosition, forwardIntoPlane, Color.yellow, Time.deltaTime, false);
 				Debug.DrawRay(groundPosition, Vector3.Cross(inputForward, groundNormal), Color.red, Time.deltaTime, false);
 				Debug.DrawRay(groundPosition, inputForward, Color.red, Time.deltaTime, false);
 			}
@@ -365,6 +357,10 @@ public class PlayerMotor : MonoBehaviour
 			groundPosition = hit.point;
 			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
 			groundNormal = hit.normal;
+			if (hit.collider != groundCollider)
+			{
+				OnChangedCollider(hit.collider);
+			}
 			groundCollider = hit.collider;
 			//if we need surface normal instead of collision normal:
 			//if (hit.collider.Raycast(new Ray(hit.point - direction, direction), out hit, 10) && Vector3.Angle(hit.normal, -direction) < 89.5f)
@@ -380,6 +376,9 @@ public class PlayerMotor : MonoBehaviour
 		}
 		else
 		{
+			if (groundCollider != null)
+				OnChangedCollider(null);
+
 			groundNormal = Vector3.up;
 			groundCollider = null;
 		}
@@ -428,26 +427,6 @@ public class PlayerMotor : MonoBehaviour
 		}
 		else if (state != MovementState.GROUNDED && input.EvaluateJumpCancelled())
 		{
-			jumpCancelledBuffer = true;
-		}
-	}
-
-	void EvaluateRoll()
-	{
-
-	}
-
-	void CheckForMovingPlatform()
-	{
-		onMovingPlatform = groundCollider != null && ((1 << groundCollider.gameObject.layer) & movingPlatformLayers.value) != 0;
-		if (onMovingPlatform)
-		{
-			//using getcomponent isn't as slow as you would think
-			movingPlatformOffset = groundCollider.GetComponent<MovingPlatform>().GetPlayerOffset();
-		}
-		else
-		{
-			movingPlatformOffset = Vector3.zero;
 		}
 	}
 
@@ -466,12 +445,8 @@ public class PlayerMotor : MonoBehaviour
 		{
 			inputVelocity -= Vector3.up * upVel;
 		}
-		//add force from leaving moving platform
-		//if (onMovingPlatform)
-		//{
-		//	float dt = Time.deltaTime == 0 ? Mathf.Infinity : Time.deltaTime;
-		//	forcesVelocity += movingPlatformOffset / dt;
-		//}
+		
+		input.EvaluateJumpCancelled();
 	}
 
 	void OnLand()
@@ -488,12 +463,15 @@ public class PlayerMotor : MonoBehaviour
 			OnJump();
 			OnLeaveGround();
 			//cancel jump immediatly if player let go of button
-			if (jumpCancelledBuffer)
+			if (input.EvaluateJumpCancelled())
 			{
 				state = MovementState.RISING;
 			}
 		}
-		jumpCancelledBuffer = false;
+		else
+		{
+			input.EvaluateJumpCancelled();
+		}
 	}
 
 	void OnLeaveGround()
@@ -501,6 +479,49 @@ public class PlayerMotor : MonoBehaviour
 		onLeaveGround.Invoke();
 		jumpCoyoteTimer = jumpCoyoteTime;
 		collisionGroundDetected = false;
+	}
+
+	void OnChangedCollider(Collider newCollider)
+	{
+		if (newCollider == null)
+		{
+			//Disconnect from platform if no new collider
+			if (movingPlatform != null)
+			{
+				//calculate velocity gained from leaving
+				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+				Vector3 vel = movingPlatformOffset / time;
+				forcesVelocity += new Vector3(vel.x, 0, vel.z);
+
+				movingPlatform.SetConnectedPlayer(null);
+				movingPlatformOffset = Vector3.zero;
+				movingPlatform = null;
+			}
+		}
+		else
+		{
+			var mp = newCollider.GetComponent<MovingPlatform>();
+			if (mp != null)
+			{
+				movingPlatform = mp;
+				movingPlatform.SetConnectedPlayer(this);
+			}
+			else
+			{
+				//Disconnect from platform if new collider has no moving platform component
+				if (movingPlatform)
+				{
+					//calculate velocity gained from leaving
+					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+					Vector3 vel = movingPlatformOffset / time;
+					forcesVelocity += new Vector3(vel.x, 0, vel.z);
+
+					movingPlatform.SetConnectedPlayer(null);
+					movingPlatform = null;
+					movingPlatformOffset = Vector3.zero;
+				}
+			}
+		}
 	}
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -530,6 +551,9 @@ public class PlayerMotor : MonoBehaviour
 	#region Properties
 	public MovementState State { get { return state; } }
 	public Vector3 TotalVelocity { get { return totalVelocity; } }
+	public Vector3 TargetVelocity { get { return targetVelocity; } }
+	public Vector3 GroundNormal { get { return groundNormal; } }
+	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	#endregion
 
 	private void OnDrawGizmosSelected()

@@ -110,21 +110,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playOnAwake: 1
+  align: 0
   useBezier: 1
-  bezierTangentMode: 2
-  stopTime: 0.5
+  automaticallyCalculateBezierCurve: 0
+  intermediateType: 2
+  stopTime: 0
   speed: 3
   points:
-  - {x: 0, y: 7.41, z: 0}
+  - {x: 0, y: 5, z: 0}
   - {x: 0, y: 0, z: 0}
-  ease: 1
+  ease: 0
   loopType: 1
   startPosition: {x: 57.78, y: -0.02, z: -12.17053}
-  tangents:
-  - {x: 4.3650475, y: -0.2881651, z: -0}
-  - {x: 4.713997, y: -0.015782833, z: 0}
-  - {x: -4.713997, y: 0.015782833, z: -0}
-  - {x: -4.3650475, y: 0.2881651, z: 0}
+  intermediates:
+  - {x: 3.1415024, y: 0, z: 0}
+  - {x: 3.1415, y: 0, z: 0}
+  - {x: -3.1415, y: -0, z: -0}
+  - {x: -3.1415024, y: -0, z: -0}
 --- !u!54 &9195232744726134351
 Rigidbody:
   m_ObjectHideFlags: 0
