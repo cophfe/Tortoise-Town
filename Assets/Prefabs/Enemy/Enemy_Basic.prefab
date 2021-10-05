@@ -117,6 +117,9 @@ MonoBehaviour:
   attackRate: 1
   projectile: {fileID: 5073684151949125092, guid: bba4b256efbe56648a5e652aeb8234f8, type: 3}
   firepoint: {fileID: 3188728813850181373}
+  dontIgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 823
   enemyViewDistanceColour: {r: 0.2825509, g: 0.9622642, b: 0.15886435, a: 0.40392157}
   enemyAttackingDistanceColour: {r: 1, g: 0, b: 0.09465361, a: 0.43137255}
   canAttack: 0
