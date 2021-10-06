@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerAnimator)), RequireComponent(typeof(PlayerInputController)), RequireComponent(typeof(PlayerHealth))]
 public class PlayerController : MonoBehaviour
 {
+	[SerializeField] OldCameraController cameraController = null;
 	[SerializeField] float rollColliderRadius = 0.5f;
 	[SerializeField] Vector3 additionalRollColliderOffset;
 	[SerializeField] Vector3 rollCameraOffset;
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
 	public PlayerInputController Input { get; private set; }
 	public CharacterController CharacterController { get; private set; }
 	public PlayerHealth Health { get; private set; }
-	public OldCameraController MainCamera { get; private set; }
+	public OldCameraController MainCamera { get { return cameraController; } private set { cameraController = value; } }
 	public Transform RotateChild { get { return rotatableChild; } }
 	public float InitialColliderHeight { get; private set; }
 	public float InitialColliderRadius { get; private set; }
@@ -36,8 +37,12 @@ public class PlayerController : MonoBehaviour
 		Input = GetComponent<PlayerInputController>();
 		CharacterController = GetComponent<CharacterController>();
 		Health = GetComponent<PlayerHealth>();
-		MainCamera = FindObjectOfType<OldCameraController>();
+		
 
+		if (MainCamera == null)
+		{
+			MainCamera = FindObjectOfType<OldCameraController>();
+		}
 		if (rotatableChild == null)
 		{
 			if (transform.childCount > 0)

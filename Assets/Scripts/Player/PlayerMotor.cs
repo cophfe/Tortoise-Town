@@ -92,13 +92,16 @@ public class PlayerMotor : MonoBehaviour
 	public float rollAccelerationModifier = 1;
 	[Tooltip("The speed of turning while rolling")]
 	public float rollTurnSpeed = 2;
-	[Tooltip("The speed of turning while rolling"), Min(0)]
-	public float ballAlignSpeed = 180;
+	[Tooltip("The speed at which the player rotation aligns to the movement direction while rolling"), Min(0)]
+	public float ballAlignSpeed = 1;
 	[Tooltip("The cooldown time after rolling before the player can switch out of roll")]
-	public float rollCooldownTime = 1;
+	public float rollCooldownTime = 0;
 	[Min(0)]
-	public float leaveRollHopSpeed = 1;
-	[Range(0, 2)] public float rollFriction = 0.5f;
+	[Tooltip("The amount of upwards force applied to the player when leaving roll")]
+	public float leaveRollHopSpeed = 0;
+	[Tooltip("The amount of friction applied per second while rolling (proportional to total velocity)")]
+	[Range(0, 3)] public float rollFriction = 0.5f;
+	[Tooltip("The speed at which the ball no longer attaches to the floor")]
 	public float ignoreGroundMagnetSpeed = 9;
 
 	//EVENTS
@@ -107,7 +110,7 @@ public class PlayerMotor : MonoBehaviour
 	public UnityEvent onLeaveGround;
 	[Tooltip("The event called when entering the grounded state")]
 	public UnityEvent onEnterGround;
-	[Tooltip("The event called when entering the grounded state")]
+	[Tooltip("The event called when entering or leaving a roll")]
 	public UnityEvent onChangeRoll;
 
 	//OTHER
@@ -119,8 +122,6 @@ public class PlayerMotor : MonoBehaviour
 	//~~~~~~~~~PRIVATE~~~~~~~~~
 	//CONTROLLER
 	PlayerController playerController;
-	//CAMERA
-	Transform cameraTransform;
 	//VELOCITY
 	Vector3 totalVelocity;
 	Vector3 inputVelocity;
@@ -165,7 +166,6 @@ public class PlayerMotor : MonoBehaviour
 	private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
-		cameraTransform = playerController.MainCamera.transform;
 	}
 
 	private void Update()
@@ -260,7 +260,7 @@ public class PlayerMotor : MonoBehaviour
 
 		Vector3 GetTargetVelocity()
 		{
-			inputForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+			inputForward = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up).normalized;
 			if (groundNormal.y != 0)
 				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z)/groundNormal.y;
 
@@ -329,7 +329,7 @@ public class PlayerMotor : MonoBehaviour
 				//align to input velocity direction
 				Quaternion aligned = Quaternion.FromToRotation(playerController.RotateChild.right, axis) * targetRotation;
 				float alignedAngle = Mathf.Acos(Mathf.Clamp(Vector3.Dot(playerController.RotateChild.up, axis), -1f, 1f)) * Mathf.Rad2Deg;
-				float frameMaxAlignedAngle = ballAlignSpeed * distance;
+				float frameMaxAlignedAngle = ballAlignSpeed * distance * Time.deltaTime;
 				if (alignedAngle <= frameMaxAlignedAngle)
 					targetRotation = aligned;
 				else
@@ -584,7 +584,7 @@ public class PlayerMotor : MonoBehaviour
 			forcesVelocity += Vector3.up * leaveRollHopSpeed;
 			OnLeaveGround();
 		}
-		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(inputVelocity, Vector3.up), Vector3.up);
+		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastNonZeroInputVelocity, Vector3.up), Vector3.up);
 	}
 
 	void OnJump()
@@ -710,7 +710,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 TotalVelocity { get { return totalVelocity; } }
 	public Vector3 TargetVelocity { get { return targetVelocity; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
+	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { playerController.CharacterController.Move(value); } }
 	public bool IsRolling { get { return isRolling; } }
 	#endregion
 
