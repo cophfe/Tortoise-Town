@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955483435082794918}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.373, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4484879854338147594}
@@ -91,7 +91,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3923705860234160775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.540375, y: -0.10883832, z: -10.590189}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4770109565418618105}
@@ -110,13 +110,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.8
+  m_Height: 1.5
   m_Radius: 0.22
   m_SlopeLimit: 60
-  m_StepOffset: 0.23
-  m_SkinWidth: 0.08
+  m_StepOffset: 0.1
+  m_SkinWidth: 0.15
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: -0.6, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &3923705860234160769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 50
-  targetSpeed: 8
+  targetSpeed: 10
   gravity: 20
   maxVelocity: 1000
   airFriction: 5
@@ -154,17 +154,17 @@ MonoBehaviour:
     m_Bits: 260
   turnSpeed: 15
   airTurnSpeed: 7
-  minPlayerRotation: 1
-  fixRotationSpeed: 10
+  minPlayerRotation: 0.3
+  fixRotationSpeed: 90
   rollRadiusModifier: 2
-  rollTargetSpeedModifier: 1.5
+  rollTargetSpeedModifier: 1.2
   rollAccelerationModifier: 0.5
   rollTurnSpeed: 2
-  ballAlignSpeed: 1
+  ballAlignSpeed: 180
   rollCooldownTime: 0
-  leaveRollHopSpeed: 0
+  leaveRollHopSpeed: 3
   rollFriction: 1
-  ignoreGroundMagnetSpeed: 5555
+  ignoreGroundMagnetSpeed: 555
   onLeaveGround:
     m_PersistentCalls:
       m_Calls: []
@@ -217,9 +217,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dbb9c6c52e3a1b4dbfa722d07dfcb53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rollColliderRadius: 0.3
+  cameraController: {fileID: 0}
+  rollColliderRadius: 0.25
   additionalRollColliderOffset: {x: 0, y: 0.17, z: 0}
-  rollCameraOffset: {x: 0, y: 0, z: 0}
+  rollCameraOffset: {x: 0, y: 0.125, z: 0}
   rotatableChild: {fileID: 0}
 --- !u!114 &2165040520005962904
 MonoBehaviour:
@@ -247,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6276d20bb9e5cba448c5e90f3c050e6a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.377
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6276d20bb9e5cba448c5e90f3c050e6a, type: 3}
       propertyPath: m_LocalPosition.z

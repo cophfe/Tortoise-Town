@@ -89,7 +89,8 @@ public class MovingPlatform : MonoBehaviour
 			stopTimer = stopTime;
 			if (loopType == LoopType.ONCE) Pause();
 			prevPosition = transform.position;
-			return;
+			if (loopType != LoopType.LOOP)
+				return;
 		}
 		
 		float easedT = GetEasedT();

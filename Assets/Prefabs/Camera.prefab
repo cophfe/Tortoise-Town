@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  maxFollowDistance: 8
+  targetOffset: {x: 0, y: 0, z: 0}
+  maxFollowDistance: 5
   obstructionLayers:
     serializedVersion: 2
     m_Bits: 1
@@ -58,7 +59,7 @@ MonoBehaviour:
   maximumUpRotation: 87
   minimumUpRotation: 0
   androidInputScreenPercentage: 0.7
-  followSpeed: 10
+  followSpeed: 20
   cameraAvoidFloorRotationPower: 0
   cameraAvoidFloorRotationAngleRange: 5
   zoomOutSpeed: 2
