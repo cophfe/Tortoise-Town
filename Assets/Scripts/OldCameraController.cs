@@ -13,6 +13,8 @@ public partial class OldCameraController : MonoBehaviour
 	[Header("Behaviour")]
 	[Tooltip("The target to orbit around.")]
 	public Transform target;
+	[Tooltip("The offset from the target in world space.")]
+	public Vector3 targetOffset;
 	[Tooltip("The maximum distance the camera can be away from the target.")]
 	public float maxFollowDistance = 10;
 	[Tooltip("The layers that can obstruct the camera.")]
@@ -109,8 +111,8 @@ public partial class OldCameraController : MonoBehaviour
 
 	void LateUpdate()
 	{
-		float distance = Vector3.Distance(currentPivotPosition, target.position);
-		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position, Time.deltaTime * followSpeed * distance);
+		float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
+		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
 	}
 
 	private void Update()
@@ -148,7 +150,6 @@ public partial class OldCameraController : MonoBehaviour
 		if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, Vector3.up, out RaycastHit hit, transform.rotation, yOffset * yOffsetMagnitude, obstructionLayers.value))
 		{
 			transform.position += Vector3.up * hit.distance;
-
 		}
 		else
 		{
