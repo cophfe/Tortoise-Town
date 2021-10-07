@@ -85,11 +85,13 @@ public class MovingPlatform : MonoBehaviour
 		}
 		else if (t >= 1)
 		{
-			t = 0;
 			stopTimer = stopTime;
-			if (loopType == LoopType.ONCE) Pause();
 			prevPosition = transform.position;
-			if (loopType != LoopType.LOOP)
+
+			if (loopType == LoopType.ONCE) Pause();
+			if (loopType == LoopType.LOOP)
+				t -= 1;
+			else
 				return;
 		}
 		
