@@ -54,7 +54,7 @@ public class MovingPlatform : MonoBehaviour
 			Play();
 	}
 	
-	void Update()
+	void FixedUpdate()
     {
 		if (!playing) return;
 
@@ -92,7 +92,10 @@ public class MovingPlatform : MonoBehaviour
 			if (loopType == LoopType.LOOP)
 				t -= 1;
 			else
+			{
+				t = 0;
 				return;
+			}
 		}
 		
 		float easedT = GetEasedT();
