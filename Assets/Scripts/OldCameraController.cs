@@ -32,8 +32,6 @@ public partial class OldCameraController : MonoBehaviour
 	[Range(-90, 90)] public float maximumUpRotation = 87;
 	[Tooltip("Up rotation cannot be less than this value.")]
 	[Range(-90, 90)] public float minimumUpRotation = -87;
-	[Tooltip("The percent of the screen the camera takes input from on android")]
-	[Range(0,1)] public float androidInputScreenPercentage = 0.7f;
 
 	[Header("Movement")]
 	[Space(5)]
@@ -55,9 +53,8 @@ public partial class OldCameraController : MonoBehaviour
 	public float yOffsetChangeSpeed = 1;
 	[Tooltip("If rotation should be smoothed.")]
 	public bool smoothCameraRotation = false;
-	
 	[Tooltip("Camera orbit speed.")]
-	[HideInInspector] public float rotateSpeed = 1;
+	public float rotateSpeed = 1;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	Camera cam;
@@ -109,7 +106,7 @@ public partial class OldCameraController : MonoBehaviour
 		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
 	}
 
-	void LateUpdate()
+	void FixedUpdate()
 	{
 		float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
 		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);

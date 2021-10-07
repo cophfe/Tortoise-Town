@@ -54,7 +54,7 @@ public class MovingPlatform : MonoBehaviour
 			Play();
 	}
 	
-	void Update()
+	void FixedUpdate()
     {
 		if (!playing) return;
 
@@ -85,12 +85,17 @@ public class MovingPlatform : MonoBehaviour
 		}
 		else if (t >= 1)
 		{
-			t = 0;
 			stopTimer = stopTime;
-			if (loopType == LoopType.ONCE) Pause();
 			prevPosition = transform.position;
-			if (loopType != LoopType.LOOP)
+
+			if (loopType == LoopType.ONCE) Pause();
+			if (loopType == LoopType.LOOP)
+				t -= 1;
+			else
+			{
+				t = 0;
 				return;
+			}
 		}
 		
 		float easedT = GetEasedT();

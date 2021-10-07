@@ -46,8 +46,6 @@ public class PlayerMotor : MonoBehaviour
 
 	//COLLISION
 	[Header("Collision Response")]
-	[Tooltip("The amount the player's input bounces from a collision.")]
-	[Range(0, 1)] public float bounciness = 0;
 	[Tooltip("The minimum velocity into a collision before the input velocity is modified")]
 	public float minCollisionVelocity = 0.1f;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
@@ -170,19 +168,17 @@ public class PlayerMotor : MonoBehaviour
 
 	private void Update()
 	{
-		Run();
-
-		//Set all timers
-		//I really need a better system for this
-		jumpTimer -= Time.deltaTime;
-		jumpCoyoteTimer -= Time.deltaTime;
-		jumpBufferTimer -= Time.deltaTime;
-		rollCooldownTimer -= Time.deltaTime;
+		UpdateRotation();
 
 		if (drawDebug && isGrounded)
 		{
 			Debug.DrawRay(groundPosition, groundNormal, Color.blue, Time.deltaTime);
 		}
+	}
+
+	private void FixedUpdate()
+	{
+		Run();
 	}
 
 	void Run()
@@ -197,10 +193,16 @@ public class PlayerMotor : MonoBehaviour
 		enableGroundMagnet = state == MovementState.GROUNDED || collisionGroundDetected;
 
 		totalVelocity = inputVelocity + forcesVelocity;
-		UpdateRotation();
-
+		
+		//move player
 		playerController.CharacterController.Move(totalVelocity * Time.deltaTime 
 			+ groundMagnetOffset * Vector3.up + movingPlatformOffset);
+
+		//Set all timers
+		jumpTimer -= Time.deltaTime;
+		jumpCoyoteTimer -= Time.deltaTime;
+		jumpBufferTimer -= Time.deltaTime;
+		rollCooldownTimer -= Time.deltaTime;
 	}
 
 	void UpdateMovementVector()
@@ -213,11 +215,17 @@ public class PlayerMotor : MonoBehaviour
 			if (state == MovementState.GROUNDED)
 			{
 				targetVelocity = GetTargetVelocity();
-				inputVelocity += Vector3.ClampMagnitude(targetVelocity, acceleration * rollAccelerationModifier * Time.deltaTime);
+				if (playerController.Input.inputVector != Vector2.zero)
+				{
+					inputVelocity += Vector3.ClampMagnitude(targetVelocity, acceleration * rollAccelerationModifier * Time.deltaTime);
+				}
+				//add friction
 				inputVelocity = inputVelocity + -Mathf.Clamp(Time.deltaTime * rollFriction, 0, 1) * inputVelocity;//Vector3.MoveTowards(Vector3.ProjectOnPlane(forcesVelocity, Vector3.up), Vector3.zero, groundFriction * Time.deltaTime);
-				inputVelocity = Vector3.ClampMagnitude(inputVelocity, targetSpeed * rollTargetSpeedModifier);
+				//remove vertical force to prevent unwanted accumulation
 				float verticalForce = Vector3.Dot(groundNormal, inputVelocity);
 				inputVelocity = Vector3.ProjectOnPlane(inputVelocity, groundNormal) + groundNormal * Mathf.MoveTowards(verticalForce, 0, acceleration * Time.deltaTime);
+				//clamp to target speed
+				inputVelocity = Vector3.ClampMagnitude(inputVelocity, targetSpeed * rollTargetSpeedModifier);
 				//LINEAR FRICTION
 				//inputVelocity -= Vector3.MoveTowards(Vector3.ProjectOnPlane(inputVelocity, groundNormal), Vector3.zero, groundFriction * Time.deltaTime *0.0000001f);
 
@@ -225,7 +233,14 @@ public class PlayerMotor : MonoBehaviour
 				if (Vector3.Dot(groundMagnetOffset * Vector3.up, groundNormal) < 0 && Vector3.ProjectOnPlane(inputVelocity, groundNormal).sqrMagnitude > ignoreGroundMagnetSpeed * ignoreGroundMagnetSpeed)
 				{
 					groundMagnetOffset = 0;
+					state = totalVelocity.y > 0 ? MovementState.RISING : MovementState.FALLING;
 				}
+			}
+			else
+			{
+				targetVelocity = Vector3.zero;
+				//FRICTION
+				inputVelocity = Vector3.MoveTowards(inputVelocity, Vector3.zero, airFriction * Time.deltaTime);
 			}
 
 		}
@@ -280,16 +295,18 @@ public class PlayerMotor : MonoBehaviour
 
 	void UpdateForcesVector()
 	{
-		Vector3 frictionApplied;
+		Vector3 planeVelocity = Vector3.ProjectOnPlane(forcesVelocity, Vector3.up);
+
 		if (state == MovementState.GROUNDED)
 		{
 			//GRAVITY
 			if (Vector3.Dot(forcesVelocity, Vector3.up) < 0)
 			{
-				forcesVelocity = Vector3.ProjectOnPlane(forcesVelocity, Vector3.up);
+				forcesVelocity = planeVelocity;
 			}
 
-			frictionApplied = Vector3.MoveTowards(Vector3.ProjectOnPlane(forcesVelocity, Vector3.up), Vector3.zero, groundFriction * Time.deltaTime);
+			//FRICTION
+			planeVelocity = Vector3.MoveTowards(planeVelocity, Vector3.zero, groundFriction * Time.deltaTime);
 		}
 		else
 		{
@@ -297,12 +314,12 @@ public class PlayerMotor : MonoBehaviour
 			forcesVelocity -= Vector3.up * (gravity * Time.deltaTime);
 
 			//FRICTION
-			frictionApplied = Vector3.MoveTowards(Vector3.ProjectOnPlane(forcesVelocity, Vector3.up), Vector3.zero, airFriction * Time.deltaTime);
+			planeVelocity = Vector3.MoveTowards(planeVelocity, Vector3.zero, airFriction * Time.deltaTime);
 		}
 
 		//apply friction
 		float up = Vector3.Dot(forcesVelocity, Vector3.up);
-		forcesVelocity = frictionApplied + up * Vector3.up;
+		forcesVelocity = planeVelocity + up * Vector3.up;
 
 		//clamp magnitude
 		Vector3.ClampMagnitude(forcesVelocity, maxVelocity);
@@ -312,8 +329,6 @@ public class PlayerMotor : MonoBehaviour
 	{
 		float turnSpeed;
 
-		//rolling rotation is from this resource:
-		//https://catlikecoding.com/unity/tutorials/movement/rolling/
 		if (isRolling)
 		{
 			float distance = totalVelocity.magnitude * Time.deltaTime;
@@ -344,7 +359,7 @@ public class PlayerMotor : MonoBehaviour
 
 			if (state == MovementState.GROUNDED)
 			{
-				rotVec = Vector3.ProjectOnPlane(inputVelocity, Vector3.up);
+				rotVec = Vector3.ProjectOnPlane(targetVelocity, Vector3.up);
 				turnSpeed = this.turnSpeed;
 			}
 			else
@@ -365,7 +380,7 @@ public class PlayerMotor : MonoBehaviour
 			else
 			{
 				playerController.RotateChild.localRotation = Quaternion.RotateTowards(playerController.RotateChild.localRotation, targetRotation,
-				   Quaternion.Angle(playerController.RotateChild.localRotation, targetRotation) * Time.deltaTime * fixRotationSpeed);
+				   Quaternion.Angle(playerController.RotateChild.localRotation, targetRotation) * Time.deltaTime * turnSpeed);
 			}
 		}
 	}
@@ -614,6 +629,11 @@ public class PlayerMotor : MonoBehaviour
 		//refresh air jumps
 		airJumpsLeft = airJumps;
 
+		if (isRolling)
+		{
+			inputVelocity += Vector3.ProjectOnPlane(forcesVelocity, Vector3.up);
+			forcesVelocity = Vector3.zero;
+		}
 		//if there is a jump buffered
 		if (jumpBufferTimer > 0)
 		{
@@ -681,14 +701,21 @@ public class PlayerMotor : MonoBehaviour
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
+		float angle = Vector3.Angle(hit.normal, Vector3.up);
 		//cancel input velocity going into collision
 		float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
 		if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
 		{
-			//input gets bounce
-			inputVelocity -= ((1 + bounciness - minCollisionVelocity) * inputHitAmount) * hit.normal;
+			inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
+			//if (state == MovementState.GROUNDED && IsRolling)
+			//{
+			//	Debug.Log("!!!! " + angle);
+			//	inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * Vector3.ProjectOnPlane(Vector3.up, hit.normal).normalized;
+			//	Debug.DrawRay(hit.point, -((1 - minCollisionVelocity) * inputHitAmount) * Vector3.ProjectOnPlane(Vector3.up, hit.normal).normalized, Color.magenta,1);
+			//	state = MovementState.RISING;
+			//}
+			Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
 		}
-
 		if (state == MovementState.FALLING)
 		{
 			float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity);
@@ -701,7 +728,7 @@ public class PlayerMotor : MonoBehaviour
 		//if it is, the groundmagnet will be enabled, leading to better ground detection
 		//this is disabled while jumping
 		collisionGroundDetected = state != MovementState.JUMPING 
-			&& Vector3.Angle(hit.normal, Vector3.up) < playerController.CharacterController.slopeLimit 
+			&& angle < playerController.CharacterController.slopeLimit 
 			&& hit.point.y - transform.position.y < playerController.CharacterController.radius;
 	}
 
