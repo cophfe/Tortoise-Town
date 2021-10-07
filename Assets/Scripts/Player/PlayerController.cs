@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerAnimator)), RequireComponent(typeof(PlayerInputController)), RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerInputController)), RequireComponent(typeof(PlayerHealth))]
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] OldCameraController cameraController = null;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 	void Awake()
     {
 		Motor = GetComponent<PlayerMotor>();
-		Animator = GetComponent<PlayerAnimator>();
+		Animator = GetComponentInChildren<PlayerAnimator>();
 		Input = GetComponent<PlayerInputController>();
 		CharacterController = GetComponent<CharacterController>();
 		Health = GetComponent<PlayerHealth>();
