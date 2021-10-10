@@ -14,9 +14,20 @@ public class PlayerAnimator : MonoBehaviour
 	public float rollColliderTransitionTimeIn = 0.1f;
 	public float rollColliderTransitionTimeOut = 0.3f;
 
+	[Header("IK")]
+	public bool enableFootIK = true;
+	public bool enableLookIK = true;
 	public float lookDistance = 20;
-	public Transform headBone = null;
-	public Transform upperChestBone = null;
+	[Range(0, 1)] public float lookBodyWeight = 0.2f;
+	[Range(0, 1)] public float lookHeadWeight = 1;
+	[Range(0, 0.3f)] public float distanceToGround = 0f;
+	[Range(0, 0.5f)] public float extendDistance = 0f;
+	[Range(0, 1)] public float footRotationWeight = 0.2f;
+	[Range(0, 1)] public float footPositionWeight = 0.5f;
+	public float footMoveSpeed = 10;
+	public float footRotateSpeed = 10;
+	public LayerMask ignoredGroundLayers;
+
 	#endregion
 
 	#region Other Fields
@@ -36,6 +47,12 @@ public class PlayerAnimator : MonoBehaviour
 	float rollColliderTransitionTimer = 0;
 	bool switchingColliderSize = false;
 	bool switchingIntoRoll;
+
+	//IK transition
+	Quaternion currentLeftRot;
+	Quaternion currentRightRot;
+	Vector3 currentLeftPos;
+	Vector3 currentRightPos;
 	#endregion
 
     void Start()
@@ -50,9 +67,15 @@ public class PlayerAnimator : MonoBehaviour
 		rollId = Animator.StringToHash("Rolling");
 
 		playerController = GetComponentInParent<PlayerController>();
+		if (playerController == null)
+			playerController = FindObjectOfType<PlayerController>();
+
 		playerController.Motor.onEnterGround.AddListener(AnimateEnterGround);
 		playerController.Motor.onLeaveGround.AddListener(AnimateLeaveGround);
 		playerController.Motor.onChangeRoll.AddListener(AnimateChangeRoll);
+
+		currentLeftRot = transform.rotation;
+		currentRightRot = transform.rotation;
 	}
 
     void Update()
@@ -121,14 +144,75 @@ public class PlayerAnimator : MonoBehaviour
 	//Called for animator inverse kinematics
 	private void OnAnimatorIK(int layerIndex)
 	{
-		if (playerController.Motor.IsRolling)
+		if (!playerController.Motor.IsRolling)
 		{
-			animator.SetLookAtWeight(0);
-		}
-		else
-		{
-			animator.SetLookAtWeight(1, .2f, 1, 0, .5f);
-			animator.SetLookAtPosition(transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance);
+			if (enableLookIK)
+			{
+				//look toward camera
+				animator.SetLookAtWeight(1, .2f, 1, 0, .5f);
+				animator.SetLookAtPosition(transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance);
+			}
+
+			//now make feet move to position
+			if (enableFootIK && playerController.Motor.State == PlayerMotor.MovementState.GROUNDED)
+			{
+				if (currentLeftPos == Vector3.zero)
+				{
+					currentLeftPos = animator.GetIKPosition(AvatarIKGoal.LeftFoot) - transform.position;
+					currentRightPos = animator.GetIKPosition(AvatarIKGoal.RightFoot) - transform.position;
+				}
+
+				animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, footPositionWeight);
+				animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, footRotationWeight);
+				animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, footPositionWeight);
+				animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, footRotationWeight);
+
+				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down, out var hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers))
+				{
+					//get position
+					var targetPosition = hit.point + Vector3.up * distanceToGround - transform.position;
+					currentLeftPos = Vector3.MoveTowards(currentLeftPos, targetPosition, Time.deltaTime * footMoveSpeed);
+					
+					//Get rotation
+					Vector3 forwardFlat = transform.forward;
+					forwardFlat.y = 0;
+					forwardFlat.Normalize();
+					Vector3 forwardDirection = (forwardFlat + Vector3.up * -(hit.normal.x * forwardFlat.x + hit.normal.z * forwardFlat.z) / hit.normal.y).normalized;
+					Quaternion targetRotation = Quaternion.LookRotation(forwardDirection, hit.normal);
+					currentLeftRot = Quaternion.RotateTowards(currentLeftRot, targetRotation, Time.deltaTime * footRotateSpeed);
+				}
+				else
+				{
+					currentLeftPos = Vector3.MoveTowards(currentLeftPos, animator.GetIKPosition(AvatarIKGoal.LeftFoot) - transform.position, Time.deltaTime * footMoveSpeed);
+					currentLeftRot = Quaternion.RotateTowards(currentLeftRot, animator.GetIKRotation(AvatarIKGoal.LeftFoot), Time.deltaTime * footRotateSpeed);
+				}
+				animator.SetIKPosition(AvatarIKGoal.LeftFoot, currentLeftPos + transform.position);
+				animator.SetIKRotation(AvatarIKGoal.LeftFoot, currentLeftRot);
+
+				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down, out hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers))
+				{
+					//get position
+					var targetPosition = hit.point + Vector3.up * distanceToGround - transform.position;
+					currentRightPos = Vector3.MoveTowards(currentRightPos, targetPosition, Time.deltaTime * footMoveSpeed);
+
+					//Get rotation
+					Vector3 forwardFlat = transform.forward;
+					forwardFlat.y = 0;
+					forwardFlat.Normalize();
+					Vector3 forwardDirection = (forwardFlat + Vector3.up * -(hit.normal.x * forwardFlat.x + hit.normal.z * forwardFlat.z) / hit.normal.y).normalized;
+					Quaternion targetRotation = Quaternion.LookRotation(forwardDirection, hit.normal);
+					currentRightRot = Quaternion.RotateTowards(currentRightRot, targetRotation, Time.deltaTime * footRotateSpeed);
+				}
+				else
+				{
+					currentRightPos = Vector3.MoveTowards(currentRightPos, animator.GetIKPosition(AvatarIKGoal.RightFoot) - transform.position, Time.deltaTime * footMoveSpeed);
+					currentRightRot = Quaternion.RotateTowards(currentRightRot, animator.GetIKRotation(AvatarIKGoal.RightFoot), Time.deltaTime * footRotateSpeed);
+				}
+				animator.SetIKPosition(AvatarIKGoal.RightFoot, currentRightPos + transform.position);
+				animator.SetIKRotation(AvatarIKGoal.RightFoot, currentRightRot);
+			}
+			
+			//animator.SetIKPosition(AvatarIKGoal.LeftFoot, )
 		}
 	}
 
@@ -138,6 +222,10 @@ public class PlayerAnimator : MonoBehaviour
 		if (playerController.Motor.enabled)
 		{
 			animator.SetBool(groundedId, true);
+			currentLeftRot = transform.rotation;
+			currentRightRot = transform.rotation;
+			currentLeftPos = Vector3.zero;
+			currentRightPos = Vector3.zero;
 		}
 	}
 
@@ -150,6 +238,7 @@ public class PlayerAnimator : MonoBehaviour
 			{
 				animator.SetTrigger(jumpId);
 			}
+			
 		}
 	}
 
@@ -160,6 +249,16 @@ public class PlayerAnimator : MonoBehaviour
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
 		rollColliderTransitionTime = switchingIntoRoll ? rollColliderTransitionTimeIn : rollColliderTransitionTimeOut;
+	}
+
+	public void AnimateMeleeAttack()
+	{
+
+	}
+
+	public void AnimateRangedAttack()
+	{
+
 	}
 	#endregion
 }

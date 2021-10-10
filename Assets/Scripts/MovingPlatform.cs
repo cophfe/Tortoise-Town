@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[DefaultExecutionOrder(11)]
+[DefaultExecutionOrder(11), RequireComponent(typeof(Rigidbody))]
 public class MovingPlatform : MonoBehaviour
 {
+	Rigidbody rb;
+
 	public bool playOnAwake = true;
 	[HideInInspector] public bool align = false;
 	[HideInInspector, SerializeField] bool useBezier = false;
-	[HideInInspector, SerializeField] bool automaticallyCalculateBezierCurve = false;
+	[HideInInspector, SerializeField] public bool automaticallyCalculateBezierCurve = false;
 	[HideInInspector, SerializeField] public IntermediateControlPointType intermediateType = IntermediateControlPointType.Free;
 
 	public float stopTime = 0;
@@ -49,7 +51,8 @@ public class MovingPlatform : MonoBehaviour
 	}
 	void Start()
     {
-		startPosition = transform.position;
+		rb = GetComponent<Rigidbody>();
+		startPosition = rb.position;
 		if (playOnAwake)
 			Play();
 	}
@@ -61,7 +64,7 @@ public class MovingPlatform : MonoBehaviour
 		stopTimer -= Time.deltaTime;
 		if (stopTimer > 0)
 		{
-			prevPosition = transform.position;
+			prevPosition = rb.position;
 			return;
 		}
 
@@ -86,7 +89,7 @@ public class MovingPlatform : MonoBehaviour
 		else if (t >= 1)
 		{
 			stopTimer = stopTime;
-			prevPosition = transform.position;
+			prevPosition = rb.position;
 
 			if (loopType == LoopType.ONCE) Pause();
 			if (loopType == LoopType.LOOP)
@@ -103,13 +106,13 @@ public class MovingPlatform : MonoBehaviour
 
 		if (player != null)
 		{
-			Vector3 offset = transform.position - prevPosition;
+			Vector3 offset = rb.position - prevPosition;
 			offset.y = 0;
 			player.MovingPlatformOffset = offset;
 		}
 
-		prevPosition = transform.position;
-		transform.position = position;
+		prevPosition = rb.position;
+		rb.position = position;
 	}
 
 	Vector3 GetPointOnSpline(float t)
