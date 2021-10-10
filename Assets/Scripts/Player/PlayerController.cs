@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
 {
 	[SerializeField] OldCameraController cameraController = null;
 	[SerializeField] float rollColliderRadius = 0.5f;
-	[SerializeField] Vector3 additionalRollColliderOffset;
-	[SerializeField] Vector3 rollCameraOffset;
+	[SerializeField] Vector3 additionalRollColliderOffset = Vector3.zero;
+	[SerializeField] Vector3 rollCameraOffset = Vector3.zero;
 	[SerializeField] private Transform rotatableChild = null;
+	[SerializeField] InterpolateChild visualInterpolator = null;
+	[SerializeField] GameManager gameManager = null;
 	Vector3 rollColliderOffset;
 
 	#region Properties
@@ -18,8 +20,9 @@ public class PlayerController : MonoBehaviour
 	public PlayerInputController Input { get; private set; }
 	public CharacterController CharacterController { get; private set; }
 	public PlayerHealth Health { get; private set; }
-	public OldCameraController MainCamera { get { return cameraController; } private set { cameraController = value; } }
+	public OldCameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
+	public GameManager GameManager { get { return gameManager; } }
 	public float InitialColliderHeight { get; private set; }
 	public float InitialColliderRadius { get; private set; }
 	public Vector3 InitialColliderOffset { get; private set; }
@@ -28,20 +31,37 @@ public class PlayerController : MonoBehaviour
 	public float RollColliderRadius { get { return rollColliderRadius; } }
 	public Vector3 RollColliderOffset { get { return rollColliderOffset + additionalRollColliderOffset; } }
 	public Vector3 RollCameraOffset { get { return rollCameraOffset; } }
+	public bool InterpolateVisuals {
+		get
+		{
+			return visualInterpolator && visualInterpolator.enabled;
+		}
+		set
+		{
+			if (visualInterpolator)
+			{
+				visualInterpolator.enabled = value;
+				MainCamera.movementUpdateType = value ? OldCameraController.MovementUpdateType.LATEUPDATE : OldCameraController.MovementUpdateType.FIXEDUPDATE;
+			}
+		}
+	}
 	#endregion
 
 	void Awake()
     {
 		Motor = GetComponent<PlayerMotor>();
 		Animator = GetComponentInChildren<PlayerAnimator>();
+		if (Animator == null)
+			Animator = FindObjectOfType<PlayerAnimator>();
 		Input = GetComponent<PlayerInputController>();
 		CharacterController = GetComponent<CharacterController>();
 		Health = GetComponent<PlayerHealth>();
-		
 
+		visualInterpolator = GetComponentInChildren<InterpolateChild>();
+		
 		if (MainCamera == null)
 		{
-			MainCamera = FindObjectOfType<OldCameraController>();
+			cameraController = FindObjectOfType<OldCameraController>();
 		}
 		if (rotatableChild == null)
 		{

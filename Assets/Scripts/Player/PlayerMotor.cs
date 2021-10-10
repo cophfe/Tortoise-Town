@@ -78,6 +78,9 @@ public class PlayerMotor : MonoBehaviour
 	[Tooltip("The speed of roll rotation")]
 	[Min(0)]
 	public float fixRotationSpeed = 1000;
+	[Range(0,45)]
+	public float bodyMaxGroundAlignAngle = 10;
+	public float walkAlignSpeed = 7;
 
 	//ROLLING
 	//radius of rollCollider
@@ -118,8 +121,9 @@ public class PlayerMotor : MonoBehaviour
 
 	#region Private Variables
 	//~~~~~~~~~PRIVATE~~~~~~~~~
-	//CONTROLLER
+	//REFERENCES
 	PlayerController playerController;
+	InterpolateChild interpolator;
 	//VELOCITY
 	Vector3 totalVelocity;
 	Vector3 inputVelocity;
@@ -164,6 +168,7 @@ public class PlayerMotor : MonoBehaviour
 	private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
+		interpolator = GetComponentInChildren<InterpolateChild>();
 	}
 
 	private void Update()
@@ -203,6 +208,9 @@ public class PlayerMotor : MonoBehaviour
 		jumpCoyoteTimer -= Time.deltaTime;
 		jumpBufferTimer -= Time.deltaTime;
 		rollCooldownTimer -= Time.deltaTime;
+
+		//reset offset
+		movingPlatformOffset = Vector3.zero;
 	}
 
 	void UpdateMovementVector()
@@ -352,15 +360,32 @@ public class PlayerMotor : MonoBehaviour
 			}
 
 			playerController.RotateChild.localRotation = targetRotation;// Quaternion.RotateTowards(playerController.RotateChild.rotation, targetRotation, Quaternion.Angle(playerController.RotateChild.rotation, targetRotation) * fixRotationSpeed * Time.deltaTime);
+			
+			Transform modelTransform = playerController.Animator.transform;
+			modelTransform.localRotation = Quaternion.RotateTowards(modelTransform.localRotation, Quaternion.identity,
+				Quaternion.Angle(modelTransform.localRotation, Quaternion.identity) * walkAlignSpeed * Time.deltaTime);
 		}
 		else
 		{
 			Vector3 rotVec;
 
+			//Vector3 clampedGroundNormal = Vector3.RotateTowards(Vector3.up, groundNormal, bodyMaxGroundAlignAngle * Mathf.Deg2Rad, 1);
+			//var animTransform = playerController.Animator.transform;
+			//Quaternion localRotation = Quaternion.Inverse(animTransform.rotation) * Quaternion.FromToRotation(Vector3.up, clampedGroundNormal);
+			//Debug.DrawRay(transform.TransformPoint(Vector3.up * 1.5f), animTransform.worldToLocalMatrix * clampedGroundNormal);
+
+			//Quaternion targetAlignRotation = Quaternion.FromToRotation(Vector3.up, animTransform.worldToLocalMatrix * clampedGroundNormal);
+			//animTransform.localRotation = Quaternion.RotateTowards(animTransform.localRotation, targetAlignRotation,
+			//   Quaternion.Angle(animTransform.localRotation, targetAlignRotation) * Time.deltaTime * walkAlignSpeed);
+
 			if (state == MovementState.GROUNDED)
 			{
-				rotVec = Vector3.ProjectOnPlane(targetVelocity, Vector3.up);
+				if (targetVelocity != Vector3.zero)
+					rotVec = Vector3.ProjectOnPlane(targetVelocity, Vector3.up);
+				else
+					rotVec = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up);
 				turnSpeed = this.turnSpeed;
+				
 			}
 			else
 			{
@@ -369,10 +394,6 @@ public class PlayerMotor : MonoBehaviour
 			}
 			if (rotVec.magnitude >= minPlayerRotation)
 			{
-				//if (Vector3.Dot(targetVelocity, inputVelocity) < 0)
-				//{
-				//	//rotVec += Vector3.Cross(inputForward, groundNormal) * 1000 * Time.deltaTime;
-				//}
 				targetRotation = Quaternion.LookRotation(rotVec, Vector3.up);
 				playerController.RotateChild.localRotation = Quaternion.RotateTowards(playerController.RotateChild.localRotation, targetRotation,
 				   Quaternion.Angle(playerController.RotateChild.localRotation, targetRotation) * Time.deltaTime * turnSpeed);
@@ -382,6 +403,12 @@ public class PlayerMotor : MonoBehaviour
 				playerController.RotateChild.localRotation = Quaternion.RotateTowards(playerController.RotateChild.localRotation, targetRotation,
 				   Quaternion.Angle(playerController.RotateChild.localRotation, targetRotation) * Time.deltaTime * turnSpeed);
 			}
+
+			Transform modelTransform = playerController.Animator.transform;
+			Vector3 clampedGroundNormal = Vector3.RotateTowards(Vector3.up, groundNormal, bodyMaxGroundAlignAngle * Mathf.Deg2Rad, 1);
+			var target = Quaternion.FromToRotation(Vector3.up, Quaternion.Inverse(playerController.RotateChild.rotation) * clampedGroundNormal);
+			modelTransform.localRotation = Quaternion.RotateTowards(modelTransform.localRotation, target,
+				Quaternion.Angle(modelTransform.localRotation, target) *  walkAlignSpeed * Time.deltaTime);
 		}
 	}
 
@@ -479,9 +506,7 @@ public class PlayerMotor : MonoBehaviour
 			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
 			groundNormal = hit.normal;
 			if (hit.collider != groundCollider)
-			{
 				OnChangedCollider(hit.collider);
-			}
 			groundCollider = hit.collider;
 			//if we need surface normal instead of collision normal:
 			//if (hit.collider.Raycast(new Ray(hit.point - direction, direction), out hit, 10) && Vector3.Angle(hit.normal, -direction) < 89.5f)
@@ -654,6 +679,8 @@ public class PlayerMotor : MonoBehaviour
 		jumpCoyoteTimer = jumpCoyoteTime;
 		collisionGroundDetected = false;
 		groundMagnetOffset = 0;
+		OnChangedCollider(null);
+		groundCollider = null;
 	}
 
 	void OnChangedCollider(Collider newCollider)
@@ -671,15 +698,18 @@ public class PlayerMotor : MonoBehaviour
 				movingPlatform.SetConnectedPlayer(null);
 				movingPlatformOffset = Vector3.zero;
 				movingPlatform = null;
+				playerController.InterpolateVisuals = true;
 			}
 		}
 		else
 		{
+			//connect to moving platform if there is a moving platform component
 			var mp = newCollider.GetComponent<MovingPlatform>();
 			if (mp != null)
 			{
 				movingPlatform = mp;
 				movingPlatform.SetConnectedPlayer(this);
+				playerController.InterpolateVisuals = false;
 			}
 			else
 			{
@@ -694,6 +724,7 @@ public class PlayerMotor : MonoBehaviour
 					movingPlatform.SetConnectedPlayer(null);
 					movingPlatform = null;
 					movingPlatformOffset = Vector3.zero;
+					playerController.InterpolateVisuals = false;
 				}
 			}
 		}
@@ -714,7 +745,10 @@ public class PlayerMotor : MonoBehaviour
 			//	Debug.DrawRay(hit.point, -((1 - minCollisionVelocity) * inputHitAmount) * Vector3.ProjectOnPlane(Vector3.up, hit.normal).normalized, Color.magenta,1);
 			//	state = MovementState.RISING;
 			//}
-			Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+			if (drawDebug)
+			{
+				Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+			}
 		}
 		if (state == MovementState.FALLING)
 		{
@@ -737,7 +771,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 TotalVelocity { get { return totalVelocity; } }
 	public Vector3 TargetVelocity { get { return targetVelocity; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { playerController.CharacterController.Move(value); } }
+	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	#endregion
 

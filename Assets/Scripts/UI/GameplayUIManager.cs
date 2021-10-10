@@ -1,18 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameplayUIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public Image healthBar;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	void SetHealthBar(float t)
+	{
+		healthBar.fillAmount = t;
+	}
 }

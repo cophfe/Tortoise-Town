@@ -19,7 +19,7 @@ public partial class OldCameraController : MonoBehaviour
 	public float maxFollowDistance = 10;
 	[Tooltip("The layers that can obstruct the camera.")]
 	public LayerMask obstructionLayers;
-
+	
 	[Header("Control")]
 	[Space(5)]
 	[Tooltip("Whether the camera accepts input or not.")]
@@ -37,6 +37,7 @@ public partial class OldCameraController : MonoBehaviour
 	[Space(5)]
 	[Tooltip("Camera movement speed.")]
 	public float followSpeed = 15;
+	public MovementUpdateType movementUpdateType = MovementUpdateType.LATEUPDATE;
 	[Tooltip("The max amount the camera will turn to look away from the floor.")]
 	public float cameraAvoidFloorRotationPower = 15;
 	[Tooltip("The angular distance in which the camera avoids the floor.")]
@@ -57,6 +58,12 @@ public partial class OldCameraController : MonoBehaviour
 	public float rotateSpeed = 1;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	public enum MovementUpdateType
+	{
+		UPDATE,
+		LATEUPDATE,
+		FIXEDUPDATE
+	}
 	Camera cam;
 
 	//The rotation of the targetQuaternion
@@ -106,10 +113,22 @@ public partial class OldCameraController : MonoBehaviour
 		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
 	}
 
-	void FixedUpdate()
+	void LateUpdate()
 	{
-		float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
-		currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
+		if (movementUpdateType == MovementUpdateType.LATEUPDATE)
+		{
+			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
+			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
+		}
+	}
+
+	private void FixedUpdate()
+	{
+		if (movementUpdateType == MovementUpdateType.FIXEDUPDATE)
+		{
+			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
+			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
+		}
 	}
 
 	private void Update()
@@ -151,6 +170,12 @@ public partial class OldCameraController : MonoBehaviour
 		else
 		{
 			transform.position += Vector3.up * (yOffset * yOffsetMagnitude);
+		}
+
+		if (movementUpdateType == MovementUpdateType.UPDATE)
+		{
+			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
+			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
 		}
 	}
 
