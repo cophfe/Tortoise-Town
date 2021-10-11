@@ -1,5 +1,5 @@
 {
-    "name": "Input",
+    "name": "InputMaster",
     "maps": [
         {
             "name": "Player",
@@ -58,6 +58,14 @@
                     "type": "Value",
                     "id": "998cc4ca-768b-4bbf-9808-551b0f3bf630",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Bow",
+                    "type": "Button",
+                    "id": "bd08b4de-056e-47d1-a866-bd1cf104f4d8",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -247,6 +255,17 @@
                     "processors": "",
                     "groups": "KBM",
                     "action": "WeaponScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "470cfed0-32b5-40d1-b839-257e64969027",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Bow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

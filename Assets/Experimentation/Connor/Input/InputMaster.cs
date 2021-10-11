@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Input/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Experimentation/Connor/Input/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -71,6 +71,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""998cc4ca-768b-4bbf-9808-551b0f3bf630"",
                     ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Bow"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd08b4de-056e-47d1-a866-bd1cf104f4d8"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -262,6 +270,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""WeaponScroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""470cfed0-32b5-40d1-b839-257e64969027"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Bow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -381,6 +400,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_WeaponChange = m_Player.FindAction("WeaponChange", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_WeaponScroll = m_Player.FindAction("WeaponScroll", throwIfNotFound: true);
+        m_Player_Bow = m_Player.FindAction("Bow", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
@@ -443,6 +463,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_WeaponChange;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_WeaponScroll;
+    private readonly InputAction m_Player_Bow;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -454,6 +475,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @WeaponChange => m_Wrapper.m_Player_WeaponChange;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @WeaponScroll => m_Wrapper.m_Player_WeaponScroll;
+        public InputAction @Bow => m_Wrapper.m_Player_Bow;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -484,6 +506,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @WeaponScroll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
                 @WeaponScroll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
                 @WeaponScroll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
+                @Bow.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
+                @Bow.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
+                @Bow.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -509,6 +534,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @WeaponScroll.started += instance.OnWeaponScroll;
                 @WeaponScroll.performed += instance.OnWeaponScroll;
                 @WeaponScroll.canceled += instance.OnWeaponScroll;
+                @Bow.started += instance.OnBow;
+                @Bow.performed += instance.OnBow;
+                @Bow.canceled += instance.OnBow;
             }
         }
     }
@@ -606,6 +634,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnWeaponChange(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnWeaponScroll(InputAction.CallbackContext context);
+        void OnBow(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {
