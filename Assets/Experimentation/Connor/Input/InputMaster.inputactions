@@ -1,5 +1,5 @@
 {
-    "name": "Input",
+    "name": "InputMaster",
     "maps": [
         {
             "name": "Player",
@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "WeaponChange",
+                    "name": "Aim",
                     "type": "Button",
                     "id": "67ba8191-ae9d-4c28-a861-4aad2d863c9b",
                     "expectedControlType": "Button",
@@ -54,10 +54,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "WeaponScroll",
-                    "type": "Value",
-                    "id": "998cc4ca-768b-4bbf-9808-551b0f3bf630",
-                    "expectedControlType": "Axis",
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "f90fef62-b01c-4d4c-92d3-8d1a89110d9d",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -198,22 +198,22 @@
                 {
                     "name": "",
                     "id": "6bd52832-413c-4cb6-b2df-f631a2280dca",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KBM",
-                    "action": "WeaponChange",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "daae620f-1f5c-46ff-a054-62d951e0b32f",
-                    "path": "<Gamepad>/dpad/up",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
-                    "action": "WeaponChange",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -241,12 +241,23 @@
                 },
                 {
                     "name": "",
-                    "id": "2d39b9f3-6eab-4220-97aa-3b0ef6df53cd",
-                    "path": "<Mouse>/scroll/y",
+                    "id": "a74f1ea8-289b-40fc-8415-d5b13d70fcd3",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "KBM",
-                    "action": "WeaponScroll",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f99147d1-a69a-4810-81ff-54352a552330",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

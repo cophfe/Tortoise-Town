@@ -18,6 +18,7 @@ public class PlayerAnimator : MonoBehaviour
 	public bool enableFootIK = true;
 	public bool enableLookIK = true;
 	public float lookDistance = 20;
+	[Range(0, 1)] public float turnPercent = 0.5f;
 	[Range(0, 1)] public float lookBodyWeight = 0.2f;
 	[Range(0, 1)] public float lookHeadWeight = 1;
 	[Range(0, 0.3f)] public float distanceToGround = 0f;
@@ -38,6 +39,7 @@ public class PlayerAnimator : MonoBehaviour
 	int groundedId;
 	int jumpId;
 	int rollId;
+	int chargeId;
 	
 	//hold the smoothened values for current speed
 	float currentSpeed = 0;
@@ -65,6 +67,7 @@ public class PlayerAnimator : MonoBehaviour
 		groundedId = Animator.StringToHash("Grounded");
 		jumpId = Animator.StringToHash("Jump");
 		rollId = Animator.StringToHash("Rolling");
+		chargeId = Animator.StringToHash("Charge");
 
 		playerController = GetComponentInParent<PlayerController>();
 		if (playerController == null)
@@ -80,7 +83,7 @@ public class PlayerAnimator : MonoBehaviour
 
     void Update()
     {
-		if (playerController.Motor.enabled)
+		if (playerController.Motor)
 		{
 			//Update animator values
 			float verticalSpeed = Vector3.Dot(playerController.Motor.TotalVelocity, Vector3.up);
@@ -138,6 +141,10 @@ public class PlayerAnimator : MonoBehaviour
 					}
 				}
 			}
+		}
+		if (playerController.Combat)
+		{
+			animator.SetFloat(chargeId, playerController.Combat.ChargePercentage);
 		}
     }
 
@@ -248,7 +255,13 @@ public class PlayerAnimator : MonoBehaviour
 		rollColliderTransitionTimer = 0;
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
-		rollColliderTransitionTime = switchingIntoRoll ? rollColliderTransitionTimeIn : rollColliderTransitionTimeOut;
+		if (switchingIntoRoll)
+		{
+			rollColliderTransitionTime = rollColliderTransitionTimeIn;
+			playerController.Combat.EquipWeapon(PlayerCombat.WeaponType.NONE);
+		}
+		else
+			rollColliderTransitionTime = rollColliderTransitionTimeOut;
 	}
 
 	public void AnimateMeleeAttack()
