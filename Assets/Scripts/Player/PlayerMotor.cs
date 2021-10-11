@@ -68,6 +68,8 @@ public class PlayerMotor : MonoBehaviour
 
 	//ROTATION
 	[Header("Rotation")]
+	[Tooltip("Whether the player is locked looking away from the camera or looks toward input")]
+	public bool alwaysLookAway = false;
 	[Tooltip("The speed of rotation")]
 	public float turnSpeed = 2;
 	[Tooltip("The speed of rotation when in air")]
@@ -123,7 +125,6 @@ public class PlayerMotor : MonoBehaviour
 	//~~~~~~~~~PRIVATE~~~~~~~~~
 	//REFERENCES
 	PlayerController playerController;
-	InterpolateChild interpolator;
 	//VELOCITY
 	Vector3 totalVelocity;
 	Vector3 inputVelocity;
@@ -168,7 +169,6 @@ public class PlayerMotor : MonoBehaviour
 	private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
-		interpolator = GetComponentInChildren<InterpolateChild>();
 	}
 
 	private void Update()
@@ -223,7 +223,7 @@ public class PlayerMotor : MonoBehaviour
 			if (state == MovementState.GROUNDED)
 			{
 				targetVelocity = GetTargetVelocity();
-				if (playerController.Input.inputVector != Vector2.zero)
+				if (playerController.inputVector != Vector2.zero)
 				{
 					inputVelocity += Vector3.ClampMagnitude(targetVelocity, acceleration * rollAccelerationModifier * Time.deltaTime);
 				}
@@ -269,7 +269,7 @@ public class PlayerMotor : MonoBehaviour
 			}
 			else
 			{
-				if (playerController.Input.inputVector != Vector2.zero)
+				if (playerController.inputVector != Vector2.zero)
 				{
 					targetVelocity = GetTargetVelocity();
 
@@ -287,8 +287,8 @@ public class PlayerMotor : MonoBehaviour
 			if (groundNormal.y != 0)
 				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z)/groundNormal.y;
 
-			Vector3 targetVelocity = Vector3.Cross(inputForward, groundNormal) * -playerController.Input.inputVector.x
-				+ inputForward * playerController.Input.inputVector.y;
+			Vector3 targetVelocity = Vector3.Cross(inputForward, groundNormal) * -playerController.inputVector.x
+				+ inputForward * playerController.inputVector.y;
 			targetVelocity = Vector3.ClampMagnitude(targetVelocity, 1) * targetSpeed * (isRolling ? rollTargetSpeedModifier : 1);
 
 			if (drawDebug)
@@ -369,15 +369,6 @@ public class PlayerMotor : MonoBehaviour
 		{
 			Vector3 rotVec;
 
-			//Vector3 clampedGroundNormal = Vector3.RotateTowards(Vector3.up, groundNormal, bodyMaxGroundAlignAngle * Mathf.Deg2Rad, 1);
-			//var animTransform = playerController.Animator.transform;
-			//Quaternion localRotation = Quaternion.Inverse(animTransform.rotation) * Quaternion.FromToRotation(Vector3.up, clampedGroundNormal);
-			//Debug.DrawRay(transform.TransformPoint(Vector3.up * 1.5f), animTransform.worldToLocalMatrix * clampedGroundNormal);
-
-			//Quaternion targetAlignRotation = Quaternion.FromToRotation(Vector3.up, animTransform.worldToLocalMatrix * clampedGroundNormal);
-			//animTransform.localRotation = Quaternion.RotateTowards(animTransform.localRotation, targetAlignRotation,
-			//   Quaternion.Angle(animTransform.localRotation, targetAlignRotation) * Time.deltaTime * walkAlignSpeed);
-
 			if (state == MovementState.GROUNDED)
 			{
 				if (targetVelocity != Vector3.zero)
@@ -392,6 +383,11 @@ public class PlayerMotor : MonoBehaviour
 				rotVec = Vector3.ProjectOnPlane(totalVelocity, Vector3.up);
 				turnSpeed = airTurnSpeed;
 			}
+			if (alwaysLookAway)
+			{
+				rotVec = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up);
+			}
+
 			if (rotVec.magnitude >= minPlayerRotation)
 			{
 				targetRotation = Quaternion.LookRotation(rotVec, Vector3.up);
@@ -514,8 +510,8 @@ public class PlayerMotor : MonoBehaviour
 			//	groundNormal = hit.normal;
 			//}
 
-			float offset = (playerController.CharacterController.height / 2 - groundDistance);
-			if (enableGroundMagnet && offset < 0)
+			float offset = (playerController.CharacterController.height / 2 + playerController.CharacterController.skinWidth - groundDistance );
+			if (enableGroundMagnet && (offset < 0 || movingPlatformOffset != Vector3.zero))
 			{
 				groundMagnetOffset = offset;
 			}
@@ -533,7 +529,7 @@ public class PlayerMotor : MonoBehaviour
 	void EvaluateJump()
 	{
 		//start jump
-		if (playerController.Input.EvaluateJumpPressed())
+		if (playerController.EvaluateJumpPressed())
 		{
 			//if rolling
 			if (isRolling)
@@ -565,7 +561,7 @@ public class PlayerMotor : MonoBehaviour
 				}
 				else
 				{
-					playerController.Input.EvaluateJumpCancelled();
+					playerController.EvaluateJumpCancelled();
 					jumpBufferTimer = jumpBufferTime;
 				}
 			}
@@ -578,21 +574,21 @@ public class PlayerMotor : MonoBehaviour
 			forcesVelocity += Vector3.up * jumpSpeed;
 
 			//check jump cancel
-			if (playerController.Input.EvaluateJumpCancelled() || jumpTimer <= 0)
+			if (playerController.EvaluateJumpCancelled() || jumpTimer <= 0)
 			{
 				state = MovementState.RISING;
 			}
 		}
 		else if (state == MovementState.GROUNDED)
 		{
-			playerController.Input.EvaluateJumpCancelled();
+			playerController.EvaluateJumpCancelled();
 		}
 	}
 
 	void EvaluateRoll()
 	{
 		//start roll
-		if (playerController.Input.EvaluateCrouchPressed() && state == MovementState.GROUNDED && rollCooldownTimer <= 0)
+		if (playerController.EvaluateCrouchPressed() && rollCooldownTimer <= 0 && state == MovementState.GROUNDED)
 		{
 			if (isRolling)
 			{
@@ -643,7 +639,7 @@ public class PlayerMotor : MonoBehaviour
 		{
 			inputVelocity -= Vector3.up * upVel;
 		}
-		if (playerController.Input.EvaluateJumpCancelled())
+		if (playerController.EvaluateJumpCancelled())
 			state = MovementState.RISING;
 	}
 
@@ -666,7 +662,7 @@ public class PlayerMotor : MonoBehaviour
 			OnJump();
 			OnLeaveGround();
 			//cancel jump immediatly if player let go of button
-			if (playerController.Input.EvaluateJumpCancelled())
+			if (playerController.EvaluateJumpCancelled())
 			{
 				state = MovementState.RISING;
 			}
@@ -691,9 +687,9 @@ public class PlayerMotor : MonoBehaviour
 			if (movingPlatform != null)
 			{
 				//calculate velocity gained from leaving
-				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
 				Vector3 vel = movingPlatformOffset / time;
-				forcesVelocity += new Vector3(vel.x, 0, vel.z);
+				forcesVelocity += new Vector3(vel.x, Mathf.Max(vel.y, 0) , vel.z);
 
 				movingPlatform.SetConnectedPlayer(null);
 				movingPlatformOffset = Vector3.zero;
@@ -717,7 +713,7 @@ public class PlayerMotor : MonoBehaviour
 				if (movingPlatform)
 				{
 					//calculate velocity gained from leaving
-					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.fixedDeltaTime;
+					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
 					Vector3 vel = movingPlatformOffset / time;
 					forcesVelocity += new Vector3(vel.x, 0, vel.z);
 

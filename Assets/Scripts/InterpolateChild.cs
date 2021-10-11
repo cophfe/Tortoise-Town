@@ -16,7 +16,7 @@ public class InterpolateChild : MonoBehaviour
 
 	private void Awake()
 	{
-		if (target == null)
+		if (target == null || target == transform.parent)
 		{
 			target = transform.parent;
 			initialLocalPosition = transform.localPosition;

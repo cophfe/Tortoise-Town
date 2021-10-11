@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerInputController)), RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerHealth))]
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] OldCameraController cameraController = null;
@@ -14,11 +14,20 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] GameManager gameManager = null;
 	Vector3 rollColliderOffset;
 
+	//INPUT
+	public Vector2 inputVector { get; private set; }
+	bool jumpPressed;
+	bool jumpCancelled;
+	bool crouchPressed;
+	bool sprintPressed;
+	bool attackPressed;
+	InputMaster controls;
+
 	#region Properties
 	public PlayerMotor Motor { get; private set; }
 	public PlayerAnimator Animator { get; private set; }
-	public PlayerInputController Input { get; private set; }
 	public CharacterController CharacterController { get; private set; }
+	public PlayerCombat Combat { get; private set; }
 	public PlayerHealth Health { get; private set; }
 	public OldCameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
@@ -53,10 +62,9 @@ public class PlayerController : MonoBehaviour
 		Animator = GetComponentInChildren<PlayerAnimator>();
 		if (Animator == null)
 			Animator = FindObjectOfType<PlayerAnimator>();
-		Input = GetComponent<PlayerInputController>();
 		CharacterController = GetComponent<CharacterController>();
 		Health = GetComponent<PlayerHealth>();
-
+		Combat = GetComponent<PlayerCombat>();
 		visualInterpolator = GetComponentInChildren<InterpolateChild>();
 		
 		if (MainCamera == null)
@@ -78,5 +86,114 @@ public class PlayerController : MonoBehaviour
 		InitialColliderOffset = CharacterController.center;
 		rollColliderOffset = CharacterController.center + new Vector3(0, (rollColliderRadius - CharacterController.height)/2, 0);
 		InitialCameraOffset = MainCamera.targetOffset;
+
+		//INPUT
+		controls = new InputMaster();
+		//Move
+		controls.Player.Move.performed += val => OnMoveInput(val.ReadValue<Vector2>());
+		controls.Player.Move.canceled += val => OnMoveInput(val.ReadValue<Vector2>());
+		//Jump
+		controls.Player.Jump.performed += _ => OnJumpPressed();
+		controls.Player.Jump.canceled += _ => OnJumpCancelled();
+		//Sprint
+		controls.Player.Sprint.performed += _ => OnSprintInput();
+		//Crouch
+		controls.Player.Crouch.performed += _ => OnCrouchInput();
+		//Attacking
+		controls.Player.Attack.performed += _ => OnAttackInput();
+		//Aiming
+		controls.Player.Aim.performed += _ => OnAimPressed();
+		controls.Player.Aim.canceled += _ => OnAimCancelled();
 	}
+
+	public void OnEnable()
+	{
+		controls.Enable();
+	}
+	public void OnDisable()
+	{
+		controls.Disable();
+	}
+
+	#region Evaluate Functions
+
+	public bool EvaluateJumpPressed()
+	{
+		bool val = jumpPressed;
+		jumpPressed = false;
+		return val;
+	}
+
+	public bool EvaluateCrouchPressed()
+	{
+		bool val = crouchPressed;
+		crouchPressed = false;
+		return val;
+	}
+
+	public bool EvaluateSprintPressed()
+	{
+		bool val = sprintPressed;
+		sprintPressed = false;
+		return val;
+	}
+
+	public bool EvaluateJumpCancelled()
+	{
+		bool val = jumpCancelled;
+		jumpCancelled = false;
+		return val;
+	}
+
+	public bool EvaluateAttackPressed()
+	{
+		bool val = attackPressed;
+		attackPressed = false;
+		return val;
+	}
+
+	#endregion
+
+	#region Input Functions
+
+	void OnMoveInput(Vector2 val)
+	{
+		inputVector = val;
+	}
+
+	void OnJumpPressed()
+	{
+		jumpPressed = true;
+	}
+
+	void OnJumpCancelled()
+	{
+		jumpCancelled = true;
+	}
+
+	void OnSprintInput()
+	{
+		sprintPressed = true;
+	}
+
+	void OnCrouchInput()
+	{
+		crouchPressed = true;
+	}
+
+	void OnAimPressed()
+	{
+		Combat.StartChargeUp();
+	}
+
+	void OnAimCancelled()
+	{
+		Combat.EndChargeUp();
+	}
+
+	void OnAttackInput()
+	{
+		attackPressed = true;
+	}
+	#endregion
 }

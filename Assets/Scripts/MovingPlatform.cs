@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [DefaultExecutionOrder(11), RequireComponent(typeof(Rigidbody))]
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : BooleanSwitch
 {
 	Rigidbody rb;
 
@@ -49,6 +49,23 @@ public class MovingPlatform : MonoBehaviour
 		Aligned,
 		Mirrored
 	}
+
+	public override bool SwitchValue { 
+		get { return on; } 
+		protected set 
+		{ 
+			on = value;
+			if (value)
+			{
+				Play();
+			}
+			else
+			{
+				Pause();
+			}
+		} 
+	}
+
 	void Start()
     {
 		rb = GetComponent<Rigidbody>();
@@ -107,7 +124,7 @@ public class MovingPlatform : MonoBehaviour
 		if (player != null)
 		{
 			Vector3 offset = rb.position - prevPosition;
-			offset.y = 0;
+			//offset.y = Mathf.Max(0, offset.y);
 			player.MovingPlatformOffset = offset;
 		}
 
@@ -173,7 +190,6 @@ public class MovingPlatform : MonoBehaviour
 
 	float GetCurrentSpeed(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent, float t)
 	{
-		float opT = 1 - t;
 		//derivitive of displacement is velocity (with time as t axis), so this is just the derivitive of the bezier curve function
 		Vector3 b = startTangent + start;
 		Vector3 c = endTangent + end;
@@ -189,6 +205,8 @@ public class MovingPlatform : MonoBehaviour
 	public void Pause()
 	{
 		playing = false;
+		if (player)
+			player.MovingPlatformOffset = Vector3.zero;
 	}
 
 	float GetEasedT()
