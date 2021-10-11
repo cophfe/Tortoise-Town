@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Experimentation/Connor/Input/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Input/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -70,6 +70,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""f90fef62-b01c-4d4c-92d3-8d1a89110d9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Bow"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd08b4de-056e-47d1-a866-bd1cf104f4d8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -265,6 +273,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""470cfed0-32b5-40d1-b839-257e64969027"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Bow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f99147d1-a69a-4810-81ff-54352a552330"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
@@ -392,6 +411,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Bow = m_Player.FindAction("Bow", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
@@ -454,6 +474,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Bow;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -465,6 +486,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Bow => m_Wrapper.m_Player_Bow;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -495,6 +517,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Bow.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
+                @Bow.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
+                @Bow.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -520,6 +545,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @Bow.started += instance.OnBow;
+                @Bow.performed += instance.OnBow;
+                @Bow.canceled += instance.OnBow;
             }
         }
     }
@@ -617,6 +645,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnBow(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {
