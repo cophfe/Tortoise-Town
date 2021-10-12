@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[DefaultExecutionOrder(11)]
-public class MovingPlatform : MonoBehaviour
+[DefaultExecutionOrder(11), RequireComponent(typeof(Rigidbody))]
+public class MovingPlatform : BooleanSwitch
 {
+	Rigidbody rb;
+
 	public bool playOnAwake = true;
 	[HideInInspector] public bool align = false;
 	[HideInInspector, SerializeField] bool useBezier = false;
-	[HideInInspector, SerializeField] bool automaticallyCalculateBezierCurve = false;
+	[HideInInspector, SerializeField] public bool automaticallyCalculateBezierCurve = false;
 	[HideInInspector, SerializeField] public IntermediateControlPointType intermediateType = IntermediateControlPointType.Free;
 
 	public float stopTime = 0;
@@ -47,9 +49,27 @@ public class MovingPlatform : MonoBehaviour
 		Aligned,
 		Mirrored
 	}
+
+	public override bool SwitchValue { 
+		get { return on; } 
+		protected set 
+		{ 
+			on = value;
+			if (value)
+			{
+				Play();
+			}
+			else
+			{
+				Pause();
+			}
+		} 
+	}
+
 	void Start()
     {
-		startPosition = transform.position;
+		rb = GetComponent<Rigidbody>();
+		startPosition = rb.position;
 		if (playOnAwake)
 			Play();
 	}
@@ -61,7 +81,7 @@ public class MovingPlatform : MonoBehaviour
 		stopTimer -= Time.deltaTime;
 		if (stopTimer > 0)
 		{
-			prevPosition = transform.position;
+			prevPosition = rb.position;
 			return;
 		}
 
@@ -86,7 +106,7 @@ public class MovingPlatform : MonoBehaviour
 		else if (t >= 1)
 		{
 			stopTimer = stopTime;
-			prevPosition = transform.position;
+			prevPosition = rb.position;
 
 			if (loopType == LoopType.ONCE) Pause();
 			if (loopType == LoopType.LOOP)
@@ -103,13 +123,13 @@ public class MovingPlatform : MonoBehaviour
 
 		if (player != null)
 		{
-			Vector3 offset = transform.position - prevPosition;
-			offset.y = 0;
+			Vector3 offset = rb.position - prevPosition;
+			//offset.y = Mathf.Max(0, offset.y);
 			player.MovingPlatformOffset = offset;
 		}
 
-		prevPosition = transform.position;
-		transform.position = position;
+		prevPosition = rb.position;
+		rb.position = position;
 	}
 
 	Vector3 GetPointOnSpline(float t)
@@ -170,7 +190,6 @@ public class MovingPlatform : MonoBehaviour
 
 	float GetCurrentSpeed(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent, float t)
 	{
-		float opT = 1 - t;
 		//derivitive of displacement is velocity (with time as t axis), so this is just the derivitive of the bezier curve function
 		Vector3 b = startTangent + start;
 		Vector3 c = endTangent + end;
@@ -186,6 +205,8 @@ public class MovingPlatform : MonoBehaviour
 	public void Pause()
 	{
 		playing = false;
+		if (player)
+			player.MovingPlatformOffset = Vector3.zero;
 	}
 
 	float GetEasedT()
