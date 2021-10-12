@@ -41,6 +41,7 @@ public class PlayerAnimator : MonoBehaviour
 	int rollId;
 	int chargeId;
 	int attackId;
+	int equipId;
 	
 	//hold the smoothened values for current speed
 	float currentSpeed = 0;
@@ -70,6 +71,7 @@ public class PlayerAnimator : MonoBehaviour
 		rollId = Animator.StringToHash("Rolling");
 		chargeId = Animator.StringToHash("Charge");
 		attackId = Animator.StringToHash("Attack");
+		equipId = Animator.StringToHash("Equipped");
 
 		playerController = GetComponentInParent<PlayerController>();
 		if (playerController == null)
@@ -78,10 +80,6 @@ public class PlayerAnimator : MonoBehaviour
 		playerController.Motor.onEnterGround.AddListener(AnimateEnterGround);
 		playerController.Motor.onLeaveGround.AddListener(AnimateLeaveGround);
 		playerController.Motor.onChangeRoll.AddListener(AnimateChangeRoll);
-
-		playerController.Combat.onMeleeAttack.AddListener(AnimateMeleeAttack);
-		playerController.Combat.onRangedAttack.AddListener(AnimateRangedAttack);
-		playerController.Combat.onWeaponChange.AddListener(AnimateRangedAttack);
 
 		currentLeftRot = transform.rotation;
 		currentRightRot = transform.rotation;
@@ -267,14 +265,14 @@ public class PlayerAnimator : MonoBehaviour
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;
 	}
 
-	public void AnimateMeleeAttack()
+	public void AnimateAttack()
 	{
 		animator.SetTrigger(attackId);
 	}
 
-	public void AnimateRangedAttack()
+	public void AnimateEquip(PlayerCombat.WeaponType weapon)
 	{
-		animator.SetTrigger(attackId);
+		animator.SetInteger(equipId, (int)weapon);
 	}
 	#endregion
 }

@@ -17,11 +17,8 @@ public class PlayerCombat : MonoBehaviour
 	public float meleeCooldownTime = 0.5f;
 	public float rangedCooldownTime = 0.5f;
 	[Min(0.001f)] public float rangedChargeUpSpeed = 2;
+	[Range(0,1)] public float chargedThreshold = 0.75f;
 	[Min(0.001f)] public float rangedChargeDownSpeed= 4;
-
-	public UnityEvent onMeleeAttack;
-	public UnityEvent onRangedAttack;
-	public UnityEvent onWeaponChange;
 
 	bool charging = false;
 	float chargeUpPercent = 0;
@@ -30,9 +27,9 @@ public class PlayerCombat : MonoBehaviour
 	WeaponType currentWeapon = WeaponType.NONE;
 	public enum WeaponType
 	{
+		NONE,
 		MELEE,
-		RANGED,
-		NONE
+		RANGED
 	}
 
 	private void Start()
@@ -61,12 +58,12 @@ public class PlayerCombat : MonoBehaviour
 
 		if (chargeUpPercent > 0)
 		{
-			EquipWeapon(WeaponType.RANGED);
 			playerController.Motor.alwaysLookAway = true;
-			if (playerController.EvaluateAttackPressed())
+			if (playerController.EvaluateAttackPressed() && chargeUpPercent > chargedThreshold)
 			{
+				playerController.Animator.AnimateEquip(WeaponType.RANGED);
 				cooldownTimer = rangedCooldownTime;
-				onRangedAttack.Invoke();
+				playerController.Animator.AnimateAttack();
 				chargeUpPercent = 0.0001f;
 			}
 
@@ -76,9 +73,9 @@ public class PlayerCombat : MonoBehaviour
 			playerController.Motor.alwaysLookAway = false;
 			if (playerController.EvaluateAttackPressed())
 			{
+				playerController.Animator.AnimateEquip(WeaponType.MELEE);
 				cooldownTimer = meleeCooldownTime;
-				EquipWeapon(WeaponType.MELEE);
-				onMeleeAttack.Invoke();
+				playerController.Animator.AnimateAttack();
 			}
 		}
 
@@ -86,6 +83,7 @@ public class PlayerCombat : MonoBehaviour
 
 	public void StartChargeUp()
 	{
+		playerController.Animator.AnimateEquip(WeaponType.RANGED);
 		charging = true;
 	}
 
@@ -118,9 +116,12 @@ public class PlayerCombat : MonoBehaviour
 
 	void OnChangeRoll()
 	{
-		EquipWeapon(WeaponType.NONE);
-		chargeUpPercent = 0;
-		charging = false;
+		if (playerController.Motor.IsRolling)
+		{
+			playerController.Animator.AnimateEquip(WeaponType.NONE);
+			chargeUpPercent = 0;
+			charging = false;
+		}
 	}
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
 }
