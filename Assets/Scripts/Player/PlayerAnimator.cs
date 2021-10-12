@@ -40,6 +40,7 @@ public class PlayerAnimator : MonoBehaviour
 	int jumpId;
 	int rollId;
 	int chargeId;
+	int attackId;
 	
 	//hold the smoothened values for current speed
 	float currentSpeed = 0;
@@ -68,6 +69,7 @@ public class PlayerAnimator : MonoBehaviour
 		jumpId = Animator.StringToHash("Jump");
 		rollId = Animator.StringToHash("Rolling");
 		chargeId = Animator.StringToHash("Charge");
+		attackId = Animator.StringToHash("Attack");
 
 		playerController = GetComponentInParent<PlayerController>();
 		if (playerController == null)
@@ -76,6 +78,10 @@ public class PlayerAnimator : MonoBehaviour
 		playerController.Motor.onEnterGround.AddListener(AnimateEnterGround);
 		playerController.Motor.onLeaveGround.AddListener(AnimateLeaveGround);
 		playerController.Motor.onChangeRoll.AddListener(AnimateChangeRoll);
+
+		playerController.Combat.onMeleeAttack.AddListener(AnimateMeleeAttack);
+		playerController.Combat.onRangedAttack.AddListener(AnimateRangedAttack);
+		playerController.Combat.onWeaponChange.AddListener(AnimateRangedAttack);
 
 		currentLeftRot = transform.rotation;
 		currentRightRot = transform.rotation;
@@ -256,22 +262,19 @@ public class PlayerAnimator : MonoBehaviour
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
 		if (switchingIntoRoll)
-		{
 			rollColliderTransitionTime = rollColliderTransitionTimeIn;
-			playerController.Combat.EquipWeapon(PlayerCombat.WeaponType.NONE);
-		}
 		else
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;
 	}
 
 	public void AnimateMeleeAttack()
 	{
-
+		animator.SetTrigger(attackId);
 	}
 
 	public void AnimateRangedAttack()
 	{
-
+		animator.SetTrigger(attackId);
 	}
 	#endregion
 }

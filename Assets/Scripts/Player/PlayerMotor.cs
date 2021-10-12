@@ -48,6 +48,8 @@ public class PlayerMotor : MonoBehaviour
 	[Header("Collision Response")]
 	[Tooltip("The minimum velocity into a collision before the input velocity is modified")]
 	public float minCollisionVelocity = 0.1f;
+	[Tooltip("The mass used for collision")]
+	public float mass = 1;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
 
@@ -188,6 +190,11 @@ public class PlayerMotor : MonoBehaviour
 
 	void Run()
 	{
+		if (movingPlatform)
+			movingPlatformOffset = movingPlatform.GetOffset();
+		else
+			movingPlatformOffset = Vector3.zero;
+
 		ScanForGround();
 		SetState();
 		EvaluateJump();
@@ -208,9 +215,6 @@ public class PlayerMotor : MonoBehaviour
 		jumpCoyoteTimer -= Time.deltaTime;
 		jumpBufferTimer -= Time.deltaTime;
 		rollCooldownTimer -= Time.deltaTime;
-
-		//reset offset
-		movingPlatformOffset = Vector3.zero;
 	}
 
 	void UpdateMovementVector()
@@ -683,7 +687,7 @@ public class PlayerMotor : MonoBehaviour
 	{
 		if (newCollider == null)
 		{
-			//Disconnect from platform if no new collider
+			//leave the platform if no new collider && was on platform
 			if (movingPlatform != null)
 			{
 				//calculate velocity gained from leaving
@@ -691,7 +695,7 @@ public class PlayerMotor : MonoBehaviour
 				Vector3 vel = movingPlatformOffset / time;
 				forcesVelocity += new Vector3(vel.x, Mathf.Max(vel.y, 0) , vel.z);
 
-				movingPlatform.SetConnectedPlayer(null);
+				//disconnect from platform
 				movingPlatformOffset = Vector3.zero;
 				movingPlatform = null;
 				playerController.InterpolateVisuals = true;
@@ -703,8 +707,9 @@ public class PlayerMotor : MonoBehaviour
 			var mp = newCollider.GetComponent<MovingPlatform>();
 			if (mp != null)
 			{
+				//connect
 				movingPlatform = mp;
-				movingPlatform.SetConnectedPlayer(this);
+				MovingPlatformOffset = movingPlatform.GetOffset();
 				playerController.InterpolateVisuals = false;
 			}
 			else
@@ -717,10 +722,10 @@ public class PlayerMotor : MonoBehaviour
 					Vector3 vel = movingPlatformOffset / time;
 					forcesVelocity += new Vector3(vel.x, 0, vel.z);
 
-					movingPlatform.SetConnectedPlayer(null);
-					movingPlatform = null;
+					//disconnect from platform
 					movingPlatformOffset = Vector3.zero;
-					playerController.InterpolateVisuals = false;
+					movingPlatform = null;
+					playerController.InterpolateVisuals = true;
 				}
 			}
 		}
@@ -733,19 +738,44 @@ public class PlayerMotor : MonoBehaviour
 		float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
 		if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
 		{
-			inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
-			//if (state == MovementState.GROUNDED && IsRolling)
-			//{
-			//	Debug.Log("!!!! " + angle);
-			//	inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * Vector3.ProjectOnPlane(Vector3.up, hit.normal).normalized;
-			//	Debug.DrawRay(hit.point, -((1 - minCollisionVelocity) * inputHitAmount) * Vector3.ProjectOnPlane(Vector3.up, hit.normal).normalized, Color.magenta,1);
-			//	state = MovementState.RISING;
-			//}
+			Rigidbody rb = null;
+			if (rb)
+			{
+				//this is collision stuff with all rotation of the player removed
+				//thank you to https://www.euclideanspace.com/physics/dynamics/collision/threed/index.htm
+
+				Vector3 particleOnA = hit.point - (playerController.CharacterController.center + transform.position + Vector3.up * playerController.CharacterController.skinWidth);
+				Vector3 particleOnB = hit.point - rb.centerOfMass;
+				Vector3 bRadius = Vector3.Cross(particleOnB, hit.normal);
+				Vector3 relativeVelocity = totalVelocity - rb.velocity;
+
+				float aInverseMass = 1 / mass;
+				float bInverseMass = 1 / rb.mass;
+
+				Matrix4x4 bInertiaRot = Matrix4x4.Rotate(rb.inertiaTensorRotation);
+				Matrix4x4 bInertia = bInertiaRot * Matrix4x4.Scale(rb.inertiaTensor) * bInertiaRot.transpose; //transpose is equal to inverse in orthagonal matrix
+
+				Matrix4x4 bInverseInertia = Matrix4x4.Inverse(bInertia);
+				float impulseMagnitude = Vector3.Dot(hit.normal, relativeVelocity)- Vector3.Dot(bRadius, rb.angularVelocity);
+				impulseMagnitude /= aInverseMass + bInverseMass + Vector3.Dot(bRadius, bInverseInertia * bRadius);
+				Vector3 impulse = impulseMagnitude * hit.normal;
+
+				//pair.a.AddImpulseAtPosition(-1 * impulse, radiusA);
+				hit.rigidbody.AddForceAtPosition(impulse, hit.point, ForceMode.Impulse);
+				forcesVelocity -= impulse * aInverseMass;
+				Debug.Log(impulseMagnitude);
+			}
+			else
+			{
+				inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
+			}
+
 			if (drawDebug)
 			{
 				Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
 			}
 		}
+
 		if (state == MovementState.FALLING)
 		{
 			float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity);

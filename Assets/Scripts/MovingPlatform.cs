@@ -15,6 +15,7 @@ public class MovingPlatform : BooleanSwitch
 	[HideInInspector, SerializeField] public IntermediateControlPointType intermediateType = IntermediateControlPointType.Free;
 
 	public float stopTime = 0;
+	public float startDelay = 0;
 	public float speed = 5;
 	//relative to startPosition
 	[HideInInspector] public Vector3[] points;
@@ -29,7 +30,8 @@ public class MovingPlatform : BooleanSwitch
 	Vector3 prevPosition;
 	int negMultiply = 1;
 	const int bezierCurveSteps = 10;
-	PlayerMotor player = null;
+
+	Vector3 movingPlatformOffset;
 
 	public enum LoopType
 	{
@@ -70,6 +72,7 @@ public class MovingPlatform : BooleanSwitch
     {
 		rb = GetComponent<Rigidbody>();
 		startPosition = rb.position;
+		stopTimer = stopTime + startDelay;
 		if (playOnAwake)
 			Play();
 	}
@@ -121,12 +124,7 @@ public class MovingPlatform : BooleanSwitch
 		float easedT = GetEasedT();
 		Vector3 position = GetPointOnSpline(easedT);
 
-		if (player != null)
-		{
-			Vector3 offset = rb.position - prevPosition;
-			//offset.y = Mathf.Max(0, offset.y);
-			player.MovingPlatformOffset = offset;
-		}
+		movingPlatformOffset = rb.position - prevPosition;
 
 		prevPosition = rb.position;
 		rb.position = position;
@@ -205,8 +203,12 @@ public class MovingPlatform : BooleanSwitch
 	public void Pause()
 	{
 		playing = false;
-		if (player)
-			player.MovingPlatformOffset = Vector3.zero;
+		movingPlatformOffset = Vector3.zero;
+	}
+
+	public Vector3 GetOffset()
+	{
+		return movingPlatformOffset;
 	}
 
 	float GetEasedT()
@@ -218,10 +220,5 @@ public class MovingPlatform : BooleanSwitch
 			default:
 				return t;
 		}
-	}
-
-	public void SetConnectedPlayer(PlayerMotor player)
-	{
-		this.player = player;
 	}
 }

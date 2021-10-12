@@ -43,13 +43,13 @@ public class PlayerController : MonoBehaviour
 	public bool InterpolateVisuals {
 		get
 		{
-			return visualInterpolator && visualInterpolator.enabled;
+			return visualInterpolator && !visualInterpolator.disable;
 		}
 		set
 		{
 			if (visualInterpolator)
 			{
-				visualInterpolator.enabled = value;
+				visualInterpolator.disable = !value;
 				MainCamera.movementUpdateType = value ? OldCameraController.MovementUpdateType.LATEUPDATE : OldCameraController.MovementUpdateType.FIXEDUPDATE;
 			}
 		}
