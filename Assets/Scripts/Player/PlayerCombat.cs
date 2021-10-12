@@ -19,8 +19,9 @@ public class PlayerCombat : MonoBehaviour
 	[Min(0.001f)] public float rangedChargeUpSpeed = 2;
 	[Min(0.001f)] public float rangedChargeDownSpeed= 4;
 
-	public UnityEvent onAttack;
-	public UnityEvent onChargeUp;
+	public UnityEvent onMeleeAttack;
+	public UnityEvent onRangedAttack;
+	public UnityEvent onWeaponChange;
 
 	bool charging = false;
 	float chargeUpPercent = 0;
@@ -37,12 +38,18 @@ public class PlayerCombat : MonoBehaviour
 	private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
+		playerController.Motor.onChangeRoll.AddListener(OnChangeRoll);
 	}
 
 	private void FixedUpdate()
 	{
-		cooldownTimer -= Time.fixedDeltaTime;
-
+		if (cooldownTimer >= 0)
+		{
+			cooldownTimer -= Time.deltaTime;
+			playerController.EvaluateAttackPressed();
+			return;
+		}
+		
 		if (charging)
 		{
 			chargeUpPercent = Mathf.Min(chargeUpPercent + Time.deltaTime * rangedChargeUpSpeed, 1);
@@ -56,11 +63,23 @@ public class PlayerCombat : MonoBehaviour
 		{
 			EquipWeapon(WeaponType.RANGED);
 			playerController.Motor.alwaysLookAway = true;
+			if (playerController.EvaluateAttackPressed())
+			{
+				cooldownTimer = rangedCooldownTime;
+				onRangedAttack.Invoke();
+				chargeUpPercent = 0.0001f;
+			}
 
 		}
 		else
 		{
 			playerController.Motor.alwaysLookAway = false;
+			if (playerController.EvaluateAttackPressed())
+			{
+				cooldownTimer = meleeCooldownTime;
+				EquipWeapon(WeaponType.MELEE);
+				onMeleeAttack.Invoke();
+			}
 		}
 
 	}
@@ -97,5 +116,11 @@ public class PlayerCombat : MonoBehaviour
 		currentWeapon = weaponType;
 	}
 
+	void OnChangeRoll()
+	{
+		EquipWeapon(WeaponType.NONE);
+		chargeUpPercent = 0;
+		charging = false;
+	}
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
 }
