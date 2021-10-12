@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
 // GENERATED AUTOMATICALLY FROM 'Assets/Input/InputMaster.inputactions'
-=======
-// GENERATED AUTOMATICALLY FROM 'Assets/Experimentation/Connor/Input/InputMaster.inputactions'
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
 
 using System;
 using System.Collections;
@@ -55,11 +51,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                     ""name"": ""Aim"",
-=======
-                    ""name"": ""WeaponChange"",
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
                     ""type"": ""Button"",
                     ""id"": ""67ba8191-ae9d-4c28-a861-4aad2d863c9b"",
                     ""expectedControlType"": ""Button"",
@@ -75,7 +67,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""f90fef62-b01c-4d4c-92d3-8d1a89110d9d"",
@@ -88,12 +79,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""bd08b4de-056e-47d1-a866-bd1cf104f4d8"",
                     ""expectedControlType"": ""Button"",
-=======
-                    ""name"": ""WeaponScroll"",
-                    ""type"": ""Value"",
-                    ""id"": ""998cc4ca-768b-4bbf-9808-551b0f3bf630"",
-                    ""expectedControlType"": ""Axis"",
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -234,38 +219,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6bd52832-413c-4cb6-b2df-f631a2280dca"",
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KBM"",
                     ""action"": ""Aim"",
-=======
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KBM"",
-                    ""action"": ""WeaponChange"",
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""daae620f-1f5c-46ff-a054-62d951e0b32f"",
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""Aim"",
-=======
-                    ""path"": ""<Gamepad>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Controller"",
-                    ""action"": ""WeaponChange"",
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -293,7 +262,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                     ""id"": ""a74f1ea8-289b-40fc-8415-d5b13d70fcd3"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -322,14 +290,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
-=======
-                    ""id"": ""2d39b9f3-6eab-4220-97aa-3b0ef6df53cd"",
-                    ""path"": ""<Mouse>/scroll/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KBM"",
-                    ""action"": ""WeaponScroll"",
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -448,16 +408,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Bow = m_Player.FindAction("Bow", throwIfNotFound: true);
-=======
-        m_Player_WeaponChange = m_Player.FindAction("WeaponChange", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
-        m_Player_WeaponScroll = m_Player.FindAction("WeaponScroll", throwIfNotFound: true);
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
@@ -517,16 +471,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Crouch;
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Bow;
-=======
-    private readonly InputAction m_Player_WeaponChange;
-    private readonly InputAction m_Player_Attack;
-    private readonly InputAction m_Player_WeaponScroll;
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -535,16 +483,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Bow => m_Wrapper.m_Player_Bow;
-=======
-        public InputAction @WeaponChange => m_Wrapper.m_Player_WeaponChange;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
-        public InputAction @WeaponScroll => m_Wrapper.m_Player_WeaponScroll;
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -566,7 +508,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                 @Aim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
@@ -579,17 +520,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Bow.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
                 @Bow.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
                 @Bow.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBow;
-=======
-                @WeaponChange.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponChange;
-                @WeaponChange.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponChange;
-                @WeaponChange.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponChange;
-                @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                @WeaponScroll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
-                @WeaponScroll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
-                @WeaponScroll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponScroll;
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -606,7 +536,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
@@ -619,17 +548,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Bow.started += instance.OnBow;
                 @Bow.performed += instance.OnBow;
                 @Bow.canceled += instance.OnBow;
-=======
-                @WeaponChange.started += instance.OnWeaponChange;
-                @WeaponChange.performed += instance.OnWeaponChange;
-                @WeaponChange.canceled += instance.OnWeaponChange;
-                @Attack.started += instance.OnAttack;
-                @Attack.performed += instance.OnAttack;
-                @Attack.canceled += instance.OnAttack;
-                @WeaponScroll.started += instance.OnWeaponScroll;
-                @WeaponScroll.performed += instance.OnWeaponScroll;
-                @WeaponScroll.canceled += instance.OnWeaponScroll;
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
             }
         }
     }
@@ -724,16 +642,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
-<<<<<<< Updated upstream:Assets/Input/InputMaster.cs
         void OnAim(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnBow(InputAction.CallbackContext context);
-=======
-        void OnWeaponChange(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
-        void OnWeaponScroll(InputAction.CallbackContext context);
->>>>>>> Stashed changes:Assets/Experimentation/Connor/Input/InputMaster.cs
     }
     public interface ICameraActions
     {
