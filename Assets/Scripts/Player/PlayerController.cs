@@ -6,12 +6,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] OldCameraController cameraController = null;
+	[SerializeField] GameplayUIManager gUI = null;
 	[SerializeField] float rollColliderRadius = 0.5f;
 	[SerializeField] Vector3 additionalRollColliderOffset = Vector3.zero;
-	[SerializeField] Vector3 rollCameraOffset = Vector3.zero;
+	[SerializeField] float rollCameraYOffset = 0;
 	[SerializeField] private Transform rotatableChild = null;
 	[SerializeField] InterpolateChild visualInterpolator = null;
 	[SerializeField] GameManager gameManager = null;
+	[SerializeField] bool drawDebug = false;
 	Vector3 rollColliderOffset;
 
 	//INPUT
@@ -32,14 +34,15 @@ public class PlayerController : MonoBehaviour
 	public OldCameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
 	public GameManager GameManager { get { return gameManager; } }
+	public GameplayUIManager GUI { get { return gUI; } }
 	public float InitialColliderHeight { get; private set; }
 	public float InitialColliderRadius { get; private set; }
 	public Vector3 InitialColliderOffset { get; private set; }
 
-	public Vector3 InitialCameraOffset { get; private set; }
 	public float RollColliderRadius { get { return rollColliderRadius; } }
 	public Vector3 RollColliderOffset { get { return rollColliderOffset + additionalRollColliderOffset; } }
-	public Vector3 RollCameraOffset { get { return rollCameraOffset; } }
+	public float RollCameraOffset { get { return rollCameraYOffset; } }
+	public bool DrawDebug { get { return drawDebug; } }
 	public bool InterpolateVisuals {
 		get
 		{
@@ -60,17 +63,19 @@ public class PlayerController : MonoBehaviour
     {
 		Motor = GetComponent<PlayerMotor>();
 		Animator = GetComponentInChildren<PlayerAnimator>();
-		if (Animator == null)
+		if (!Animator)
 			Animator = FindObjectOfType<PlayerAnimator>();
 		CharacterController = GetComponent<CharacterController>();
 		Health = GetComponent<PlayerHealth>();
 		Combat = GetComponent<PlayerCombat>();
 		visualInterpolator = GetComponentInChildren<InterpolateChild>();
-		
-		if (MainCamera == null)
-		{
+
+		if (!gUI)
+			gUI = FindObjectOfType<GameplayUIManager>();
+		if (!gameManager)
+			gameManager = FindObjectOfType<GameManager>();
+		if (!MainCamera)
 			cameraController = FindObjectOfType<OldCameraController>();
-		}
 		if (rotatableChild == null)
 		{
 			if (transform.childCount > 0)
@@ -85,7 +90,6 @@ public class PlayerController : MonoBehaviour
 		InitialColliderRadius = CharacterController.radius;
 		InitialColliderOffset = CharacterController.center;
 		rollColliderOffset = CharacterController.center + new Vector3(0, (rollColliderRadius - CharacterController.height)/2, 0);
-		InitialCameraOffset = MainCamera.targetOffset;
 
 		//INPUT
 		controls = new InputMaster();

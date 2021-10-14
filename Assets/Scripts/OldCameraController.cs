@@ -13,59 +13,46 @@ public partial class OldCameraController : MonoBehaviour
 	[Header("Behaviour")]
 	[Tooltip("The target to orbit around.")]
 	public Transform target;
-	[Tooltip("The offset from the target in world space.")]
-	public Vector3 targetOffset;
-	[Tooltip("The maximum distance the camera can be away from the target.")]
-	public float maxFollowDistance = 10;
-	[Tooltip("The layers that can obstruct the camera.")]
-	public LayerMask obstructionLayers;
-	
+
+	[Tooltip("Contains data about the camera. These values cannot be changed at runtime, but the cameraData itself can be changed.")]
+	public CameraData defaultCameraData;
+
 	[Header("Control")]
 	[Space(5)]
 	[Tooltip("Whether the camera accepts input or not.")]
 	public bool enableInput = true;
-	[Tooltip("The camera sensitivity multiplier.")]
-	[Range(0, 1)] public float sensitivity = 0.1f;
+	
 	[Tooltip("If input is inverted or not.")]
 	public bool inverted = false;
-	[Tooltip("Up rotation cannot be higher than this value.")]
-	[Range(-90, 90)] public float maximumUpRotation = 87;
-	[Tooltip("Up rotation cannot be less than this value.")]
-	[Range(-90, 90)] public float minimumUpRotation = -87;
-
-	[Header("Movement")]
-	[Space(5)]
-	[Tooltip("Camera movement speed.")]
-	public float followSpeed = 15;
+	[Tooltip("The camera sensitivity multiplier.")]
+	[Range(0, 1)] public float sensitivity = 0.1f;
+	
 	public MovementUpdateType movementUpdateType = MovementUpdateType.LATEUPDATE;
-	[Tooltip("The max amount the camera will turn to look away from the floor.")]
-	public float cameraAvoidFloorRotationPower = 15;
-	[Tooltip("The angular distance in which the camera avoids the floor.")]
-	public float cameraAvoidFloorRotationAngleRange = 30;
-	[Tooltip("The speed the camera zooms out.")]
-	public float zoomOutSpeed = 15;
+	//[Tooltip("The max amount the camera will turn to look away from the floor.")]
+	//public float cameraAvoidFloorRotationPower = 15;
+	//[Tooltip("The angular distance in which the camera avoids the floor.")]
+	//public float cameraAvoidFloorRotationAngleRange = 30;
+	
 	[Tooltip("Propertional to the speed camera shake deteriorates")]
 	public float shakeDeteriorateSpeed = 1;
 	[Tooltip("Affects the amount of random movement applied to the screen shake (multiplied by shake magnitude)."), Range(0,1)]
 	public float shakeNoiseMag = 0;
-	public float yOffsetStartDistance = 0;
-	public float yOffsetDistance = 3;
-	public float yOffsetMagnitude = 1;
-	public float yOffsetChangeSpeed = 1;
+	
 	[Tooltip("If rotation should be smoothed.")]
 	public bool smoothCameraRotation = false;
-	[Tooltip("Camera orbit speed.")]
-	public float rotateSpeed = 1;
+	[Tooltip("The layers that can obstruct the camera.")]
+	public LayerMask obstructionLayers;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	public enum MovementUpdateType
 	{
-		UPDATE,
 		LATEUPDATE,
 		FIXEDUPDATE
 	}
 	Camera cam;
 
+	//the current cameraData (created in memory only)
+	CameraData data;
 	//The rotation of the targetQuaternion
 	Vector2 rotation;
 	//the offset from the target
@@ -89,10 +76,17 @@ public partial class OldCameraController : MonoBehaviour
 	//camera shake
 	Vector3 cameraShake = Vector3.zero;
 
+	private void OnEnable()
+	{
+		data = ScriptableObject.CreateInstance<CameraData>();
+	}
+	private void OnDisable()
+	{
+		ScriptableObject.Destroy(data);
+	}
 	void Start()
 	{
-		//show error in console if target is null
-		Debug.Assert(target != null);
+		SetCameraData(defaultCameraData);
 
 		cam = GetComponent<Camera>();
 
@@ -117,8 +111,9 @@ public partial class OldCameraController : MonoBehaviour
 	{
 		if (movementUpdateType == MovementUpdateType.LATEUPDATE)
 		{
-			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
-			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
+			Vector3 pos = data.targetOffset.y * Vector3.up + target.position;
+			float distance = Vector3.Distance(currentPivotPosition, pos);
+			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, pos, Time.deltaTime * data.followSpeed * distance);
 		}
 	}
 
@@ -126,8 +121,9 @@ public partial class OldCameraController : MonoBehaviour
 	{
 		if (movementUpdateType == MovementUpdateType.FIXEDUPDATE)
 		{
-			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
-			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
+			Vector3 pos = data.targetOffset.y * Vector3.up + target.position;
+			float distance = Vector3.Distance(currentPivotPosition, pos);
+			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, pos, Time.deltaTime * data.followSpeed * distance);
 		}
 	}
 
@@ -138,8 +134,8 @@ public partial class OldCameraController : MonoBehaviour
 		{
 			float sphericalDistance = Quaternion.Angle(currentOrbit, targetOrbit);
 
-			currentOrbit = Quaternion.RotateTowards(currentOrbit, targetOrbit, sphericalDistance * Time.deltaTime * rotateSpeed);
-			xRotationAdditionCurrent = Mathf.MoveTowardsAngle(xRotationAdditionCurrent, xRotationAddition, Mathf.Abs(xRotationAdditionCurrent - xRotationAddition) * Time.deltaTime * rotateSpeed);
+			currentOrbit = Quaternion.RotateTowards(currentOrbit, targetOrbit, sphericalDistance * Time.deltaTime * data.rotateSpeed);
+			xRotationAdditionCurrent = Mathf.MoveTowardsAngle(xRotationAdditionCurrent, xRotationAddition, Mathf.Abs(xRotationAdditionCurrent - xRotationAddition) * Time.deltaTime * data.rotateSpeed);
 			//set the orbit vector 
 			orbitVector = currentOrbit * Vector3.forward;
 			//the camera will look in the opposite direction of the orbit vector, toward the target position
@@ -162,21 +158,31 @@ public partial class OldCameraController : MonoBehaviour
 			}
 		}
 
-		//add y offset
-		if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, Vector3.up, out RaycastHit hit, transform.rotation, yOffset * yOffsetMagnitude, obstructionLayers.value))
+		//add offsets
+		Vector3 offset = data.targetOffset;
+		offset.y = yOffset * data.yOffsetMagnitude;
+		if (offset != Vector3.zero)
 		{
-			transform.position += Vector3.up * hit.distance;
-		}
-		else
-		{
-			transform.position += Vector3.up * (yOffset * yOffsetMagnitude);
+			float additionMagnitude = offset.magnitude;
+			Vector3 additionDirection = target.TransformDirection(offset / additionMagnitude);
+			if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, additionDirection, out RaycastHit hit, transform.rotation, additionMagnitude, obstructionLayers.value))
+			{
+				transform.position += additionDirection * hit.distance;
+			}
+			else
+			{
+				transform.position += additionDirection * additionMagnitude;
+			}
 		}
 
-		if (movementUpdateType == MovementUpdateType.UPDATE)
-		{
-			float distance = Vector3.Distance(currentPivotPosition, target.position + targetOffset);
-			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, target.position + targetOffset, Time.deltaTime * followSpeed * distance);
-		}
+		//if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, Vector3.up, out hit, transform.rotation, yOffset * data.yOffsetMagnitude, obstructionLayers.value))
+		//{
+		//	transform.position += Vector3.up * hit.distance;
+		//}
+		//else
+		//{
+		//	transform.position += Vector3.up * (yOffset * data.yOffsetMagnitude);
+		//}
 	}
 
 	//Called through unity input system
@@ -195,7 +201,7 @@ public partial class OldCameraController : MonoBehaviour
 	/// Updates the camera movement based on an input vector
 	/// </summary>
 	/// <param name="input">A 2d vector representing a rotational movement on the x and y axis</param>
-	void InputMove(Vector2 input)
+	public void InputMove(Vector2 input)
 	{
 		if (!enableInput) return;
 
@@ -205,16 +211,16 @@ public partial class OldCameraController : MonoBehaviour
 		//clamp x rotation
 		rotation.y = Mathf.Repeat(rotation.y, 360);
 
-		rotation.x = Mathf.Clamp(rotation.x, -maximumUpRotation, -minimumUpRotation);
+		rotation.x = Mathf.Clamp(rotation.x, -data.maximumUpRotation, -data.minimumUpRotation);
 
-		//this is used to push camera away from floor when on ground so you can see more upward
-		float rotationFromMin = -(rotation.x - (minimumUpRotation));
-		if (rotationFromMin < cameraAvoidFloorRotationAngleRange)
-		{
-			xRotationAddition = cameraAvoidFloorRotationPower * (1 - rotationFromMin / cameraAvoidFloorRotationAngleRange);
-		}
-		else
-			xRotationAddition = 0;
+		////this is used to push camera away from floor when on ground so you can see more upward
+		//float rotationFromMin = -(rotation.x - (data.minimumUpRotation));
+		//if (rotationFromMin < cameraAvoidFloorRotationAngleRange)
+		//{
+		//	xRotationAddition = cameraAvoidFloorRotationPower * (1 - rotationFromMin / cameraAvoidFloorRotationAngleRange);
+		//}
+		//else
+		//	xRotationAddition = 0;
 		
 		//set target quaternion
 		targetOrbit = Quaternion.Euler(rotation);
@@ -226,19 +232,6 @@ public partial class OldCameraController : MonoBehaviour
 			orbitVector = currentOrbit * Vector3.forward;
 			transform.forward = -orbitVector;
 			transform.Rotate(new Vector3(-xRotationAddition, 0, 0));
-		}
-	}
-
-	//When inspector values are changed, check they are valid
-	void OnValidate()
-	{
-		if (maxFollowDistance < 0)
-			maxFollowDistance = 0;
-		if (rotateSpeed < 0)
-			rotateSpeed = 0;
-		if (maximumUpRotation < minimumUpRotation)
-		{
-			maximumUpRotation = minimumUpRotation;
 		}
 	}
 
@@ -257,7 +250,7 @@ public partial class OldCameraController : MonoBehaviour
 		if (c.Length == 0)
 		{
 			if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, orbitVector,
-			out RaycastHit boxHit, transform.rotation, maxFollowDistance, obstructionLayers.value))
+			out RaycastHit boxHit, transform.rotation, data.maxFollowDistance, obstructionLayers.value))
 			{
 				targetDistance = boxHit.distance;
 			}
@@ -267,13 +260,13 @@ public partial class OldCameraController : MonoBehaviour
 				//this should fix most cases of that happening
 				//will not fix if raycast origin is inside of obstruction collider
 				Ray ray = new Ray(currentPivotPosition, orbitVector);
-				if (Physics.Raycast(ray, out RaycastHit rayHit, maxFollowDistance, obstructionLayers.value))
+				if (Physics.Raycast(ray, out RaycastHit rayHit, data.maxFollowDistance, obstructionLayers.value))
 				{
 					targetDistance = rayHit.distance;
 				}
 				else
 				{
-					targetDistance = maxFollowDistance;
+					targetDistance = data.maxFollowDistance;
 				}
 
 			}
@@ -283,7 +276,7 @@ public partial class OldCameraController : MonoBehaviour
 		//need to move currentdistance toward targetdistance
 		if (currentDistance < targetDistance)
 		{
-			currentDistance = Mathf.MoveTowards(currentDistance, targetDistance, Time.deltaTime * zoomOutSpeed * (targetDistance - currentDistance));
+			currentDistance = Mathf.MoveTowards(currentDistance, targetDistance, Time.deltaTime * data.zoomOutSpeed * (targetDistance - currentDistance));
 		}
 		else
 		{
@@ -294,9 +287,9 @@ public partial class OldCameraController : MonoBehaviour
 		orbitVector *= currentDistance;
 
 		//now set y offset based on distance
-		if (currentDistance < yOffsetStartDistance + yOffsetDistance)
+		if (currentDistance < data.yOffsetStartDistance + data.yOffsetDistance)
 		{
-			float t = 1 - Mathf.Max(0, currentDistance - yOffsetStartDistance) / yOffsetDistance;
+			float t = 1 - Mathf.Max(0, currentDistance - data.yOffsetStartDistance) / data.yOffsetDistance;
 			targetYOffset = t;
 		}
 		else
@@ -304,7 +297,7 @@ public partial class OldCameraController : MonoBehaviour
 			targetYOffset = 0;
 		}
 
-		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
+		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * data.yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
 	}
 
 	/// <summary>
@@ -325,5 +318,30 @@ public partial class OldCameraController : MonoBehaviour
 		float magnitude = cameraShake.magnitude;
 		cameraShake = Vector3.MoveTowards(cameraShake, Vector3.zero, magnitude * Time.unscaledDeltaTime * shakeDeteriorateSpeed);
 		return magnitude;
+	}
+
+	public void SetCameraData(CameraData newData)
+	{
+		data.followSpeed = newData.followSpeed;
+		data.maxFollowDistance = newData.maxFollowDistance;
+		data.maximumUpRotation = newData.maximumUpRotation;
+		data.minimumUpRotation = newData.minimumUpRotation;
+		data.rotateSpeed = newData.rotateSpeed;
+		data.targetOffset = newData.targetOffset;
+		data.yOffsetChangeSpeed = newData.yOffsetChangeSpeed;
+		data.yOffsetDistance = newData.zoomOutSpeed;
+		data.yOffsetMagnitude = newData.yOffsetMagnitude;
+		data.yOffsetStartDistance = newData.yOffsetStartDistance;
+		data.zoomOutSpeed = newData.zoomOutSpeed;
+	}
+
+	public void ResetCameraData()
+	{
+		SetCameraData(defaultCameraData);
+	}
+
+	public CameraData GetCameraData()
+	{
+		return data;
 	}
 }

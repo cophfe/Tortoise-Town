@@ -45,8 +45,9 @@ public class PlayerMotor : MonoBehaviour
 	public float jumpCoyoteTime = 0.1f;
 
 	[Header("Dash")]
+	public AnimationCurve dashCurve;
 	public float dashSpeed = 4;
-	public float dashAcceleration = 100;
+	public float dashAcceleration = 200;
 	public float dashDuration = 0.2f;
 	public float dashCooldown = 2;
 	public float dashTurnSpeed = 40;
@@ -61,6 +62,7 @@ public class PlayerMotor : MonoBehaviour
 	[Range(0,1)] public float bounciness = 0;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
+	public float dashCancelDot = 0.5f;
 
 	//CONTROL
 	[Tooltip("The percent of acceleration applied to input while in the air")]
@@ -126,10 +128,8 @@ public class PlayerMotor : MonoBehaviour
 	public UnityEvent onEnterGround;
 	[Tooltip("The event called when entering or leaving a roll")]
 	public UnityEvent onChangeRoll;
-
-	//OTHER
-	[Tooltip("Whether or not to draw additional debug information")]
-	public bool drawDebug = false;
+	[Tooltip("The event called when dashing")]
+	public UnityEvent onDash;
 	#endregion
 
 	#region Private Variables
@@ -148,6 +148,9 @@ public class PlayerMotor : MonoBehaviour
 	float jumpTimer = 0;
 	float airJumpsLeft = 0;
 	//dash
+	float currentDashDuration;
+	float currentDashVelocity;
+	Vector3 currentDashDirection;
 	float dashCooldownTimer = 0;
 	float dashTimer = 0;
 	bool dashing = false;
@@ -157,6 +160,7 @@ public class PlayerMotor : MonoBehaviour
 	Vector3 groundPosition;
 	Vector3 groundNormal;
 	float groundDistance;
+	float groundAngle;
 	Collider groundCollider;
 	bool enableGroundMagnet = false;
 	float groundMagnetOffset;
@@ -185,13 +189,14 @@ public class PlayerMotor : MonoBehaviour
 	private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
+		TargetSpeedManipulator = 1;
 	}
 
 	private void Update()
 	{
 		UpdateRotation();
 
-		if (drawDebug && isGrounded)
+		if (playerController.DrawDebug && isGrounded)
 		{
 			Debug.DrawRay(groundPosition, groundNormal, Color.blue, Time.deltaTime);
 		}
@@ -232,38 +237,14 @@ public class PlayerMotor : MonoBehaviour
 		rollCooldownTimer -= Time.deltaTime;
 		dashCooldownTimer -= Time.deltaTime;
 		dashTimer -= Time.deltaTime;
+		TargetSpeedManipulator = 1;
 	}
 
 	void UpdateMovementVector()
 	{
 		if (inputVelocity != Vector3.zero)
 			lastNonZeroInputVelocity = inputVelocity;
-
-		if (dashing)
-		{
-			if (playerController.inputVector == Vector2.zero)
-			{
-				inputForward = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up).normalized;
-				if (groundNormal.y != 0)
-				{
-					inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z) / groundNormal.y;
-					inputForward.Normalize();
-				}
-				targetVelocity = inputForward * dashSpeed;
-			}
-			else
-			{
-				targetVelocity = GetTargetDirection().normalized * dashSpeed;
-			}
-			inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, dashAcceleration * Time.deltaTime);
-
-			if (dashTimer <= 0)
-			{
-				dashing = false;
-				dashedInThisJump = false;
-			}
-		}
-		else if (isRolling)
+		if (isRolling)
 		{
 			if (state == MovementState.GROUNDED)
 			{
@@ -300,7 +281,7 @@ public class PlayerMotor : MonoBehaviour
 		{
 			if (state == MovementState.GROUNDED)
 			{
-				targetVelocity = GetTargetDirection() * targetSpeed;
+				targetVelocity = GetTargetDirection() * targetSpeed * TargetSpeedManipulator;
 
 				float currentAcceleration = acceleration;
 
@@ -315,13 +296,28 @@ public class PlayerMotor : MonoBehaviour
 			{
 				if (playerController.inputVector != Vector2.zero)
 				{
-					targetVelocity = GetTargetDirection() * targetSpeed;
+					targetVelocity = GetTargetDirection() * targetSpeed * TargetSpeedManipulator;
 
 					inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, airControlModifier * acceleration * Time.deltaTime * (isRolling ? rollTargetSpeedModifier : 1));
 				}
 
 				//FRICTION
 				inputVelocity = Vector3.MoveTowards(inputVelocity, Vector3.zero, airFriction * Time.deltaTime);
+			}
+
+			if (dashing)
+			{
+				float t = dashCurve.Evaluate(1 - dashTimer / dashDuration);
+				targetVelocity = currentDashDirection * currentDashVelocity * t;
+
+				//transition between the two velocities
+				targetVelocity = Vector3.Lerp(inputVelocity, targetVelocity, t);
+				inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, dashAcceleration * Time.deltaTime);
+
+				if (dashTimer <= 0)
+				{
+					dashing = false;
+				}
 			}
 		}
 
@@ -338,7 +334,7 @@ public class PlayerMotor : MonoBehaviour
 				+ inputForward * playerController.inputVector.y;
 			targetVelocity = Vector3.ClampMagnitude(targetVelocity, 1);
 
-			if (drawDebug)
+			if (playerController.DrawDebug)
 			{
 				Debug.DrawRay(groundPosition, Vector3.Cross(inputForward, groundNormal), Color.red, Time.deltaTime, false);
 				Debug.DrawRay(groundPosition, inputForward, Color.red, Time.deltaTime, false);
@@ -357,6 +353,7 @@ public class PlayerMotor : MonoBehaviour
 			forcesVelocity = Vector3.zero;
 			return;
 		}
+
 		if (state == MovementState.GROUNDED)
 		{
 			//GRAVITY
@@ -388,7 +385,6 @@ public class PlayerMotor : MonoBehaviour
 	public void UpdateRotation()
 	{
 		float turnSpeed;
-
 		
 		if (isRolling)
 		{
@@ -434,7 +430,6 @@ public class PlayerMotor : MonoBehaviour
 				else
 					rotVec = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up);
 				turnSpeed = this.turnSpeed;
-				
 			}
 			else
 			{
@@ -459,7 +454,7 @@ public class PlayerMotor : MonoBehaviour
 			}
 
 			Transform modelTransform = playerController.Animator.transform;
-			Vector3 clampedGroundNormal = Vector3.RotateTowards(Vector3.up, groundNormal, bodyMaxGroundAlignAngle * Mathf.Deg2Rad, 1);
+			Vector3 clampedGroundNormal = Vector3.RotateTowards(Vector3.up, groundNormal, Mathf.Max(groundAngle / playerController.CharacterController.slopeLimit, 1) * bodyMaxGroundAlignAngle * Mathf.Deg2Rad, 1);
 			var target = Quaternion.FromToRotation(Vector3.up, Quaternion.Inverse(playerController.RotateChild.rotation) * clampedGroundNormal);
 			modelTransform.localRotation = Quaternion.RotateTowards(modelTransform.localRotation, target,
 				Quaternion.Angle(modelTransform.localRotation, target) *  walkAlignSpeed * Time.deltaTime);
@@ -469,7 +464,7 @@ public class PlayerMotor : MonoBehaviour
 	void SetState()
 	{
 		bool movingUp = Vector3.Dot(Vector3.up, forcesVelocity) > 0.0001f;
-		bool groundTooSteep = Vector3.Angle(groundNormal, Vector3.up) > playerController.CharacterController.slopeLimit;
+		bool groundTooSteep = groundAngle > playerController.CharacterController.slopeLimit;
 
 		switch (state)
 		{
@@ -550,14 +545,70 @@ public class PlayerMotor : MonoBehaviour
 			groundMagnetOffset = 0;
 		}
 		float radius = playerController.CharacterController.radius * groundDetectionRadiusModifier;
+
+		//for some reason this causes bugs even when no rigidbodies are near
+		//RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction,
+		//	length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround);
+
+		//RaycastHit hit = new RaycastHit();
+		//float minDistanceToCentre = float.PositiveInfinity;
+		//isGrounded = false;
+		//for (int i = 0; i < hits.Length; i++)
+		//{
+		//	if (hits[i].rigidbody)
+		//	{
+		//		Debug.Log("Hit a rigidbody named" + hits[i].collider.gameObject.name);
+		//		if (Vector3.Angle(hits[i].normal, Vector3.up) > playerController.CharacterController.slopeLimit)
+		//		{
+		//			continue;
+		//		}
+		//	}
+		//	float len = hits[i].distance;
+		//	if (len < minDistanceToCentre)
+		//	{
+		//		isGrounded = true;
+		//		minDistanceToCentre = len;
+		//		hit = hits[i];
+		//	}
+		//	else
+		//	{
+		//		Debug.Log("ground not good enough");
+				
+		//	}
+		//	break;
+		//}
+		//isGrounded = minDistanceToCentre != float.PositiveInfinity;
 		isGrounded = Physics.SphereCast(origin, radius, direction, out var hit,
 			length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround);
+
+		var rb = hit.rigidbody;
+		//in a very specific case rigidbodies can cause the player to not detect the ground, this should fix that
+		groundAngle = Vector3.Angle(hit.normal, Vector3.up);
+		if (rb && !rb.isKinematic && groundAngle > playerController.CharacterController.slopeLimit)
+		{
+			//make collider undetectable
+			GameObject hitObject = hit.collider.gameObject;
+			int layer = hitObject.layer;
+			int newLayer = 0;
+			//find 
+			while ((ignoredGround & (1 <<newLayer)) == 0 && newLayer < 32)
+				newLayer++;
+
+			if (newLayer < 32)
+			{
+				hitObject.layer = newLayer;
+				isGrounded = Physics.SphereCast(origin, radius, direction, out hit,
+					length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround);
+				hitObject.layer = layer;
+			}
+		}
 
 		if (isGrounded)
 		{
 			groundPosition = hit.point;
 			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
 			groundNormal = hit.normal;
+			groundAngle = Vector3.Angle(groundNormal, Vector3.up);
 			if (hit.collider != groundCollider)
 				OnChangedCollider(hit.collider);
 			groundCollider = hit.collider;
@@ -579,6 +630,7 @@ public class PlayerMotor : MonoBehaviour
 				OnChangedCollider(null);
 
 			groundNormal = Vector3.up;
+			groundAngle = 0;
 			groundCollider = null;
 		}
 	}
@@ -706,19 +758,75 @@ public class PlayerMotor : MonoBehaviour
 		}
 		if (playerController.EvaluateJumpCancelled())
 			state = MovementState.RISING;
+
+		if (dashing)
+		{
+			dashing = false;
+			dashedInThisJump = false;
+			inputVelocity = Vector3.ClampMagnitude(inputVelocity, inputVelocity.magnitude - jumpSpeed);
+		}
 	}
 
 	void OnStartDash()
 	{
+		currentDashVelocity = dashSpeed;
+		currentDashDuration = dashDuration;
+
 		if (state != MovementState.GROUNDED)
 		{
-			if (dashedInThisJump) return;
-			dashedInThisJump = true;
-			state = MovementState.RISING;
+			if (dashedInThisJump)
+			{
+				return;
+			}
+			else
+			{
+				dashedInThisJump = true;
+			}
 		}
 		dashing = true;
 		dashCooldownTimer = dashCooldown;
-		dashTimer = dashDuration;
+		dashTimer = currentDashDuration;
+		if (playerController.inputVector == Vector2.zero)
+		{
+			inputForward = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up).normalized;
+			if (groundNormal.y != 0)
+			{
+				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z) / groundNormal.y;
+				inputForward.Normalize();
+			}
+			currentDashDirection = inputForward;
+		}
+		else
+		{
+			inputForward = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up).normalized;
+			if (groundNormal.y != 0)
+			{
+				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z) / groundNormal.y;
+				inputForward.Normalize();
+			}
+			currentDashDirection = Vector3.Cross(inputForward, groundNormal) * -playerController.inputVector.x
+				+ inputForward * playerController.inputVector.y;
+			currentDashDirection.Normalize();
+		}
+		onDash.Invoke();
+	}
+
+	//a dash called by an external script
+	public void StartExternalDash(float dashSpeed, float dashDuration, Vector3 dashDirection, bool considerCooldown = false)
+	{
+		if (considerCooldown)
+		{
+			if (dashCooldownTimer > 0) return; 
+			dashCooldownTimer = dashCooldown;
+		}
+		currentDashDirection = dashDirection;
+		currentDashDuration = dashDuration;
+		currentDashVelocity = dashSpeed;
+		dashing = true;
+
+		dashTimer = currentDashDuration;
+		currentDashDirection = dashDirection;
+		onDash.Invoke();
 	}
 
 	void OnLand()
@@ -810,7 +918,11 @@ public class PlayerMotor : MonoBehaviour
 	{
 		float angle = Vector3.Angle(hit.normal, Vector3.up);
 		Rigidbody rb = hit.rigidbody;
-
+		
+		if (dashing && Vector3.Dot(-inputVelocity.normalized, hit.normal) > dashCancelDot)
+		{
+			dashing = false;
+		}
 		if ((hit.gameObject.layer & ignoredCollision) == 0)
 		{
 			if (rb && !rb.isKinematic)
@@ -825,7 +937,7 @@ public class PlayerMotor : MonoBehaviour
 					rb.AddForceAtPosition(impulseMag * hit.normal, hit.point, ForceMode.Impulse);
 				}
 
-				if (drawDebug)
+				if (playerController.DrawDebug)
 				{
 					Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
 				}
@@ -839,7 +951,7 @@ public class PlayerMotor : MonoBehaviour
 					inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
 
 
-					if (drawDebug)
+					if (playerController.DrawDebug)
 					{
 						Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
 					}
@@ -870,11 +982,13 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 GroundNormal { get { return groundNormal; } }
 	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	public bool IsRolling { get { return isRolling; } }
+	public bool IsDashing { get { return dashing; } }
+	public float TargetSpeedManipulator { get; set; }
 	#endregion
 
 	private void OnDrawGizmosSelected()
 	{
-		if (drawDebug && Application.isPlaying)
+		if (Application.isPlaying && playerController.DrawDebug)
 		{
 			float radius = playerController.CharacterController.radius * groundDetectionRadiusModifier;
 

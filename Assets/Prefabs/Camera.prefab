@@ -48,29 +48,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  targetOffset: {x: 0, y: 0, z: 0}
-  maxFollowDistance: 5
+  defaultCameraData: {fileID: 11400000, guid: e2c576efeb0f2624a96918c52ee0edb6, type: 2}
+  enableInput: 1
+  inverted: 0
+  sensitivity: 0.1
+  movementUpdateType: 0
+  shakeDeteriorateSpeed: 1
+  shakeNoiseMag: 0.174
+  smoothCameraRotation: 1
   obstructionLayers:
     serializedVersion: 2
     m_Bits: 1
-  enableInput: 1
-  sensitivity: 0.1
-  inverted: 0
-  maximumUpRotation: 87
-  minimumUpRotation: 0
-  androidInputScreenPercentage: 0.7
-  followSpeed: 20
-  cameraAvoidFloorRotationPower: 0
-  cameraAvoidFloorRotationAngleRange: 5
-  zoomOutSpeed: 2
-  shakeDeteriorateSpeed: 1
-  shakeNoiseMag: 0.174
-  yOffsetStartDistance: 0
-  yOffsetDistance: 2
-  yOffsetMagnitude: 1
-  yOffsetChangeSpeed: 1
-  smoothCameraRotation: 0
-  rotateSpeed: 1
 --- !u!20 &4388463355891788019
 Camera:
   m_ObjectHideFlags: 0
