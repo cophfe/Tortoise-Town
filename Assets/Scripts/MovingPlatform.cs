@@ -111,8 +111,9 @@ public class MovingPlatform : BooleanSwitch
 			stopTimer = stopTime;
 			prevPosition = rb.position;
 
-			if (loopType == LoopType.ONCE) Pause();
-			if (loopType == LoopType.LOOP)
+			if (loopType == LoopType.ONCE) 
+				Pause();
+			else if (loopType == LoopType.LOOP)
 				t -= 1;
 			else
 			{
