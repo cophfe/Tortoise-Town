@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5373185578883234791}
   - component: {fileID: 5373185578883234790}
   m_Layer: 0
-  m_Name: Game_Manager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,5 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f4c0067daa4b045b88bb5ffee713fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableCursorRestriction: 0
+  enableCursorRestriction: 1
   targetFrameRate: -1
+  arrowPrefab: {fileID: 5496907085034195303, guid: f4033c1e1448ef143b0ff24c4fc51d5c, type: 3}
+  arrowPoolAmount: 20
+  arrowPoolNotifyDistance: 3

@@ -40,10 +40,6 @@ public class ArrowPhysics : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-
-
-
         if (collision.transform.CompareTag("Enemy"))
         {
            // enemyhealther = collision.gameObject.GetComponentInParent<EnemyHealth>();
