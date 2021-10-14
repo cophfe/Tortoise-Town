@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: tes
-  m_Shader: {fileID: -6465566751694194690, guid: 701f9fa225c23134db43d8c2b8e6398a, type: 3}
+  m_Shader: {fileID: 4800000, guid: e117d0ca335b13748aed0cf6d6d3b559, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -60,14 +60,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: f62c0c3a5ddcd844e905fb2632fdcb15, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_28C506EB: 0.342
-    - Vector1_610F019B: 36.46
+    - Vector1_610F019B: 49
     - Vector1_8A3B304C: 0.2
     - Vector1_E07D012C: 1
-    - Voroni_Scale: 2.73
+    - Voroni_Scale: 0.6
+    - _Alpha: 0.613
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
+    - _Amplitude: 0.1
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
@@ -75,6 +81,7 @@ Material:
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _FresenelPower: 0
+    - _FresnelScale: 0
     - _FrothBlend: 1
     - _FrothScaleBig: 2.61
     - _FrothScaleSmall: 4.37
@@ -95,14 +102,19 @@ Material:
     - _MediumWaveRotationZ: 1
     - _MediumWaveSpeed: 1
     - _Metallic: 0
+    - _Multy: 1
     - _OcclusionStrength: 1
-    - _Offset: 0
+    - _Offset: 2
+    - _OutlineDetailScale: 27.48
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RefractionBlend: 5
     - _RefractionScale: 25
     - _RefractionSize: 0.4
     - _RefractionStrength: 0.09
+    - _RotationSpeed: 1
+    - _ScaleAmount: 0.02
+    - _ScaleSize: 10
     - _SmallWaveHeight: 0.2
     - _SmallWavePower: 2
     - _SmallWaveRotationX: 0.85
@@ -114,26 +126,35 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _TopColourContrast: 1
+    - _Twist: 90.85
+    - _TwistAmount: 30
     - _WaterAlpha: 1
+    - _WaveLength: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _ZoomAmount: 0.1
     m_Colors:
-    - Color_6E279938: {r: 0, g: 0.74736834, b: 1, a: 1}
+    - Color_6E279938: {r: 0.023584902, g: 0.7496582, b: 1, a: 1}
     - Color_A9CA057: {r: 0.2783019, g: 0.59528303, b: 1, a: 1}
     - Vector2_61631E4: {r: 0, g: 1, b: 0, a: 0}
     - Vector2_C450566B: {r: 1, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BottomDarkColour: {r: 0, g: 0, b: 0, a: 0}
     - _BottomLightColour: {r: 0.6745283, g: 0.918313, b: 1, a: 0}
+    - _Center: {r: 0, g: 0.5, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FrothDirection: {r: 1, g: 1, b: 0, a: 0}
     - _FrothStretch: {r: 0, g: 0, b: 0, a: 0}
     - _GradientSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _MainColor: {r: 0, g: 0.21775776, b: 0.509434, a: 0}
     - _MediumWaveColourBlend: {r: 0.57547164, g: 0.57547164, b: 0.57547164, a: 0}
+    - _OutlineColor: {r: 0, g: 1, b: 0.9686274, a: 0}
     - _RefractionColour: {r: 1, g: 1, b: 1, a: 0}
     - _RefractionStretch: {r: 2, g: 2, b: 0, a: 0}
+    - _SecondColor: {r: 1, g: 1, b: 1, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TopDarkColour: {r: 0, g: 1, b: 0.9999998, a: 0}
     - _TopLightColour: {r: 0.8915094, g: 1, b: 0.99237496, a: 0}
+    - _Vector1: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
