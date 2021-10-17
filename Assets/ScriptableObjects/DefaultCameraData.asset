@@ -16,7 +16,7 @@ MonoBehaviour:
   maxFollowDistance: 5
   maximumUpRotation: 87
   minimumUpRotation: 0
-  followSpeed: 20
+  followSpeed: 29
   zoomOutSpeed: 2
   yOffsetStartDistance: 0
   yOffsetDistance: 2

@@ -418,7 +418,12 @@ public class PlayerMotor : MonoBehaviour
 		{
 			Vector3 rotVec;
 
-			if (dashing)
+			if (alwaysLookAway)
+			{
+				rotVec = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up);
+				turnSpeed = this.turnSpeed * 4;
+			}
+			else if (dashing)
 			{
 				rotVec = Vector3.ProjectOnPlane(targetVelocity, Vector3.up);
 				turnSpeed = dashTurnSpeed;
@@ -436,11 +441,7 @@ public class PlayerMotor : MonoBehaviour
 				rotVec = Vector3.ProjectOnPlane(totalVelocity, Vector3.up);
 				turnSpeed = airTurnSpeed;
 			}
-			if (alwaysLookAway)
-			{
-				rotVec = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up);
-			}
-
+			
 			if (rotVec.magnitude >= minPlayerRotation)
 			{
 				targetRotation = Quaternion.LookRotation(rotVec, Vector3.up);
@@ -579,7 +580,7 @@ public class PlayerMotor : MonoBehaviour
 		//}
 		//isGrounded = minDistanceToCentre != float.PositiveInfinity;
 		isGrounded = Physics.SphereCast(origin, radius, direction, out var hit,
-			length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround);
+			length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround, QueryTriggerInteraction.Ignore);
 
 		var rb = hit.rigidbody;
 		//in a very specific case rigidbodies can cause the player to not detect the ground, this should fix that
@@ -916,6 +917,8 @@ public class PlayerMotor : MonoBehaviour
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
+		if (hit.collider.isTrigger || (hit.gameObject.layer & ignoredCollision) != 0) return;
+
 		float angle = Vector3.Angle(hit.normal, Vector3.up);
 		Rigidbody rb = hit.rigidbody;
 		
@@ -923,38 +926,36 @@ public class PlayerMotor : MonoBehaviour
 		{
 			dashing = false;
 		}
-		if ((hit.gameObject.layer & ignoredCollision) == 0)
+		
+		if (rb && !rb.isKinematic)
 		{
-			if (rb && !rb.isKinematic)
+			Vector3 rv = inputVelocity - rb.GetPointVelocity(hit.point);
+			float projRV = Vector3.Dot(rv, hit.normal);
+			if (projRV < 0)
 			{
-				Vector3 rv = inputVelocity - rb.GetPointVelocity(hit.point);
-				float projRV = Vector3.Dot(rv, hit.normal);
-				if (projRV < 0)
-				{
-					float impulseMag = ((1 + bounciness) * projRV) / (1 / mass + 1 / rb.mass);
+				float impulseMag = ((1 + bounciness) * projRV) / (1 / mass + 1 / rb.mass);
 
-					inputVelocity -= impulseMag * hit.normal / mass;
-					rb.AddForceAtPosition(impulseMag * hit.normal, hit.point, ForceMode.Impulse);
-				}
+				inputVelocity -= impulseMag * hit.normal / mass;
+				rb.AddForceAtPosition(impulseMag * hit.normal, hit.point, ForceMode.Impulse);
+			}
+
+			if (playerController.DrawDebug)
+			{
+				Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+			}
+		}
+		else
+		{
+			//cancel input velocity going into collision
+			float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
+			if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
+			{
+				inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
+
 
 				if (playerController.DrawDebug)
 				{
 					Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
-				}
-			}
-			else
-			{
-				//cancel input velocity going into collision
-				float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
-				if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
-				{
-					inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
-
-
-					if (playerController.DrawDebug)
-					{
-						Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
-					}
 				}
 			}
 		}

@@ -29,7 +29,6 @@ public class PlayerPortalTraveller : PortalTraveller
 		}
 		else
 		{
-			controller.Interpolator.ResetPosition();
 			controller.MainCamera.SetPositionAndRotation(portalRenderer.transform.position, portalRenderer.transform.rotation);
 			portalRenderer.OnPlayerThroughPortal();
 		}

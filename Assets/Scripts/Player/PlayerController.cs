@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
 			if (visualInterpolator)
 			{
 				visualInterpolator.disable = !value;
-				MainCamera.movementUpdateType = value ? OldCameraController.MovementUpdateType.LATEUPDATE : OldCameraController.MovementUpdateType.FIXEDUPDATE;
+				MainCamera.movementUpdateType = value ? OldCameraController.MovementUpdateType.UPDATE : OldCameraController.MovementUpdateType.FIXEDUPDATE;
 			}
 		}
 	}

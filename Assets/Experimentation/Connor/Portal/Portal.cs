@@ -25,7 +25,6 @@ public class Portal : MonoBehaviour
 
 		if (traveller)
 		{
-			Debug.Log(name + ": hello " + other.name);
 			traveller.OnEnter(this);
 			if (!travelling.Contains(traveller)) travelling.Add(traveller);
 		}
@@ -35,7 +34,6 @@ public class Portal : MonoBehaviour
 		var traveller = other.GetComponent<PortalTraveller>();
 		if (traveller)
 		{
-			Debug.Log(name + ": goodbye " + other.name);
 			traveller.OnExit(this);
 			travelling.Remove(traveller);
 		}
