@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 	bool crouchPressed;
 	bool sprintPressed;
 	bool attackPressed;
-	InputMaster controls;
+	InputMaster controls = null;
 
 	#region Properties
 	public PlayerMotor Motor { get; private set; }
@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
 	public Transform RotateChild { get { return rotatableChild; } }
 	public GameManager GameManager { get { return gameManager; } }
 	public GameplayUIManager GUI { get { return gUI; } }
+	public InterpolateChild Interpolator { get { return visualInterpolator; } }
 	public float InitialColliderHeight { get; private set; }
 	public float InitialColliderRadius { get; private set; }
 	public Vector3 InitialColliderOffset { get; private set; }
@@ -112,11 +113,13 @@ public class PlayerController : MonoBehaviour
 
 	public void OnEnable()
 	{
-		controls.Enable();
+		if (controls != null)
+			controls.Enable();
 	}
 	public void OnDisable()
 	{
-		controls.Disable();
+		if (controls != null)
+			controls.Disable();
 	}
 
 	#region Evaluate Functions

@@ -47,4 +47,11 @@ public class InterpolateChild : MonoBehaviour
 		float currentTime = Time.unscaledTime;
 		transform.position = Vector3.Lerp(start, end, (currentTime - fixedUpdateTime) / Time.fixedUnscaledDeltaTime);
 	}
+
+	public void ResetPosition()
+	{
+		start -= end;
+		end = target.TransformPoint(initialLocalPosition);
+		start += end;
+	}
 }

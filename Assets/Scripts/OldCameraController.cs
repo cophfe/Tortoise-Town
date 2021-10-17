@@ -300,6 +300,14 @@ public partial class OldCameraController : MonoBehaviour
 		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * data.yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
 	}
 
+	public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+	{
+		currentPivotPosition -= transform.position;
+		currentPivotPosition += position;
+		transform.position = position;
+		transform.rotation = rotation;
+	}
+
 	/// <summary>
 	/// Adds a vector to the camera shake vector
 	/// </summary>
