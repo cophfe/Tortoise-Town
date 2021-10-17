@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (cooldownTimer >= 0 || playerController.Motor.IsDashing)
+		if (cooldownTimer >= 0 || playerController.Motor.IsDashing || playerController.Motor.IsRolling)
 		{
 			cooldownTimer -= Time.deltaTime;
 			playerController.EvaluateAttackPressed();
@@ -138,9 +138,14 @@ public class PlayerCombat : MonoBehaviour
 				//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 				//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
 				Transform cam = playerController.MainCamera.transform;
+				Vector3 hitPoint;
 				if (!Physics.Raycast(cam.position, cam.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
 				{
-					hit.point = cam.forward * 10000;
+					hitPoint = cam.forward * 100;
+				}
+				else
+				{
+					hitPoint = hit.point;
 				}
 				
 				var arrow = equippedArrow.GetComponent<Arrow>();
@@ -149,10 +154,9 @@ public class PlayerCombat : MonoBehaviour
 
 				//convert 3d problem into 2d problem like this:
 				//calculate x axis
-				Vector3 xAxis = (hit.point - equippedArrow.transform.position);
+				Vector3 xAxis = (hitPoint - equippedArrow.transform.position);
 				xAxis.y = 0;
 				xAxis.Normalize();
-				Vector3 hitPoint = hit.point;
 				//convert 3d point into 2d point
 				Vector2 positionToHit = new Vector2(Vector3.Dot(hitPoint, xAxis) 
 					- Vector3.Dot(equippedArrow.transform.position, xAxis), hitPoint.y - equippedArrow.transform.position.y);

@@ -91,7 +91,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3847948669635755484}
   - component: {fileID: 5496907085034195303}
-  - component: {fileID: 960203884352330377}
   m_Layer: 10
   m_Name: Arrow
   m_TagString: Untagged
@@ -127,16 +126,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoredInPool: 0
---- !u!114 &960203884352330377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3847948669635755485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db978f41360b7fc4c8e0689890d72ef1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentsToDisable: []
