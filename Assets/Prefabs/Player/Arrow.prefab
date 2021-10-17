@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab388c0eb95c754189abad796f914f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 52363365744deee4cbb1dc01f3069203, type: 2}
+  ignoredInPool: 0

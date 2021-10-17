@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4388463355891788020}
   - component: {fileID: 4388463355891788016}
   - component: {fileID: 4388463355891788017}
+  - component: {fileID: 1572272002}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -48,10 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  globalOffset: 0
   defaultCameraData: {fileID: 11400000, guid: e2c576efeb0f2624a96918c52ee0edb6, type: 2}
   enableInput: 1
   inverted: 0
-  sensitivity: 0.1
+  sensitivity: 0.054
   movementUpdateType: 0
   shakeDeteriorateSpeed: 1
   shakeNoiseMag: 0.174
@@ -132,11 +134,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 0
+  m_StopNaN: 1
+  m_Dithering: 1
   m_ClearDepth: 1
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
@@ -171,3 +173,17 @@ MonoBehaviour:
   m_DefaultActionMap: Camera
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 4388463355891788019}
+--- !u!114 &1572272002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388463355891788021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86887483cf7d0634c870fa34ca757d30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentsToDisable: []
+  portalRenderer: {fileID: 0}

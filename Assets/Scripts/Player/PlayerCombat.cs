@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (cooldownTimer >= 0 || playerController.Motor.IsDashing)
+		if (cooldownTimer >= 0 || playerController.Motor.IsDashing || playerController.Motor.IsRolling)
 		{
 			cooldownTimer -= Time.deltaTime;
 			playerController.EvaluateAttackPressed();
@@ -137,69 +137,70 @@ public class PlayerCombat : MonoBehaviour
 			{
 				//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 				//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
-				if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
+				Transform cam = playerController.MainCamera.transform;
+				Vector3 hitPoint;
+				if (!Physics.Raycast(cam.position, cam.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
 				{
-					var arrow = equippedArrow.GetComponent<Arrow>();
-					float initialSpeed = arrowData.maxInitialSpeed* chargeUpPercent;
-					Vector3 velocity = Vector3.zero;
-
-					//convert 3d problem into 2d problem like this:
-					//calculate x axis
-					Vector3 xAxis = (hit.point - equippedArrow.transform.position);
-					xAxis.y = 0;
-					xAxis.Normalize();
-					Vector3 hitPoint = hit.point;
-					//convert 3d point into 2d point
-					Vector2 positionToHit = new Vector2(Vector3.Dot(hitPoint, xAxis) 
-						- Vector3.Dot(equippedArrow.transform.position, xAxis), hitPoint.y - equippedArrow.transform.position.y);
-
-					//now calculate tan(0) of arrow angle and turns it into direction vector
-					//https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)
-					float v4 = initialSpeed * initialSpeed * initialSpeed * initialSpeed;
-					float g2 = arrowData.gravity * arrowData.gravity;
-					float possibleNeg = v4 - arrowData.gravity * (arrowData.gravity * positionToHit.x * positionToHit.x + 2 * positionToHit.y * initialSpeed * initialSpeed);
-					
-					//if distance is too far away to hit at this speed
-					if (possibleNeg < 0)
-					{
-						//find closest valid point that gives a 0 'possibleNeg' value
-						//this is technically wrong sometimes, but not when possibleNeg is less than 0
-						//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses one)
-						//computed based on this visualisation: https://www.desmos.com/calculator/olszi1qcpd
-						//which I made
-
-						//this should fix for floating point error by looking not for 0 neg value, but errorfix neg value
-						const float errorFix = 1;
-						double q = -positionToHit.x * v4 / g2;
-						double p = (2 * positionToHit.y * arrowData.gravity * initialSpeed * initialSpeed + v4 + errorFix)/ (3*g2);
-						double newSqrt = Math.Sqrt(q * q + p * p * p);
-						//since pow cannot handle negative cube rooting we will use some jank to fix
-						double newXValue = (-Math.Pow(Math.Abs(q + newSqrt), 1.0f / 3.0f) * Math.Sign(q + newSqrt) - Math.Pow(Math.Abs(q - newSqrt), 1.0f / 3.0f) * Math.Sign(q - newSqrt));
-						double newYValue = ((v4-errorFix) / arrowData.gravity - arrowData.gravity * newXValue * newXValue) / (2 * initialSpeed * initialSpeed);
-						positionToHit.x = (float)newXValue;
-						positionToHit.y = (float)newYValue;
-						possibleNeg = v4 - arrowData.gravity * (arrowData.gravity * positionToHit.x * positionToHit.x + 2 * positionToHit.y * initialSpeed * initialSpeed);
-					}
-					float sqrt = Mathf.Sqrt(possibleNeg);
-					//there are technically two options, but option one is always best
-					float tanOfAngle = (initialSpeed * initialSpeed - sqrt) / (arrowData.gravity * positionToHit.x);
-					// tanOfAngleOption2 = (initialSpeed * initialSpeed + sqrt) / (arrowData.gravity * positionToHit.x);
-
-					Vector2 v = new Vector3(1, tanOfAngle).normalized * initialSpeed;
-					velocity.y = v.y;
-					velocity += xAxis * v.x;
-					//Debug.Log($"x: {positionToHit.x}, y: {positionToHit.y} v: {initialSpeed}, g: {arrowData.gravity}, sq: {possibleNeg}");
-					arrow.Shoot(velocity, arrowData);
+					hitPoint = cam.forward * 100;
 				}
 				else
 				{
-					equippedArrow.GetComponent<Arrow>().Shoot(playerController.MainCamera.transform.forward * arrowData.maxInitialSpeed * chargeUpPercent
-						, arrowData);
+					hitPoint = hit.point;
 				}
+				
+				var arrow = equippedArrow.GetComponent<Arrow>();
+				float initialSpeed = arrowData.maxInitialSpeed* chargeUpPercent;
+				Vector3 velocity = Vector3.zero;
+
+				//convert 3d problem into 2d problem like this:
+				//calculate x axis
+				Vector3 xAxis = (hitPoint - equippedArrow.transform.position);
+				xAxis.y = 0;
+				xAxis.Normalize();
+				//convert 3d point into 2d point
+				Vector2 positionToHit = new Vector2(Vector3.Dot(hitPoint, xAxis) 
+					- Vector3.Dot(equippedArrow.transform.position, xAxis), hitPoint.y - equippedArrow.transform.position.y);
+
+				//now calculate tan(0) of arrow angle and turns it into direction vector
+				//https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)
+				float v4 = initialSpeed * initialSpeed * initialSpeed * initialSpeed;
+				float g2 = arrowData.gravity * arrowData.gravity;
+				float possibleNeg = v4 - arrowData.gravity * (arrowData.gravity * positionToHit.x * positionToHit.x + 2 * positionToHit.y * initialSpeed * initialSpeed);
+					
+				//if distance is too far away to hit at this speed
+				if (possibleNeg < 0)
+				{
+					//find closest valid point that gives a 0 'possibleNeg' value
+					//this is technically wrong sometimes, but not when possibleNeg is less than 0
+					//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses one)
+					//here is a visualisation: https://www.desmos.com/calculator/olszi1qcpd
+
+					//this should fix for floating point error by looking not for 0 neg value, but errorfix neg value
+					const float errorFix = 1;
+					double q = -positionToHit.x * v4 / g2;
+					double p = (2 * positionToHit.y * arrowData.gravity * initialSpeed * initialSpeed + v4 + errorFix)/ (3*g2);
+					double newSqrt = Math.Sqrt(q * q + p * p * p);
+					//since pow cannot handle negative cube rooting we will use some jank to fix
+					double newXValue = (-Math.Pow(Math.Abs(q + newSqrt), 1.0f / 3.0f) * Math.Sign(q + newSqrt) - Math.Pow(Math.Abs(q - newSqrt), 1.0f / 3.0f) * Math.Sign(q - newSqrt));
+					double newYValue = ((v4-errorFix) / arrowData.gravity - arrowData.gravity * newXValue * newXValue) / (2 * initialSpeed * initialSpeed);
+					positionToHit.x = (float)newXValue;
+					positionToHit.y = (float)newYValue;
+					possibleNeg = v4 - arrowData.gravity * (arrowData.gravity * positionToHit.x * positionToHit.x + 2 * positionToHit.y * initialSpeed * initialSpeed);
+				}
+				float sqrt = Mathf.Sqrt(possibleNeg);
+				//there are technically two options, but this one is always best
+				float tanOfAngle = (initialSpeed * initialSpeed - sqrt) / (arrowData.gravity * positionToHit.x);
+				// tanOfAngleOption2 = (initialSpeed * initialSpeed + sqrt) / (arrowData.gravity * positionToHit.x);
+
+				Vector2 v = new Vector3(1, tanOfAngle).normalized * initialSpeed;
+				velocity.y = v.y;
+				velocity += xAxis * v.x;
+				//Debug.Log($"x: {positionToHit.x}, y: {positionToHit.y} v: {initialSpeed}, g: {arrowData.gravity}, sq: {possibleNeg}");
+				arrow.Shoot(velocity, arrowData);
 
 				cooldownTimer = rangedCooldownTime;
 				playerController.Animator.AnimateAttack();
-				chargeUpPercent = 0;
+				chargeUpPercent = 0.001f;
 				equippedArrow.transform.parent = null;
 				equippedArrow.ignoredInPool = false;
 				equippedArrow = null;
@@ -296,8 +297,7 @@ public class PlayerCombat : MonoBehaviour
 	{
 		playerController.Animator.AnimateEquip(WeaponType.NONE);
 		chargeUpPercent = 0;
-		cameraChanged = true;
-		charging = false;
+		EndChargeUp();
 	}
 
 	void LerpCamera(float t)
