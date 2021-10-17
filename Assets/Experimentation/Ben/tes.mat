@@ -70,7 +70,7 @@ Material:
     - Vector1_8A3B304C: 0.2
     - Vector1_E07D012C: 1
     - Voroni_Scale: 0.6
-    - _Alpha: 0.613
+    - _Alpha: 0.45
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
     - _Amplitude: 0.1
@@ -112,7 +112,7 @@ Material:
     - _RefractionScale: 25
     - _RefractionSize: 0.4
     - _RefractionStrength: 0.09
-    - _RotationSpeed: 1
+    - _RotationSpeed: 2.17
     - _ScaleAmount: 0.02
     - _ScaleSize: 10
     - _SmallWaveHeight: 0.2
