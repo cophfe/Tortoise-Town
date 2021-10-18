@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   globalOffset: 0
-  defaultCameraData: {fileID: 11400000, guid: e2c576efeb0f2624a96918c52ee0edb6, type: 2}
+  defaultCameraData: {fileID: 11400000, guid: 47ed7641f1b47ec4ba099038a62aee7d, type: 2}
   enableInput: 1
   inverted: 0
   sensitivity: 0.054

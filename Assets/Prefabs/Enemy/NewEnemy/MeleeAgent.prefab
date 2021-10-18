@@ -211,11 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856ca97194dfb7e409b70306f17e756e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stopTime: 5
-  stopVarience: 3
-  stopChance: 0.86
-  detectionRange: 30
-  attackRange: 2
+  data: {fileID: 11400000, guid: 4e2e2f1d716c5194f97fe4e13c351554, type: 2}
 --- !u!195 &7989550828904182710
 NavMeshAgent:
   m_ObjectHideFlags: 0
