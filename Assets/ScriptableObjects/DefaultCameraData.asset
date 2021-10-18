@@ -12,19 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95ed9d2f387e1734bad4726383e1b29b, type: 3}
   m_Name: DefaultCameraData
   m_EditorClassIdentifier: 
-  targetOffset: {x: 0, y: 1.5, z: 0}
+  targetOffset: {x: 0, y: 1, z: 0}
   maxFollowDistance: 5
-  maximumUpRotation: 87
-<<<<<<< HEAD
-  minimumUpRotation: -20
-  followSpeed: 20
-=======
-  minimumUpRotation: 0
-  followSpeed: 29
->>>>>>> main
-  zoomOutSpeed: 2
+  maximumUpRotation: 89
+  minimumUpRotation: -15
+  followSpeed: 200
+  zoomOutSpeed: 3
   yOffsetStartDistance: 0
   yOffsetDistance: 2
   yOffsetMagnitude: 0.6
   yOffsetChangeSpeed: 5
-  rotateSpeed: 10
+  rotateSpeed: 20
