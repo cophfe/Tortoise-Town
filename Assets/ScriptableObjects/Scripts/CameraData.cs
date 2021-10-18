@@ -10,7 +10,7 @@ public class CameraData : ScriptableObject
 	public Vector3 targetOffset;
 	[Tooltip("The maximum distance the camera can be away from the target.")]
 	[Min(0)] public float maxFollowDistance = 10;
-	
+
 	[Header("Control")]
 	[Tooltip("Up rotation cannot be higher than this value.")]
 	[Range(-90, 90)] public float maximumUpRotation = 87;

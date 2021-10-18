@@ -53,7 +53,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
 				float2 textureCoordinate = i.screenPosition.xy / i.screenPosition.w;
-                fixed4 col = tex2D(_MainTex, textureCoordinate);
+                fixed4 col = tex2Dproj(_MainTex, i.screenPosition);
                 return col;
             }
             ENDCG
