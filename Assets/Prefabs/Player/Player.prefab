@@ -163,7 +163,6 @@ MonoBehaviour:
   rollCameraYOffset: 0.5
   rotatableChild: {fileID: 4770109565418618105}
   visualInterpolator: {fileID: 0}
-  gameManager: {fileID: 0}
   drawDebug: 1
 --- !u!114 &3923705860234160769
 MonoBehaviour:
@@ -239,7 +238,7 @@ MonoBehaviour:
   groundMagnetDistanceModifier: 0.2
   ignoredGround:
     serializedVersion: 2
-    m_Bits: 260
+    m_Bits: 2308
   alwaysLookAway: 0
   turnSpeed: 7
   airTurnSpeed: 7
@@ -328,22 +327,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangedWeapon: {fileID: 369350033516869629}
-  meleeWeapon: {fileID: 951713679818076028}
   arrowData: {fileID: 11400000, guid: 52363365744deee4cbb1dc01f3069203, type: 2}
   arrowPosRest: {fileID: 1745597572}
   arrowPosCharged: {fileID: 517645686}
-  meleeDamage: 10
-  rangedDamage: 10
-  aimingSpeedPercent: 0.5
-  meleeCooldownTime: 0.5
   rangedCooldownTime: 0.5
+  rangedCameraShakeMagnitude: 0.08
+  aimingSpeedPercent: 0.5
   zoomInSpeed: 2
   zoomOutSpeed: 2
   rangedChargeUpSpeed: 2
   chargedThreshold: 0.5
   rangedChargeDownSpeed: 4
+  meleeWeapon: {fileID: 951713679818076028}
+  meleeDamage: 10
+  meleeKnockback: 0
+  meleeSphereLocalOffset: {x: 0.1, y: 0.5, z: 0}
+  meleeSphereRadius: 1
+  meleeMaximumAngle: 40
+  meleeCooldownTime: 0.5
   meleeStepSpeed: 20
   meleeStepDuration: 0.3
+  meleeCameraShakeMagnitude: 0.2
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 2048
   aimingCameraData: {fileID: 11400000, guid: f41d75c65138bbf42a85be63b033a385, type: 2}
 --- !u!114 &259275505
 MonoBehaviour:

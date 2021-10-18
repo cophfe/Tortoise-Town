@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+[RequireComponent(typeof(EnemyMotor))]
+public class EnemyHealth : Health
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	EnemyMotor motor;
+	private void Start()
+	{
+		motor = GetComponent<EnemyMotor>();
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	protected override void OnDeath()
+	{
+		motor.LocalManager.OnEnemyDeath(gameObject);
+		gameObject.SetActive(false);
+	}
 }

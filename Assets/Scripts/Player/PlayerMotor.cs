@@ -190,6 +190,7 @@ public class PlayerMotor : MonoBehaviour
 	{
 		playerController = GetComponent<PlayerController>();
 		TargetSpeedManipulator = 1;
+		lastNonZeroInputVelocity = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up).normalized;
 	}
 
 	private void Update()

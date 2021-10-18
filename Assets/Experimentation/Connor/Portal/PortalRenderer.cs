@@ -66,7 +66,6 @@ public class PortalRenderer : MonoBehaviour
 
 	void RenderCamera(Portal inPortal, Portal outPortal, ScriptableRenderContext context)
 	{
-		CheckForCamera();
 		Camera c1;
 		Camera c2;
 		Vector3 pos;
@@ -120,6 +119,7 @@ public class PortalRenderer : MonoBehaviour
 		//travel objects before rendering
 		//this will temporarilly travel objects that are just partially through the portal
 		//it will also teleport objects that are fully through the portal
+		CheckForCamera();
 		inPortal.TravelTravellers(outPortal);
 		UniversalRenderPipeline.RenderSingleCamera(context, c2);
 		inPortal.UndoTravel(outPortal);
@@ -148,7 +148,6 @@ public class PortalRenderer : MonoBehaviour
 	{
 		cameraWithPlayer = !cameraWithPlayer;
 		OnSwitchCamera();
-
 	}
 
 	public void OnCameraThroughPortal()
@@ -191,6 +190,7 @@ public class PortalRenderer : MonoBehaviour
 	}
 
 	int cameraState = -1;
+
 	void CheckForCamera()
 	{
 		if (!cameraTraveller) return;
