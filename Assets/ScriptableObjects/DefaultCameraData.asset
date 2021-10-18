@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetOffset: {x: 0, y: 1, z: 0}
   maxFollowDistance: 5
-  maximumUpRotation: 87
-  minimumUpRotation: 0
-  followSpeed: 29
-  zoomOutSpeed: 2
+  maximumUpRotation: 89
+  minimumUpRotation: -15
+  followSpeed: 200
+  zoomOutSpeed: 3
   yOffsetStartDistance: 0
   yOffsetDistance: 2
   yOffsetMagnitude: 0.6
   yOffsetChangeSpeed: 5
-  rotateSpeed: 10
+  rotateSpeed: 20
