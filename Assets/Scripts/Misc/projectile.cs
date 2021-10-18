@@ -16,4 +16,10 @@ public class projectile : MonoBehaviour
     {
         rb.velocity = transform.forward * moveSpeed;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
+    }
+
 }

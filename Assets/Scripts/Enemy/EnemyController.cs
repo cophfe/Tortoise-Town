@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
     public float attackRate;
     public GameObject projectile;
     public Transform firepoint;
-    
+    public LayerMask dontIgnoreLayers;
 
     [Space(5)]
     [Header("Gizmo")]
@@ -61,15 +61,41 @@ public class EnemyController : MonoBehaviour
     {
         if (!enemyCombat.isAttacking)
         {
+
             //Check if the player is within the range of the spotting distance
             if (Vector3.Distance(transform.position, target.position) <= spottingDistance)
             {
-                MoveToTarget();
+                RaycastHit hit;
+                if (Physics.Raycast(transform.GetChild(1).GetChild(0).position, target.position - transform.position, out hit, Mathf.Infinity, dontIgnoreLayers))
+                {
+                    Debug.Log(hit.transform.name);
+                    if (hit.transform.tag == "Player")
+                    {
+                        MoveToTarget();
+                    }
+                    else
+                    {
+                        //  Debug.Log("Search for target");
+                        nav.isStopped = true;
+                        canAttack = false;
+
+                    }
+                }
+                else
+                {
+                    //  Debug.Log("Search for target");
+                    nav.isStopped = true;
+                    canAttack = false;
+
+                }
+
             }
             else if (Vector3.Distance(transform.position, target.position) > spottingDistance)
             {
               //  Debug.Log("Search for target");
                 nav.isStopped = true;
+                canAttack = false;
+
             }
         }
         else
@@ -100,11 +126,17 @@ public class EnemyController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (target)
+        {
+            Gizmos.DrawRay(transform.GetChild(1).GetChild(0).position, target.position - transform.position);
+        }
+
         Gizmos.color = enemyViewDistanceColour;
         Gizmos.DrawSphere(transform.position, spottingDistance);
       
         Gizmos.color = enemyAttackingDistanceColour;
         Gizmos.DrawSphere(transform.position, attackingDistance);
+
     }
 
 
