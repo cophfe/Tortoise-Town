@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Timers;
 using UnityEngine;
 
@@ -13,10 +12,11 @@ public class InterpolateChild : MonoBehaviour
 	public Transform target = null;
 	Vector3 initialLocalPosition;
 	float fixedUpdateTime;
+	public bool disable = false;
 
 	private void Awake()
 	{
-		if (target == null)
+		if (target == null || target == transform.parent)
 		{
 			target = transform.parent;
 			initialLocalPosition = transform.localPosition;
@@ -42,8 +42,16 @@ public class InterpolateChild : MonoBehaviour
 
 	void Update()
 	{
+		if (disable) return;
 		//yes using time.time for precise values surely will not cause any problems whatsoever yes
 		float currentTime = Time.unscaledTime;
 		transform.position = Vector3.Lerp(start, end, (currentTime - fixedUpdateTime) / Time.fixedUnscaledDeltaTime);
+	}
+
+	public void ResetPosition()
+	{
+		start -= end;
+		end = target.TransformPoint(initialLocalPosition);
+		start += end;
 	}
 }

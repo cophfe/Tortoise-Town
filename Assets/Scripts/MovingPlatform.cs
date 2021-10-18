@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [DefaultExecutionOrder(11), RequireComponent(typeof(Rigidbody))]
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : BooleanSwitch
 {
 	Rigidbody rb;
 
@@ -15,6 +15,7 @@ public class MovingPlatform : MonoBehaviour
 	[HideInInspector, SerializeField] public IntermediateControlPointType intermediateType = IntermediateControlPointType.Free;
 
 	public float stopTime = 0;
+	public float startDelay = 0;
 	public float speed = 5;
 	//relative to startPosition
 	[HideInInspector] public Vector3[] points;
@@ -29,7 +30,8 @@ public class MovingPlatform : MonoBehaviour
 	Vector3 prevPosition;
 	int negMultiply = 1;
 	const int bezierCurveSteps = 10;
-	PlayerMotor player = null;
+
+	Vector3 movingPlatformOffset;
 
 	public enum LoopType
 	{
@@ -49,10 +51,28 @@ public class MovingPlatform : MonoBehaviour
 		Aligned,
 		Mirrored
 	}
+
+	public override bool SwitchValue { 
+		get { return on; } 
+		protected set 
+		{ 
+			on = value;
+			if (value)
+			{
+				Play();
+			}
+			else
+			{
+				Pause();
+			}
+		} 
+	}
+
 	void Start()
     {
 		rb = GetComponent<Rigidbody>();
 		startPosition = rb.position;
+		stopTimer = stopTime + startDelay;
 		if (playOnAwake)
 			Play();
 	}
@@ -91,8 +111,9 @@ public class MovingPlatform : MonoBehaviour
 			stopTimer = stopTime;
 			prevPosition = rb.position;
 
-			if (loopType == LoopType.ONCE) Pause();
-			if (loopType == LoopType.LOOP)
+			if (loopType == LoopType.ONCE) 
+				Pause();
+			else if (loopType == LoopType.LOOP)
 				t -= 1;
 			else
 			{
@@ -104,12 +125,7 @@ public class MovingPlatform : MonoBehaviour
 		float easedT = GetEasedT();
 		Vector3 position = GetPointOnSpline(easedT);
 
-		if (player != null)
-		{
-			Vector3 offset = rb.position - prevPosition;
-			offset.y = 0;
-			player.MovingPlatformOffset = offset;
-		}
+		movingPlatformOffset = rb.position - prevPosition;
 
 		prevPosition = rb.position;
 		rb.position = position;
@@ -173,7 +189,6 @@ public class MovingPlatform : MonoBehaviour
 
 	float GetCurrentSpeed(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent, float t)
 	{
-		float opT = 1 - t;
 		//derivitive of displacement is velocity (with time as t axis), so this is just the derivitive of the bezier curve function
 		Vector3 b = startTangent + start;
 		Vector3 c = endTangent + end;
@@ -189,6 +204,12 @@ public class MovingPlatform : MonoBehaviour
 	public void Pause()
 	{
 		playing = false;
+		movingPlatformOffset = Vector3.zero;
+	}
+
+	public Vector3 GetOffset()
+	{
+		return movingPlatformOffset;
 	}
 
 	float GetEasedT()
@@ -200,10 +221,5 @@ public class MovingPlatform : MonoBehaviour
 			default:
 				return t;
 		}
-	}
-
-	public void SetConnectedPlayer(PlayerMotor player)
-	{
-		this.player = player;
 	}
 }

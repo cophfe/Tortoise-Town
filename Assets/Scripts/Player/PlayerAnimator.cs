@@ -18,6 +18,7 @@ public class PlayerAnimator : MonoBehaviour
 	public bool enableFootIK = true;
 	public bool enableLookIK = true;
 	public float lookDistance = 20;
+	[Range(0, 1)] public float turnPercent = 0.5f;
 	[Range(0, 1)] public float lookBodyWeight = 0.2f;
 	[Range(0, 1)] public float lookHeadWeight = 1;
 	[Range(0, 0.3f)] public float distanceToGround = 0f;
@@ -38,6 +39,9 @@ public class PlayerAnimator : MonoBehaviour
 	int groundedId;
 	int jumpId;
 	int rollId;
+	int chargeId;
+	int attackId;
+	int equipId;
 	
 	//hold the smoothened values for current speed
 	float currentSpeed = 0;
@@ -65,6 +69,9 @@ public class PlayerAnimator : MonoBehaviour
 		groundedId = Animator.StringToHash("Grounded");
 		jumpId = Animator.StringToHash("Jump");
 		rollId = Animator.StringToHash("Rolling");
+		chargeId = Animator.StringToHash("Charge");
+		attackId = Animator.StringToHash("Attack");
+		equipId = Animator.StringToHash("Equipped");
 
 		playerController = GetComponentInParent<PlayerController>();
 		if (playerController == null)
@@ -80,7 +87,7 @@ public class PlayerAnimator : MonoBehaviour
 
     void Update()
     {
-		if (playerController.Motor.enabled)
+		if (playerController.Motor)
 		{
 			//Update animator values
 			float verticalSpeed = Vector3.Dot(playerController.Motor.TotalVelocity, Vector3.up);
@@ -105,7 +112,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = playerController.RollColliderRadius;
 						playerController.CharacterController.height = playerController.RollColliderRadius * 2;
 						playerController.CharacterController.center = playerController.RollColliderOffset;
-						playerController.MainCamera.targetOffset = playerController.RollCameraOffset;
+						playerController.MainCamera.GetCameraData().targetOffset.y = playerController.RollCameraOffset;
 						switchingColliderSize = false;
 					}
 					else
@@ -114,7 +121,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius * 2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.targetOffset = Vector3.Lerp(playerController.InitialCameraOffset, playerController.RollCameraOffset, t);
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseOutQuad(t));
 					}
 				}
 				//IF CHANGING OUT OF ROLL
@@ -125,7 +132,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = playerController.InitialColliderRadius;
 						playerController.CharacterController.height = playerController.InitialColliderHeight;
 						playerController.CharacterController.center = playerController.InitialColliderOffset;
-						playerController.MainCamera.targetOffset = playerController.InitialCameraOffset;
+						playerController.MainCamera.GetCameraData().targetOffset = playerController.MainCamera.defaultCameraData.targetOffset;
 						switchingColliderSize = false;
 					}
 					else
@@ -134,10 +141,14 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius*2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.targetOffset = Vector3.Lerp(playerController.InitialCameraOffset, playerController.RollCameraOffset, t);
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseInQuad(t));
 					}
 				}
 			}
+		}
+		if (playerController.Combat)
+		{
+			animator.SetFloat(chargeId, playerController.Combat.ChargePercentage);
 		}
     }
 
@@ -149,7 +160,7 @@ public class PlayerAnimator : MonoBehaviour
 			if (enableLookIK)
 			{
 				//look toward camera
-				animator.SetLookAtWeight(1, .2f, 1, 0, .5f);
+				animator.SetLookAtWeight(1, lookBodyWeight, lookHeadWeight, 0, turnPercent);
 				animator.SetLookAtPosition(transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance);
 			}
 
@@ -248,17 +259,20 @@ public class PlayerAnimator : MonoBehaviour
 		rollColliderTransitionTimer = 0;
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
-		rollColliderTransitionTime = switchingIntoRoll ? rollColliderTransitionTimeIn : rollColliderTransitionTimeOut;
+		if (switchingIntoRoll)
+			rollColliderTransitionTime = rollColliderTransitionTimeIn;
+		else
+			rollColliderTransitionTime = rollColliderTransitionTimeOut;
 	}
 
-	public void AnimateMeleeAttack()
+	public void AnimateAttack()
 	{
-
+		animator.SetTrigger(attackId);
 	}
 
-	public void AnimateRangedAttack()
+	public void AnimateEquip(PlayerCombat.WeaponType weapon)
 	{
-
+		animator.SetInteger(equipId, (int)weapon);
 	}
 	#endregion
 }
