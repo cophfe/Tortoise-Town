@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
 	public float CurrentHealth { get; protected set; }
 	public bool IsDead { get; protected set; }
 
-	private void Start()
+	protected virtual void Start()
 	{
 		CurrentHealth = maxHealth;
 		IsDead = false;

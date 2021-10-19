@@ -139,8 +139,8 @@ public partial class OldCameraController : MonoBehaviour
 		else
 		{
 			offset = data.targetOffset;
-
 		}
+
 		offset.y = yOffset * data.yOffsetMagnitude;
 		if (offset != Vector3.zero)
 		{

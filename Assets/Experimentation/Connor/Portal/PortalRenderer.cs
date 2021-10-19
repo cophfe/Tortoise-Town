@@ -57,7 +57,7 @@ public class PortalRenderer : MonoBehaviour
 		{
 			RenderCamera(portals[0], portals[1], context);
 		}
-		else if (!firstPortalActive)
+		else
 		{
 			RenderCamera(portals[1], portals[0], context);
 		}
@@ -105,6 +105,7 @@ public class PortalRenderer : MonoBehaviour
 		Vector4 nearPlaneCamera = Matrix4x4.Transpose(Matrix4x4.Inverse(portalCamera.worldToCameraMatrix)) * nearPlane;
 		c2.projectionMatrix = mainCamera.CalculateObliqueMatrix(nearPlaneCamera);
 		c1.projectionMatrix = defaultMatrix;
+
 		//also set position of render box for super smooth rendering reasons
 		negateRBZ *= sign;
 		Transform rB = inPortal.GetRenderBox();

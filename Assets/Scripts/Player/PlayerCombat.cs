@@ -170,11 +170,12 @@ public class PlayerCombat : MonoBehaviour
 		else
 		{
 			playerController.Motor.alwaysLookAway = false;
+			
 			//SWING SWORD
-			if (playerController.EvaluateAttackPressed())
-			{
-				SwingSword();
-			}
+			//if (playerController.EvaluateAttackPressed())
+			//{
+			//	SwingSword();
+			//}
 		}
 
 	}
@@ -194,7 +195,7 @@ public class PlayerCombat : MonoBehaviour
 	{
 		playerController.MainCamera.AddCameraShake(meleeCameraShakeMagnitude * meleeForward);
 
-		Vector3 playerPosition = transform.TransformPoint(playerController.CharacterController.center);
+		Vector3 playerPosition = playerController.RotateChild.TransformPoint(playerController.CharacterController.center);
 		Vector3 circlePosition = playerPosition + Quaternion.FromToRotation(Vector3.forward, meleeForward) * meleeSphereLocalOffset;
 
 		Collider[] enemies = Physics.OverlapSphere(circlePosition, meleeSphereRadius, enemyMask);
@@ -202,7 +203,7 @@ public class PlayerCombat : MonoBehaviour
 		{
 			var health = enemies[i].GetComponent<Health>();
 			Vector3 delta = enemies[i].transform.position - playerPosition;
-			if (health && Vector3.Angle(meleeForward, delta) < meleeMaximumAngle)
+			if (health && Vector3.Angle(Vector3.ProjectOnPlane(meleeForward,Vector3.up), Vector3.ProjectOnPlane(delta, Vector3.up)) < meleeMaximumAngle)
 			{
 				health.Damage(meleeDamage);
 				health.ApplyKnockback(meleeForward * meleeKnockback);
@@ -365,6 +366,7 @@ public class PlayerCombat : MonoBehaviour
 		else
 			data.targetOffset =	Vector3.Lerp(aData.targetOffset, aimingCameraData.targetOffset, t);
 		playerController.MainCamera.InputMove(Vector2.zero);
+		playerController.MainCamera.globalOffset = t <= 0;
 	}
 
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
