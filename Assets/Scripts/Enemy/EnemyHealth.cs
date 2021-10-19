@@ -6,9 +6,10 @@ using UnityEngine;
 public class EnemyHealth : Health
 {
 	EnemyMotor motor;
-	private void Start()
+	protected override void Start()
 	{
 		motor = GetComponent<EnemyMotor>();
+		base.Start();
 	}
 
 	protected override void OnDeath()

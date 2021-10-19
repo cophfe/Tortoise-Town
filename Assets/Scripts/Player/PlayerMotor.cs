@@ -306,19 +306,21 @@ public class PlayerMotor : MonoBehaviour
 				inputVelocity = Vector3.MoveTowards(inputVelocity, Vector3.zero, airFriction * Time.deltaTime);
 			}
 
-			if (dashing)
+			
+		}
+
+		if (dashing)
+		{
+			float t = dashCurve.Evaluate(1 - dashTimer / dashDuration);
+			targetVelocity = currentDashDirection * currentDashVelocity * t;
+
+			//transition between the two velocities
+			targetVelocity = Vector3.Lerp(inputVelocity, targetVelocity, t);
+			inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, dashAcceleration * Time.deltaTime);
+
+			if (dashTimer <= 0)
 			{
-				float t = dashCurve.Evaluate(1 - dashTimer / dashDuration);
-				targetVelocity = currentDashDirection * currentDashVelocity * t;
-
-				//transition between the two velocities
-				targetVelocity = Vector3.Lerp(inputVelocity, targetVelocity, t);
-				inputVelocity = Vector3.MoveTowards(inputVelocity, targetVelocity, dashAcceleration * Time.deltaTime);
-
-				if (dashTimer <= 0)
-				{
-					dashing = false;
-				}
+				dashing = false;
 			}
 		}
 
@@ -348,12 +350,6 @@ public class PlayerMotor : MonoBehaviour
 	void UpdateForcesVector()
 	{
 		Vector3 planeVelocity = Vector3.ProjectOnPlane(forcesVelocity, Vector3.up);
-
-		if (dashing)
-		{
-			forcesVelocity = Vector3.zero;
-			return;
-		}
 
 		if (state == MovementState.GROUNDED)
 		{
@@ -810,6 +806,7 @@ public class PlayerMotor : MonoBehaviour
 				+ inputForward * playerController.inputVector.y;
 			currentDashDirection.Normalize();
 		}
+		OnRoll();
 		onDash.Invoke();
 	}
 

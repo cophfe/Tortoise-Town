@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : Health
 {
 	PlayerController controller;
-	private void Start()
+	protected override void Start()
 	{
 		controller = GameManager.Instance.Player;
+		base.Start();
 	}
 
 	protected override void OnDamaged(float damageAmount)
