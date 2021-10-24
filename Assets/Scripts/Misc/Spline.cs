@@ -7,7 +7,8 @@ public class Spline : MonoBehaviour
 	[SerializeField] Vector3[] controlPoints;
 	[SerializeField] bool loop;
 	[SerializeField] RestrainType restrainType = RestrainType.MIRRORED;
-
+	public RestrainType Restrain {  get { return restrainType; } 
+	}
 	[System.Serializable]
 	public enum RestrainType
 	{

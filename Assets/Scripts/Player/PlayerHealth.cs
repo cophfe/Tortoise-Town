@@ -15,7 +15,7 @@ public class PlayerHealth : Health
 	protected override void OnDamaged(float damageAmount)
 	{
 		//set GUI
-		controller.GUI.SetHealthBar(CurrentHealth / maxHealth);
+		
 		//set Animation
 
 	}
