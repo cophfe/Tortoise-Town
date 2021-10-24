@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameplayUIManager : MonoBehaviour
 {
 	public Image healthBar;
-	public GameObject crosshair;
+	public Image crosshair;
 
 	public void SetHealthBar(float t)
 	{
@@ -15,6 +15,6 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void EnableCrossHair(bool enable)
 	{
-		crosshair.SetActive(enable);
+		crosshair.enabled = enable;
 	}
 }

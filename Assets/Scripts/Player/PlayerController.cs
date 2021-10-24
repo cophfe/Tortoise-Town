@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerHealth)), DefaultExecutionOrder(2)]
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] OldCameraController cameraController = null;
@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float rollCameraYOffset = 0;
 	[SerializeField] private Transform rotatableChild = null;
 	[SerializeField] InterpolateChild visualInterpolator = null;
-	[SerializeField] GameManager gameManager = null;
 	[SerializeField] bool drawDebug = false;
 	Vector3 rollColliderOffset;
 
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviour
 	public PlayerHealth Health { get; private set; }
 	public OldCameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
-	public GameManager GameManager { get { return gameManager; } }
+	public GameManager GameManager { get; private set; }
 	public GameplayUIManager GUI { get { return gUI; } }
 	public InterpolateChild Interpolator { get { return visualInterpolator; } }
 	public float InitialColliderHeight { get; private set; }
@@ -70,13 +69,13 @@ public class PlayerController : MonoBehaviour
 		Health = GetComponent<PlayerHealth>();
 		Combat = GetComponent<PlayerCombat>();
 		visualInterpolator = GetComponentInChildren<InterpolateChild>();
-
 		if (!gUI)
 			gUI = FindObjectOfType<GameplayUIManager>();
-		if (!gameManager)
-			gameManager = FindObjectOfType<GameManager>();
 		if (!MainCamera)
 			cameraController = FindObjectOfType<OldCameraController>();
+		GameManager = GameManager.Instance;
+
+
 		if (rotatableChild == null)
 		{
 			if (transform.childCount > 0)

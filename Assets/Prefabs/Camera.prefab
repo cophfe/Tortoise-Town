@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4388463355891788016}
   - component: {fileID: 4388463355891788017}
   - component: {fileID: 1572272002}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -50,13 +50,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   globalOffset: 0
-  defaultCameraData: {fileID: 11400000, guid: e2c576efeb0f2624a96918c52ee0edb6, type: 2}
+  defaultCameraData: {fileID: 11400000, guid: 47ed7641f1b47ec4ba099038a62aee7d, type: 2}
   enableInput: 1
   inverted: 0
   sensitivity: 0.054
   movementUpdateType: 0
-  shakeDeteriorateSpeed: 1
-  shakeNoiseMag: 0.174
+  shakeDeteriorateSpeed: 6
+  shakeNoiseMag: 0.154
   smoothCameraRotation: 1
   obstructionLayers:
     serializedVersion: 2

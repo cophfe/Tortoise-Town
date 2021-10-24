@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9cc502918aa4ee42ac92f08a6330fb0, type: 3}
-  m_Name: PlayerArrowData
+  m_Name: EnemyArrowData
   m_EditorClassIdentifier: 
-  maxInitialSpeed: 40
+  maxInitialSpeed: 50
   rotateSpeed: 10
-  damage: 20
+  damage: 10
   gravity: 9
   arrowPenetratePercent: 0.2
   ignoreCollisionLayers:
     serializedVersion: 2
-    m_Bits: 1284
-  arrowLength: 0.725
-  radius: 0.025
-  disappearTime: 0.5
+    m_Bits: 0
+  arrowLength: 0.3
+  radius: 0.1
+  disappearTime: 0.1

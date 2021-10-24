@@ -121,7 +121,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius * 2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseOutQuad(t));
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, t);
 					}
 				}
 				//IF CHANGING OUT OF ROLL
@@ -141,7 +141,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius*2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseInQuad(t));
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, t);
 					}
 				}
 			}
