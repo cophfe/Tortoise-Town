@@ -1,0 +1,2 @@
+*.unity merge=unityyamlmerge eol=lf
+*.prefab merge=unityyamlmerge eol=lf
