@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5578822807895177684}
   - component: {fileID: 7381240496473391830}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 3936238725320283426}
   - component: {fileID: 1551464293133769817}
   - component: {fileID: 5568293468718559975}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1713709360565714643}
   - component: {fileID: -2299138955754714977}
   - component: {fileID: 2294899570322460655}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArrowProj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
