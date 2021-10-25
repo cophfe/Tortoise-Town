@@ -366,7 +366,6 @@ public class PlayerCombat : MonoBehaviour
 		else
 			data.targetOffset =	Vector3.Lerp(aData.targetOffset, aimingCameraData.targetOffset, t);
 		playerController.MainCamera.InputMove(Vector2.zero);
-		playerController.MainCamera.globalOffset = t <= 0;
 	}
 
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
