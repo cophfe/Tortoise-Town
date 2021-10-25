@@ -134,18 +134,22 @@ public partial class OldCameraController : MonoBehaviour
 		Vector3 offset;
 		if (globalOffset)
 		{
-			offset = target.InverseTransformDirection(data.targetOffset);
+			offset = data.targetOffset;
+			offset.y = 0;
+			offset = target.InverseTransformDirection(offset);
 		}
 		else
 		{
 			offset = data.targetOffset;
+			offset.y = 0;
 		}
 
-		offset.y = yOffset * data.yOffsetMagnitude;
-		if (offset != Vector3.zero)
+		if (offset != Vector3.zero && yOffset != 0)
 		{
 			float additionMagnitude = offset.magnitude;
 			Vector3 additionDirection = target.TransformDirection(offset / additionMagnitude);
+			offset.y += yOffset * data.yOffsetMagnitude;
+
 			if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, additionDirection, out RaycastHit hit, transform.rotation, additionMagnitude, obstructionLayers.value))
 			{
 				transform.position += additionDirection * hit.distance;
