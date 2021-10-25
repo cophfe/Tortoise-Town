@@ -61238,42 +61238,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 522500971}
     m_Modifications:
-    - target: {fileID: 163373311, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: meleeSphereLocalOffset.y
-      value: -0.59
-      objectReference: {fileID: 0}
-    - target: {fileID: 163373311, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: meleeSphereLocalOffset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 163373311, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: meleeSphereLocalOffset.z
-      value: 0.72
-      objectReference: {fileID: 0}
-    - target: {fileID: 163373311, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: meleeSphereRadius
-      value: 1.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 163373311, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: meleeDamage
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3923705860234160769, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: dashCurve.m_Curve.Array.data[2].value
-      value: 0.51415145
-      objectReference: {fileID: 0}
-    - target: {fileID: 3923705860234160769, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: dashCurve.m_Curve.Array.data[2].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3923705860234160769, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: dashSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 3923705860234160769, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
-      propertyPath: rollTargetSpeedModifier
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3923705860234160774, guid: d8320022ca5c948468d79f65b4a7d2c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 45.26058

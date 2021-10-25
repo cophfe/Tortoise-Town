@@ -63,6 +63,7 @@ public class PlayerMotor : MonoBehaviour
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
 	public float dashCancelDot = 0.5f;
+	public float ceilingCancelDot = 0.5f;
 
 	//CONTROL
 	[Tooltip("The percent of acceleration applied to input while in the air")]
@@ -982,7 +983,7 @@ public class PlayerMotor : MonoBehaviour
 		}
 
 		//if top of head hit the ceiling cancel jump
-		if (!IsRolling && (state == MovementState.JUMPING || state == MovementState.RISING) && Vector3.Dot(hit.normal, forcesVelocity) < 0.6f && hit.point.y - transform.position.y > playerController.CharacterController.height - playerController.CharacterController.radius) 
+		if (!IsRolling && (state == MovementState.JUMPING || state == MovementState.RISING) && Vector3.Dot(hit.normal, forcesVelocity.normalized) < -ceilingCancelDot && hit.point.y - transform.position.y > playerController.CharacterController.height - playerController.CharacterController.radius) 
 		{
 			state = MovementState.FALLING;
 			forcesVelocity.y = 0;
