@@ -57,7 +57,7 @@ public class PortalRenderer : MonoBehaviour
 		{
 			RenderCamera(portals[0], portals[1], context);
 		}
-		else if (!firstPortalActive)
+		else
 		{
 			RenderCamera(portals[1], portals[0], context);
 		}
@@ -66,7 +66,6 @@ public class PortalRenderer : MonoBehaviour
 
 	void RenderCamera(Portal inPortal, Portal outPortal, ScriptableRenderContext context)
 	{
-		CheckForCamera();
 		Camera c1;
 		Camera c2;
 		Vector3 pos;
@@ -106,6 +105,7 @@ public class PortalRenderer : MonoBehaviour
 		Vector4 nearPlaneCamera = Matrix4x4.Transpose(Matrix4x4.Inverse(portalCamera.worldToCameraMatrix)) * nearPlane;
 		c2.projectionMatrix = mainCamera.CalculateObliqueMatrix(nearPlaneCamera);
 		c1.projectionMatrix = defaultMatrix;
+
 		//also set position of render box for super smooth rendering reasons
 		negateRBZ *= sign;
 		Transform rB = inPortal.GetRenderBox();
@@ -120,6 +120,7 @@ public class PortalRenderer : MonoBehaviour
 		//travel objects before rendering
 		//this will temporarilly travel objects that are just partially through the portal
 		//it will also teleport objects that are fully through the portal
+		CheckForCamera();
 		inPortal.TravelTravellers(outPortal);
 		UniversalRenderPipeline.RenderSingleCamera(context, c2);
 		inPortal.UndoTravel(outPortal);
@@ -148,7 +149,6 @@ public class PortalRenderer : MonoBehaviour
 	{
 		cameraWithPlayer = !cameraWithPlayer;
 		OnSwitchCamera();
-
 	}
 
 	public void OnCameraThroughPortal()
@@ -191,6 +191,7 @@ public class PortalRenderer : MonoBehaviour
 	}
 
 	int cameraState = -1;
+
 	void CheckForCamera()
 	{
 		if (!cameraTraveller) return;
