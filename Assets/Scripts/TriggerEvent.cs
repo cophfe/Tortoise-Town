@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class TriggerEvent : MonoBehaviour
 {
    public UnityEvent triggerEvent;
-
+    public string triggerTag;
     void Start()
     {
         if (triggerEvent == null)
@@ -18,7 +18,8 @@ public class TriggerEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.tag == "Player")
+    
+        if (other.transform.tag == triggerTag)
         {
             triggerEvent.Invoke();
         }
