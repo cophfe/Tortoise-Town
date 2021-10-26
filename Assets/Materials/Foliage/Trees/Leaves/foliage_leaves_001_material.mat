@@ -71,7 +71,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaClip: 0
-    - _AlphaClipThreshold: 0.25
+    - _AlphaClipThreshold: 0.301
     - _AlphaCutoff: 0.5
     - _Blend: 0
     - _BumpScale: 1

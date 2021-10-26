@@ -78,6 +78,7 @@ Material:
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _CutoffHeight: 28.8
     - _CuttoffHieght: 28.8
     - _DstBlend: 0
     - _EdgeWidth: 0.05
@@ -103,12 +104,12 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _Albedo: {r: 0.27058825, g: 0.20784314, b: 0.16078432, a: 0}
+    - _Albedo: {r: 0.2705882, g: 0.2078431, b: 0.16078427, a: 0}
     - _BaseColor: {r: 0.272, g: 0.20672178, b: 0.16048002, a: 1}
     - _Color: {r: 0.272, g: 0.20672178, b: 0.16048002, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColour: {r: 64, g: 12.54902, b: 0, a: 1}
-    - _MossAlbedo: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _MossAlbedo: {r: 0.31132075, g: 0.31132075, b: 0.31132075, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tilling: {r: 1, g: 1, b: 0, a: 0}
