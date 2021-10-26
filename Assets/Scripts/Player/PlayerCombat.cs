@@ -22,19 +22,6 @@ public class PlayerCombat : MonoBehaviour
 	[Min(0.001f)] public float rangedChargeUpSpeed = 2;
 	[Range(0,1)] public float chargedThreshold = 0.75f;
 	[Min(0.001f)] public float rangedChargeDownSpeed= 4;
-	[Header("Melee")]
-	public GameObject meleeWeapon;
-	public float meleeDamage = 10;
-	public float meleeKnockback = 0;
-	public Vector3 meleeSphereLocalOffset = new Vector3(0.1f, 0);
-	public float meleeSphereRadius = 1;
-	public float meleeMaximumAngle = 40;
-	public float meleeCooldownTime = 0.5f;
-	public float meleeStepSpeed = 10;
-	public float meleeStepDuration = 0.1f;
-	public float meleeCameraShakeMagnitude = 2;
-	public LayerMask enemyMask;
-	Vector3 meleeForward;
 	bool gotToEndOfZoom = false;
 	bool cameraChanged = false;
 	public CameraData aimingCameraData;
@@ -45,13 +32,7 @@ public class PlayerCombat : MonoBehaviour
 	float zoomInPercent = 0;
 	float cooldownTimer = 0;
 
-	WeaponType currentWeapon = WeaponType.NONE;
-	public enum WeaponType
-	{
-		NONE,
-		MELEE,
-		RANGED
-	}
+	bool equipped = false;
 
 	private void Start()
 	{
@@ -170,45 +151,8 @@ public class PlayerCombat : MonoBehaviour
 		else
 		{
 			playerController.Motor.alwaysLookAway = false;
-			
-			//SWING SWORD
-			//if (playerController.EvaluateAttackPressed())
-			//{
-			//	SwingSword();
-			//}
 		}
 
-	}
-	
-	void SwingSword()
-	{
-		meleeForward = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, playerController.Motor.GroundNormal).normalized;
-		playerController.Motor.StartExternalDash(meleeStepSpeed, meleeStepDuration, meleeForward);
-		playerController.Animator.AnimateEquip(WeaponType.MELEE);
-
-		cooldownTimer = meleeCooldownTime;
-		playerController.Animator.AnimateAttack();
-		HitEnemies();
-	}
-
-	public void HitEnemies()
-	{
-		playerController.MainCamera.AddCameraShake(meleeCameraShakeMagnitude * meleeForward);
-
-		Vector3 playerPosition = playerController.RotateChild.TransformPoint(playerController.CharacterController.center);
-		Vector3 circlePosition = playerPosition + Quaternion.FromToRotation(Vector3.forward, meleeForward) * meleeSphereLocalOffset;
-
-		Collider[] enemies = Physics.OverlapSphere(circlePosition, meleeSphereRadius, enemyMask);
-		for (int i = 0; i < enemies.Length; i++)
-		{
-			var health = enemies[i].GetComponent<Health>();
-			Vector3 delta = enemies[i].transform.position - playerPosition;
-			if (health && Vector3.Angle(Vector3.ProjectOnPlane(meleeForward,Vector3.up), Vector3.ProjectOnPlane(delta, Vector3.up)) < meleeMaximumAngle)
-			{
-				health.Damage(meleeDamage);
-				health.ApplyKnockback(meleeForward * meleeKnockback);
-			}
-		}
 	}
 
 	void ShootBow()
@@ -290,7 +234,7 @@ public class PlayerCombat : MonoBehaviour
 	{
 		if (playerController.Motor.IsRolling || playerController.Motor.IsDashing || playerController.Motor.State != PlayerMotor.MovementState.GROUNDED) return;
 
-		playerController.Animator.AnimateEquip(WeaponType.RANGED);
+		playerController.Animator.AnimateEquip(true);
 		charging = true;
 		cameraChanged = true;
 
@@ -305,41 +249,29 @@ public class PlayerCombat : MonoBehaviour
 			playerController.GUI.EnableCrossHair(false);
 	}
 
-	public void EquipWeapon(WeaponType weaponType)
+	public void EquipWeapon(bool equip)
 	{
-		if (currentWeapon == weaponType) return;
-		
-		switch (weaponType)
+		if (equipped == equip) return;
+
+		equipped = equip;
+		if (equip)
 		{
-			case WeaponType.MELEE:
-				if (equippedArrow)
-				{
-					playerController.GameManager.ArrowPool.ReturnPooledObject(equippedArrow);
-					equippedArrow = null;
-				}
-				rangedWeapon.SetActive(false);
-				meleeWeapon.SetActive(true);
-				break;
-			case WeaponType.RANGED:
-				rangedWeapon.SetActive(true);
-				meleeWeapon.SetActive(false);
-				break;
-			case WeaponType.NONE:
-				if (equippedArrow)
-				{
-					playerController.GameManager.ArrowPool.ReturnPooledObject(equippedArrow);
-					equippedArrow = null;
-				}
-				rangedWeapon.SetActive(false);
-				meleeWeapon.SetActive(false);
-				break;
+			rangedWeapon.SetActive(true);
 		}
-		currentWeapon = weaponType;
+		else
+		{
+			if (equippedArrow)
+			{
+				playerController.GameManager.ArrowPool.ReturnPooledObject(equippedArrow);
+				equippedArrow = null;
+			}
+			rangedWeapon.SetActive(false);
+		}
 	}
 
 	void Dequip()
 	{
-		playerController.Animator.AnimateEquip(WeaponType.NONE);
+		playerController.Animator.AnimateEquip(false);
 		chargeUpPercent = 0;
 		EndChargeUp();
 	}

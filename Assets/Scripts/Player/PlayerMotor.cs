@@ -820,6 +820,11 @@ public class PlayerMotor : MonoBehaviour
 		onDash.Invoke();
 	}
 
+	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection)
+	{
+		//WILL START AN EXTERNAL DASH, BUT WILL ALSO DO SPECIFIC KNOCKBACK STUFF LIKE BREAKING OUT OF ROLL
+	}
+
 	void OnLand()
 	{
 		//call land event
@@ -977,7 +982,7 @@ public class PlayerMotor : MonoBehaviour
 				}
 			}
 
-			if (state == MovementState.FALLING)
+			if (state == MovementState.FALLING || isRolling)
 			{
 				float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity + inputVelocity);
 				if (forcesHitAmount < 0)

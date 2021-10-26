@@ -270,9 +270,9 @@ public class PlayerAnimator : MonoBehaviour
 		animator.SetTrigger(attackId);
 	}
 
-	public void AnimateEquip(PlayerCombat.WeaponType weapon)
+	public void AnimateEquip(bool equip)
 	{
-		animator.SetInteger(equipId, (int)weapon);
+		animator.SetBool(equipId, equip);
 	}
 	#endregion
 }
