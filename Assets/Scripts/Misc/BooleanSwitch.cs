@@ -8,11 +8,9 @@ public class BooleanSwitch : MonoBehaviour
 	[SerializeField] bool testSwitch = false;
 	public UnityEvent onSwitchOn;
 	public UnityEvent onSwitchOff;
-
 	
 	protected bool on;
 	public virtual bool SwitchValue { get { return on; } protected set { on = value; } }
-
 
 	private void OnValidate()
 	{
@@ -33,4 +31,6 @@ public class BooleanSwitch : MonoBehaviour
 			onSwitchOff.Invoke();
 		SwitchValue = on;
 	}
+
+	
 }

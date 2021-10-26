@@ -10,7 +10,7 @@ public class PlayerMotor : MonoBehaviour
 {
 	#region Exposed Variables
 	//FORCES
-	[Header("Forces")]
+	[Header("Walking")]
 	[Tooltip("The acceleration applied to the player's input.")]
 	public float acceleration = 10;
 	[Tooltip("The target speed of a player's input")]
@@ -19,6 +19,8 @@ public class PlayerMotor : MonoBehaviour
 	public float gravity = 10;
 	[Tooltip("The maximum velocity overall.")]
 	public float maxVelocity = 1000;
+	[Tooltip("The percent of acceleration applied to input while in the air")]
+	[Range(0, 1)] public float airControlModifier = 0.5f;
 
 	//FRICTION
 	[Tooltip("The magnitude of velocity removed every second when in the air")]
@@ -45,11 +47,17 @@ public class PlayerMotor : MonoBehaviour
 	public float jumpCoyoteTime = 0.1f;
 
 	[Header("Dash")]
+	[Tooltip("The curve that dictates the players speed while dashing. Player only samples from 0 to 1")]
 	public AnimationCurve dashCurve;
+	[Tooltip("The target speed of the dash at a y value of one on the dash curve")]
 	public float dashSpeed = 4;
+	[Tooltip("The acceration of the player for getting to that speed")]
 	public float dashAcceleration = 200;
+	[Tooltip("The length of time a dash takes place over")]
 	public float dashDuration = 0.2f;
+	[Tooltip("How long after one dash you can do another one")]
 	public float dashCooldown = 2;
+	[Tooltip("How fast the players model turns to point in the direction of the dash")]
 	public float dashTurnSpeed = 40;
 
 	//COLLISION
@@ -62,12 +70,10 @@ public class PlayerMotor : MonoBehaviour
 	[Range(0,1)] public float bounciness = 0;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
+	[Tooltip("The maximum dot product magnitdude of a collision normal and velocity before a dash is cancelled")]
 	public float dashCancelDot = 0.5f;
+	[Tooltip("The maximum dot product magnitdude of a collision normal and velocity before a jump is cancelled (only applies for ceiling collisions)")]
 	public float ceilingCancelDot = 0.5f;
-
-	//CONTROL
-	[Tooltip("The percent of acceleration applied to input while in the air")]
-	[Range(0, 1)] public float airControlModifier = 0.5f;
 
 	//GROUND DETECTION 
 	[Header("Ground Detection")]
@@ -814,6 +820,11 @@ public class PlayerMotor : MonoBehaviour
 		onDash.Invoke();
 	}
 
+	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection)
+	{
+		//WILL START AN EXTERNAL DASH, BUT WILL ALSO DO SPECIFIC KNOCKBACK STUFF LIKE BREAKING OUT OF ROLL
+	}
+
 	void OnLand()
 	{
 		//call land event
@@ -971,7 +982,7 @@ public class PlayerMotor : MonoBehaviour
 				}
 			}
 
-			if (state == MovementState.FALLING)
+			if (state == MovementState.FALLING || isRolling)
 			{
 				float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity + inputVelocity);
 				if (forcesHitAmount < 0)
