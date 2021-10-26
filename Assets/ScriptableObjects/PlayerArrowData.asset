@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxInitialSpeed: 60
   rotateSpeed: 10
-  damage: 20
+  damage: 1
   gravity: 6
   arrowPenetratePercent: 0.2
   ignoreCollisionLayers:

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerWeaponSwitchBehaviour : StateMachineBehaviour
 {
-	public PlayerCombat.WeaponType switchToWeapon;
+	public bool equipped = false;
 	public bool enforce = false;
 	//If we ever get equip animations this is for that
 	//float switchToWeaponTime;
@@ -14,10 +14,10 @@ public class PlayerWeaponSwitchBehaviour : StateMachineBehaviour
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
 		var pC = animator.GetComponentInParent<PlayerCombat>();
-		if (pC) pC.EquipWeapon(switchToWeapon);
-		if (enforce && animator.GetInteger("Equipped") != (int)switchToWeapon)
+		if (pC) pC.EquipWeapon(equipped);
+		if (enforce && animator.GetBool("Equipped") != equipped)
 		{
-			animator.SetInteger("Equipped", (int)switchToWeapon);
+			animator.SetBool("Equipped", equipped);
 		}
 
 	}
