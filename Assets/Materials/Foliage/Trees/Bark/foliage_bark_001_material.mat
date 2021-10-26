@@ -8,18 +8,21 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: foliage_bark_001_material
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: fbcfb050b30c3bc4b99c18409bc6f5af, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_76cecd40c06143788c8992d785861d8f:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -49,6 +52,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_2095e37010fd4244934aad963a31020b: 0.5
+    - Vector1_2540aa9803824b96a5e5f62704c2446e: 2
+    - Vector1_2acbd040880a40dbb00aafa79b4a5fad: 0
+    - Vector1_2f67095867954595acb67fb41a0da719: 0.1
+    - Vector1_7be2bafec6314bc2b73a9c607322efdc: 0.5
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -71,6 +79,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_0736ef410e5f4a859405f46c9da78060: {r: 0.4245283, g: 0.29102883, b: 0.19424173, a: 0}
+    - Vector3_bf04f7293b2e4326a9971bd285119310: {r: 1, g: 0, b: 1, a: 0}
     - _BaseColor: {r: 0.46226418, g: 0.2927434, b: 0.20278569, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
