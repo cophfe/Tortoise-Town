@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-	[SerializeField] protected float maxHealth = 100;
-	public float CurrentHealth { get; protected set; }
+	[SerializeField] protected int maxHealth = 1;
+	
+
+	public int CurrentHealth { get; protected set; }
 	public bool IsDead { get; protected set; }
 
 	protected virtual void Start()
@@ -14,74 +16,50 @@ public class Health : MonoBehaviour
 		IsDead = false;
 	}
 
-	public void Damage(float damageAmount)
+	public virtual bool Damage(int damageAmount)
 	{
 		if (IsDead)
-			return;
+			return false;
 		CurrentHealth = Mathf.Clamp(CurrentHealth - damageAmount, 0, maxHealth);
-		OnDamaged(damageAmount);
 
 		if (CurrentHealth <= 0)
 		{
-			IsDead = true;
 			OnDeath();
 		}
+		return true;
 	}
 
-	public void Heal(float healAmount)
+	public virtual bool Heal(int healAmount)
 	{
 		if (IsDead)
-			return;
+			return false;
+
 		CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
-		OnHealed(healAmount);
 		
 		//(could happen if healAmount is negative)
 		if (CurrentHealth <= 0)
 		{
-			IsDead = true;
 			OnDeath();
 		}
+		return true;
 	}
 
-	public void Revive(float healAmount)
+	public virtual bool Revive(int healAmount)
 	{
 		if (IsDead && healAmount > 0)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
 			IsDead = false;
-			OnRevive(healAmount);
 		}
+		return true;
 	}
 
-	public virtual void ApplyKnockback(Vector3 knockbackVector)
-	{
-
-	}
 	/// <summary>
 	/// Called when player health is set to zero
 	/// </summary>
 	/// <returns>Whether or not to continue and set dead to true</returns>
 	protected virtual void OnDeath()
 	{
-	}
-
-	protected virtual void OnRevive(float healAmount)
-	{
-	}
-
-	/// <summary>
-	/// Called before healing the player
-	/// </summary>
-	/// <returns>Whether or not to continue and heal the player</returns>
-	protected virtual void OnHealed(float healAmount)
-	{
-	}
-
-	/// <summary>
-	/// Called before damaging the player
-	/// </summary>
-	/// <returns>Whether or not to continue and damage the player</returns>
-	protected virtual void OnDamaged(float damageAmount)
-	{
+		IsDead = true;
 	}
 }
