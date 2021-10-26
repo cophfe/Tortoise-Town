@@ -61439,6 +61439,10 @@ PrefabInstance:
       propertyPath: easeIn
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1234277739025442385, guid: 16ed21ce3c663b148b699354b57ffda2, type: 3}
+      propertyPath: startCutoffHeight
+      value: 3.94
+      objectReference: {fileID: 0}
     - target: {fileID: 1234277739025442386, guid: 16ed21ce3c663b148b699354b57ffda2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 104.02065

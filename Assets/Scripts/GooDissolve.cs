@@ -24,7 +24,7 @@ public class GooDissolve : MonoBehaviour
 
 	private void Start()
 	{
-		cutOffHeightId = Shader.PropertyToID("_CuttoffHieght");
+		cutOffHeightId = Shader.PropertyToID("_CutoffHeight");
 		currentCutOffHeight = startCutoffHeight;
 
 		//Get targets
@@ -104,7 +104,22 @@ public class GooDissolve : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		if (block != null)
-		block.SetFloat(cutOffHeightId, endCutoffHeight);
+		//if (block != null)
+		//block.SetFloat(cutOffHeightId, endCutoffHeight);
+	}
+
+	private void OnDrawGizmosSelected()
+	{
+		Vector3 pos = transform.position;
+		Vector3 scale = new Vector3(2, 0.02f, 2);
+		Gizmos.color = Color.blue;
+		Gizmos.DrawCube(new Vector3(pos.x, startCutoffHeight, pos.z), scale);
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawCube(new Vector3(pos.x, endCutoffHeight, pos.z), scale);
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireCube(new Vector3(pos.x, (startCutoffHeight + endCutoffHeight)/2, pos.z), new Vector3(scale.x, endCutoffHeight - startCutoffHeight, scale.z));
+		if (Application.isPlaying)
+			Gizmos.DrawCube(new Vector3(pos.x, currentCutOffHeight, pos.z), scale);
+
 	}
 }
