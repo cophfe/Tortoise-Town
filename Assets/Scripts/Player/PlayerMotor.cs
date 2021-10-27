@@ -161,6 +161,7 @@ public class PlayerMotor : MonoBehaviour
 	float currentDashDuration;
 	float currentDashVelocity;
 	Vector3 currentDashDirection;
+	public AnimationCurve currentDashCurve;
 	float dashCooldownTimer = 0;
 	float dashTimer = 0;
 	bool dashing = false;
@@ -182,7 +183,6 @@ public class PlayerMotor : MonoBehaviour
 	float rollCooldownTimer = 0;
 	//MOVING PLATFORM
 	MovingPlatform movingPlatform = null;
-	Vector3 movingPlatformOffset = Vector3.zero;
 	//OTHER
 	MovementState state = MovementState.FALLING;
 	Vector3 inputForward;
@@ -220,10 +220,6 @@ public class PlayerMotor : MonoBehaviour
 
 	void Run()
 	{
-		if (movingPlatform)
-			movingPlatformOffset = movingPlatform.GetOffset();
-		else
-			movingPlatformOffset = Vector3.zero;
 
 		ScanForGround();
 		SetState();
@@ -239,7 +235,7 @@ public class PlayerMotor : MonoBehaviour
 		
 		//move player
 		playerController.CharacterController.Move(totalVelocity * Time.deltaTime 
-			+ groundMagnetOffset * Vector3.up + movingPlatformOffset);
+			+ groundMagnetOffset * Vector3.up);
 		lastCollider = null;
 		//Set all timers
 		jumpTimer -= Time.deltaTime;
@@ -321,7 +317,7 @@ public class PlayerMotor : MonoBehaviour
 
 		if (dashing)
 		{
-			float t = dashCurve.Evaluate(1 - dashTimer / dashDuration);
+			float t = currentDashCurve.Evaluate(1 - dashTimer / dashDuration);
 			targetVelocity = currentDashDirection * currentDashVelocity * t;
 
 			//transition between the two velocities
@@ -581,6 +577,10 @@ public class PlayerMotor : MonoBehaviour
 
 		if (isGrounded)
 		{
+			groundPosition = hit.point;
+			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
+			groundNormal = hit.normal;
+			groundAngle = Vector3.Angle(groundNormal, Vector3.up);
 			//if onChangedCollider needs to be called, and 
 			if (hit.collider != groundCollider && !OnChangedCollider(hit.collider))
 			{
@@ -591,11 +591,6 @@ public class PlayerMotor : MonoBehaviour
 				enableGroundMagnet = false;
 				return;
 			}
-
-			groundPosition = hit.point;
-			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
-			groundNormal = hit.normal;
-			groundAngle = Vector3.Angle(groundNormal, Vector3.up);
 			groundCollider = hit.collider;
 			//if we need surface normal instead of collision normal:
 			//if (hit.collider.Raycast(new Ray(hit.point - direction, direction), out hit, 10) && Vector3.Angle(hit.normal, -direction) < 89.5f)
@@ -604,7 +599,7 @@ public class PlayerMotor : MonoBehaviour
 			//}
 
 			float offset = (playerController.CharacterController.height / 2 + playerController.CharacterController.skinWidth - groundDistance );
-			if (enableGroundMagnet && (offset < 0 || movingPlatformOffset != Vector3.zero))
+			if (enableGroundMagnet && (offset < 0 || movingPlatform != null))
 			{
 				groundMagnetOffset = offset;
 			}
@@ -761,6 +756,7 @@ public class PlayerMotor : MonoBehaviour
 	{
 		currentDashVelocity = dashSpeed;
 		currentDashDuration = dashDuration;
+		currentDashCurve = dashCurve;
 
 		if (state != MovementState.GROUNDED)
 		{
@@ -803,8 +799,13 @@ public class PlayerMotor : MonoBehaviour
 	}
 
 	//a dash called by an external script
-	public void StartExternalDash(float dashSpeed, float dashDuration, Vector3 dashDirection, bool considerCooldown = false)
+	public void StartExternalDash(float dashSpeed, float dashDuration, Vector3 dashDirection, AnimationCurve dashCurve = null, bool considerCooldown = false)
 	{
+		if (dashCurve == null)
+			currentDashCurve = this.dashCurve;
+		else 
+			currentDashCurve = dashCurve;
+		
 		if (considerCooldown)
 		{
 			if (dashCooldownTimer > 0) return; 
@@ -820,9 +821,10 @@ public class PlayerMotor : MonoBehaviour
 		onDash.Invoke();
 	}
 
-	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection)
+	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection, AnimationCurve knockbackCurve = null)
 	{
 		//WILL START AN EXTERNAL DASH, BUT WILL ALSO DO SPECIFIC KNOCKBACK STUFF LIKE BREAKING OUT OF ROLL
+		StartExternalDash(dashSpeed, dashDuration, dashDirection, dashCurve, false);
 	}
 
 	void OnLand()
@@ -871,13 +873,13 @@ public class PlayerMotor : MonoBehaviour
 			if (movingPlatform != null)
 			{
 				//calculate velocity gained from leaving
-				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-				Vector3 vel = movingPlatformOffset / time;
-				inputVelocity += new Vector3(vel.x,  0, vel.z) * movingPlatformForceMultiplier;
-				forcesVelocity.y += Mathf.Max(vel.y, 0);
+				//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
+				//Vector3 vel = movingPlatformOffset / time;
+				//inputVelocity += new Vector3(vel.x,  0, vel.z) * movingPlatformForceMultiplier;
+				//forcesVelocity.y += Mathf.Max(vel.y, 0);
 
 				//disconnect from platform
-				movingPlatformOffset = Vector3.zero;
+				movingPlatform.AssignPlayer(null);
 				movingPlatform = null;
 				playerController.InterpolateVisuals = true;
 			}
@@ -897,7 +899,7 @@ public class PlayerMotor : MonoBehaviour
 			{
 				//connect
 				movingPlatform = mp;
-				MovingPlatformOffset = movingPlatform.GetOffset();
+				movingPlatform.AssignPlayer(playerController);
 				playerController.InterpolateVisuals = false;
 			}
 			else
@@ -906,13 +908,13 @@ public class PlayerMotor : MonoBehaviour
 				if (movingPlatform)
 				{
 					//calculate velocity gained from leaving
-					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-					Vector3 vel = movingPlatformOffset / time;
-					inputVelocity += new Vector3(vel.x, 0, vel.z) * movingPlatformForceMultiplier;
-					forcesVelocity.y += Mathf.Max(vel.y, 0);
+					//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
+					//Vector3 vel = movingPlatformOffset / time;
+					//inputVelocity += new Vector3(vel.x, 0, vel.z) * movingPlatformForceMultiplier;
+					//forcesVelocity.y += Mathf.Max(vel.y, 0);
 
 					//disconnect from platform
-					movingPlatformOffset = Vector3.zero;
+					movingPlatform.AssignPlayer(null);
 					movingPlatform = null;
 					playerController.InterpolateVisuals = true;
 				}
@@ -1014,7 +1016,6 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
 	public float TargetSpeedManipulator { get; set; }
