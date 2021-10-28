@@ -4,74 +4,62 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-	[SerializeField] float maxHealth = 100;
-	public float CurrentHealth { get; private set; }
-	public bool IsDead { get; private set; }
+	[SerializeField] protected int maxHealth = 1;
+	
 
-	private void Start()
+	public int CurrentHealth { get; protected set; }
+	public bool IsDead { get; protected set; }
+
+	protected virtual void Start()
 	{
 		CurrentHealth = maxHealth;
 		IsDead = false;
 	}
 
-	public void Damage(float damageAmount)
+	public virtual bool Damage(int damageAmount)
 	{
-		if (IsDead || !OnDamaged(damageAmount))
-			return;
+		if (IsDead)
+			return false;
 		CurrentHealth = Mathf.Clamp(CurrentHealth - damageAmount, 0, maxHealth);
 
 		if (CurrentHealth <= 0)
-			IsDead = OnDeath() | IsDead;
+		{
+			OnDeath();
+		}
+		return true;
 	}
 
-	public void Heal(float healAmount)
+	public virtual bool Heal(int healAmount)
 	{
-		if (IsDead || !OnHealed(healAmount))
-			return;
+		if (IsDead)
+			return false;
+
 		CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
-
-		if (CurrentHealth <= 0) //(could happen if healAmount is negative)
-			IsDead = OnDeath() | IsDead;
+		
+		//(could happen if healAmount is negative)
+		if (CurrentHealth <= 0)
+		{
+			OnDeath();
+		}
+		return true;
 	}
 
-	public void Revive(float healAmount)
+	public virtual bool Revive(int healAmount)
 	{
-		if (IsDead && OnRevive(healAmount) && healAmount > 0)
+		if (IsDead && healAmount > 0)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
 			IsDead = false;
 		}
+		return true;
 	}
 
 	/// <summary>
 	/// Called when player health is set to zero
 	/// </summary>
 	/// <returns>Whether or not to continue and set dead to true</returns>
-	protected virtual bool OnDeath()
+	protected virtual void OnDeath()
 	{
-		return true;
-	}
-
-	protected virtual bool OnRevive(float healAmount)
-	{
-		return true;
-	}
-
-	/// <summary>
-	/// Called before healing the player
-	/// </summary>
-	/// <returns>Whether or not to continue and heal the player</returns>
-	protected virtual bool OnHealed(float healAmount)
-	{
-		return true;
-	}
-
-	/// <summary>
-	/// Called before damaging the player
-	/// </summary>
-	/// <returns>Whether or not to continue and damage the player</returns>
-	protected virtual bool OnDamaged(float damageAmount)
-	{
-		return true;
+		IsDead = true;
 	}
 }

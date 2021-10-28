@@ -121,7 +121,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius * 2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseOutQuad(t));
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, t);
 					}
 				}
 				//IF CHANGING OUT OF ROLL
@@ -141,7 +141,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.radius = Mathf.Lerp(playerController.InitialColliderRadius, playerController.RollColliderRadius, t);
 						playerController.CharacterController.height = Mathf.Lerp(playerController.InitialColliderHeight, playerController.RollColliderRadius*2, t);
 						playerController.CharacterController.center = Vector3.Lerp(playerController.InitialColliderOffset, playerController.RollColliderOffset, t);
-						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, Ease.EaseInQuad(t));
+						playerController.MainCamera.GetCameraData().targetOffset.y = Mathf.Lerp(playerController.MainCamera.defaultCameraData.targetOffset.y, playerController.RollCameraOffset, t);
 					}
 				}
 			}
@@ -178,7 +178,7 @@ public class PlayerAnimator : MonoBehaviour
 				animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, footPositionWeight);
 				animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, footRotationWeight);
 
-				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down, out var hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers))
+				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down, out var hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers, QueryTriggerInteraction.Ignore))
 				{
 					//get position
 					var targetPosition = hit.point + Vector3.up * distanceToGround - transform.position;
@@ -200,7 +200,7 @@ public class PlayerAnimator : MonoBehaviour
 				animator.SetIKPosition(AvatarIKGoal.LeftFoot, currentLeftPos + transform.position);
 				animator.SetIKRotation(AvatarIKGoal.LeftFoot, currentLeftRot);
 
-				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down, out hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers))
+				if (Physics.Raycast(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down, out hit, distanceToGround + 1 + extendDistance, ~ignoredGroundLayers, QueryTriggerInteraction.Ignore))
 				{
 					//get position
 					var targetPosition = hit.point + Vector3.up * distanceToGround - transform.position;
@@ -270,9 +270,9 @@ public class PlayerAnimator : MonoBehaviour
 		animator.SetTrigger(attackId);
 	}
 
-	public void AnimateEquip(PlayerCombat.WeaponType weapon)
+	public void AnimateEquip(bool equip)
 	{
-		animator.SetInteger(equipId, (int)weapon);
+		animator.SetBool(equipId, equip);
 	}
 	#endregion
 }

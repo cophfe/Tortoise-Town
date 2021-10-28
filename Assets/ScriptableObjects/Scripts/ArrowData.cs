@@ -7,7 +7,7 @@ public class ArrowData : ScriptableObject
 {
 	public float maxInitialSpeed = 50;
 	public float rotateSpeed = 10;
-	public float damage = 10;
+	public int damage = 1;
 	public float gravity = 9;
 	public float arrowPenetratePercent = 0.2f;
 	public LayerMask ignoreCollisionLayers;

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a7d458eda5f14348a1fe8b2fdd30a6f, type: 3}
+  m_Script: {fileID: 11500000, guid: f9cc502918aa4ee42ac92f08a6330fb0, type: 3}
   m_Name: PlayerArrowData
   m_EditorClassIdentifier: 
-  maxInitialSpeed: 40
+  maxInitialSpeed: 60
   rotateSpeed: 10
-  damage: 20
-  gravity: 9
+  damage: 1
+  gravity: 6
   arrowPenetratePercent: 0.2
   ignoreCollisionLayers:
     serializedVersion: 2
