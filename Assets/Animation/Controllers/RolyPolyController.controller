@@ -825,7 +825,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RolyPolyController-LAPTOP-EU22417N
+  m_Name: RolyPolyController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Grounded
@@ -904,7 +904,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Attack Layer
     m_StateMachine: {fileID: -6619027678616954903}
-    m_Mask: {fileID: 31900000, guid: 72fbf40db980db843ab88a6fa7d2525f, type: 2}
+    m_Mask: {fileID: 31900000, guid: 9ee339af8fd2f944da6ea09f08830de9, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
