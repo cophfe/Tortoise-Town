@@ -147,11 +147,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1533119652441385055}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31297a678fa47e44d9270ae67a547c7a, type: 3}
+  m_Script: {fileID: 11500000, guid: fbbc01d08cb9a0348bc444398031b472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
-  crosshair: {fileID: 545574814}
+  crosshair: {fileID: 0}
 --- !u!114 &1533119652441385049
 MonoBehaviour:
   m_ObjectHideFlags: 0

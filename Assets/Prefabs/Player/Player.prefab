@@ -101,7 +101,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 955483435082794918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e9d3414cbc3154588c7d9186cce181, type: 3}
+  m_Script: {fileID: 11500000, guid: c2cdbc1de90f03440a479d403a0472db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3923705860234160774}
@@ -671,6 +671,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.26101625
       objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 3c6b0542d66f0464baf49cc39951bc94, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8c467fc6f07cf944ea05775d5da5bc76, type: 2}
     - target: {fileID: 919132149155446097, guid: 3c6b0542d66f0464baf49cc39951bc94, type: 3}
       propertyPath: m_Name
       value: RolyTempRig
@@ -862,7 +866,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 3c6b0542d66f0464baf49cc39951bc94, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3b12858632a557646a62a6c8577306e0, type: 2}
+      objectReference: {fileID: 9100000, guid: 811d42a0ffa6f944fb9f76bf577e8a1e, type: 2}
     - target: {fileID: 5866666021909216657, guid: 3c6b0542d66f0464baf49cc39951bc94, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
