@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 	public Vector3 RollColliderOffset { get { return rollColliderOffset + additionalRollColliderOffset; } }
 	public float RollCameraOffset { get { return rollCameraYOffset; } }
 	public bool DrawDebug { get { return drawDebug; } }
+	public bool InputIsEnabled { get { return inputEnabled; } set { inputEnabled = value; if(value) controls.Enable(); else controls.Disable(); } }
+	bool inputEnabled = true;
 	public bool InterpolateVisuals {
 		get
 		{

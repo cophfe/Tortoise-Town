@@ -25,9 +25,8 @@ public class GameWindow : MonoBehaviour
 		rectTransform = GetComponent<RectTransform>();
 		alphaGroup = GetComponent<CanvasGroup>();
 		initialScale = rectTransform.localScale;
-		smallScale = initialScale * 0.5f;
+		smallScale = initialScale * 0.75f;
 		smallScale.z = 1;
-		gameObject.SetActive(false);
 	}
 
 	public bool OpenWindow(bool openValue)
@@ -38,10 +37,12 @@ public class GameWindow : MonoBehaviour
 		{
 			gameObject.SetActive(true);
 			state = TransitionState.OPENING;
+			rectTransform.localScale = smallScale;
 			alphaGroup.alpha = 0;
 		}
 		else
 		{
+			rectTransform.localScale = initialScale;
 			alphaGroup.alpha = 1;
 			state = TransitionState.CLOSING;
 		}

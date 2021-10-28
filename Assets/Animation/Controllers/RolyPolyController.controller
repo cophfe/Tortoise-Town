@@ -34,7 +34,7 @@ BlendTree:
   m_Name: IdleWalkRun
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: bca9d6c7c786fa343a8fd11394154d15, type: 3}
+    m_Motion: {fileID: 1827226128182048838, guid: 887d373f32652e74bb8c22b321e59d79, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -514,7 +514,7 @@ BlendTree:
   m_Name: BlendTree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: bca9d6c7c786fa343a8fd11394154d15, type: 3}
+    m_Motion: {fileID: 1827226128182048838, guid: 887d373f32652e74bb8c22b321e59d79, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 5
