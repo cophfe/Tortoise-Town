@@ -31,7 +31,7 @@ namespace UnityEngine.Rendering.Universal
     }
 
     [DisallowMultipleRendererFeature]
-    internal class ScreenSpaceAmbientOcclusion : ScriptableRendererFeature
+    internal class ScreenSpaceAmbientOcclusion : ScriptableRendererFeature, IDisposable
     {
         // Serialized Fields
         [SerializeField, HideInInspector] private Shader m_Shader = null;
@@ -40,9 +40,10 @@ namespace UnityEngine.Rendering.Universal
         // Private Fields
         private Material m_Material;
         private ScreenSpaceAmbientOcclusionPass m_SSAOPass = null;
+		private bool disposedValue;
 
-        // Constants
-        private const string k_ShaderName = "Hidden/Universal Render Pipeline/ScreenSpaceAmbientOcclusion";
+		// Constants
+		private const string k_ShaderName = "Custom/Universal Render Pipeline/ScreenSpaceAmbientOcclusion";
         private const string k_OrthographicCameraKeyword = "_ORTHOGRAPHIC";
         private const string k_NormalReconstructionLowKeyword = "_RECONSTRUCT_NORMAL_LOW";
         private const string k_NormalReconstructionMediumKeyword = "_RECONSTRUCT_NORMAL_MEDIUM";
@@ -83,12 +84,6 @@ namespace UnityEngine.Rendering.Universal
             }
         }
 
-        /// <inheritdoc/>
-        protected override void Dispose(bool disposing)
-        {
-            CoreUtils.Destroy(m_Material);
-        }
-
         private bool GetMaterial()
         {
             if (m_Material != null)
@@ -101,7 +96,7 @@ namespace UnityEngine.Rendering.Universal
                 m_Shader = Shader.Find(k_ShaderName);
                 if (m_Shader == null)
                 {
-                    return false;
+					return false;
                 }
             }
 
@@ -119,7 +114,6 @@ namespace UnityEngine.Rendering.Universal
 
             // Private Variables
             private ScreenSpaceAmbientOcclusionSettings m_CurrentSettings;
-            private ProfilingSampler m_ProfilingSampler = ProfilingSampler.Get(URPProfileId.SSAO);
             private RenderTargetIdentifier m_SSAOTexture1Target = new RenderTargetIdentifier(s_SSAOTexture1ID, 0, CubemapFace.Unknown, -1);
             private RenderTargetIdentifier m_SSAOTexture2Target = new RenderTargetIdentifier(s_SSAOTexture2ID, 0, CubemapFace.Unknown, -1);
             private RenderTargetIdentifier m_SSAOTexture3Target = new RenderTargetIdentifier(s_SSAOTexture3ID, 0, CubemapFace.Unknown, -1);
@@ -155,10 +149,10 @@ namespace UnityEngine.Rendering.Universal
                 switch (m_CurrentSettings.Source)
                 {
                     case ScreenSpaceAmbientOcclusionSettings.DepthSource.Depth:
-                        ConfigureInput(ScriptableRenderPassInput.Depth);
+                        //ConfigureInput(ScriptableRenderPassInput.Depth);
                         break;
                     case ScreenSpaceAmbientOcclusionSettings.DepthSource.DepthNormals:
-                        ConfigureInput(ScriptableRenderPassInput.Normal);
+                       // ConfigureInput(ScriptableRenderPassInput.Normal);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -244,8 +238,9 @@ namespace UnityEngine.Rendering.Universal
                 ConfigureClear(ClearFlag.None, Color.white);
             }
 
-            /// <inheritdoc/>
-            public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+			static readonly int _SourceSize = Shader.PropertyToID("_SourceSize");
+			/// <inheritdoc/>
+			public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 if (material == null)
                 {
@@ -254,16 +249,24 @@ namespace UnityEngine.Rendering.Universal
                 }
 
                 CommandBuffer cmd = CommandBufferPool.Get();
-                using (new ProfilingScope(cmd, m_ProfilingSampler))
                 {
-                    CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.ScreenSpaceOcclusion, true);
-                    PostProcessUtils.SetSourceSize(cmd, m_Descriptor);
+                    CoreUtils.SetKeyword(cmd, "_SCREEN_SPACE_OCCLUSION", true);
+					{
+						float width = m_Descriptor.width;
+						float height = m_Descriptor.height;
+						if (m_Descriptor.useDynamicScale)
+						{
+							width *= ScalableBufferManager.widthScaleFactor;
+							height *= ScalableBufferManager.heightScaleFactor;
+						}
+						cmd.SetGlobalVector(_SourceSize, new Vector4(width, height, 1.0f / width, 1.0f / height));
+					}
 
                     // Execute the SSAO
                     Render(cmd, m_SSAOTexture1Target, ShaderPasses.AO);
-
-                    // Execute the Blur Passes
-                    RenderAndSetBaseMap(cmd, m_SSAOTexture1Target, m_SSAOTexture2Target, ShaderPasses.BlurHorizontal);
+					
+					// Execute the Blur Passes
+					RenderAndSetBaseMap(cmd, m_SSAOTexture1Target, m_SSAOTexture2Target, ShaderPasses.BlurHorizontal);
                     RenderAndSetBaseMap(cmd, m_SSAOTexture2Target, m_SSAOTexture3Target, ShaderPasses.BlurVertical);
                     RenderAndSetBaseMap(cmd, m_SSAOTexture3Target, m_SSAOTexture2Target, ShaderPasses.BlurFinal);
 
@@ -303,11 +306,22 @@ namespace UnityEngine.Rendering.Universal
                     throw new ArgumentNullException("cmd");
                 }
 
-                CoreUtils.SetKeyword(cmd, ShaderKeywordStrings.ScreenSpaceOcclusion, false);
+                CoreUtils.SetKeyword(cmd, "_SCREEN_SPACE_OCCLUSION", false);
                 cmd.ReleaseTemporaryRT(s_SSAOTexture1ID);
                 cmd.ReleaseTemporaryRT(s_SSAOTexture2ID);
                 cmd.ReleaseTemporaryRT(s_SSAOTexture3ID);
             }
         }
-    }
+
+		protected virtual void Dispose(bool disposing)
+		{
+			CoreUtils.Destroy(m_Material);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+	}
 }

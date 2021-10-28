@@ -21,17 +21,16 @@ public class MovingPlatform : BooleanSwitch
 	[HideInInspector] public Vector3[] points;
 	public EaseMode ease = EaseMode.NONE;
 	[HideInInspector] public LoopType loopType = LoopType.PINGPONG;
-	[SerializeField, HideInInspector] Vector3 startPosition;
+	public Vector3 StartPosition { get; private set; }
+	public Quaternion StartRotation { get; private set; }
 	[SerializeField, HideInInspector] Vector3[] intermediates = null;
 	bool playing = false;
 	float t = 0;
 	float iterateAmount = 0;
 	float stopTimer = 0;
-	Vector3 prevPosition;
 	int negMultiply = 1;
-	const int bezierCurveSteps = 10;
-
-	Vector3 movingPlatformOffset;
+	PlayerController player;
+	BoxCollider platformCollider;
 
 	public enum LoopType
 	{
@@ -71,8 +70,10 @@ public class MovingPlatform : BooleanSwitch
 	void Start()
     {
 		rb = GetComponent<Rigidbody>();
-		startPosition = rb.position;
+		StartPosition = rb.position;
+		StartRotation = rb.rotation;
 		stopTimer = stopTime + startDelay;
+		platformCollider = GetComponentInChildren<BoxCollider>();
 		if (playOnAwake)
 			Play();
 	}
@@ -83,9 +84,10 @@ public class MovingPlatform : BooleanSwitch
 
 		stopTimer -= Time.deltaTime;
 		if (stopTimer > 0)
-		{
-			prevPosition = rb.position;
 			return;
+		else if (player && loopType == LoopType.RESTART && t == 0)
+		{
+			AssignPlayer(null);
 		}
 
 		t += negMultiply * iterateAmount * Time.deltaTime;
@@ -109,7 +111,6 @@ public class MovingPlatform : BooleanSwitch
 		else if (t >= 1)
 		{
 			stopTimer = stopTime;
-			prevPosition = rb.position;
 
 			if (loopType == LoopType.ONCE) 
 				Pause();
@@ -123,12 +124,30 @@ public class MovingPlatform : BooleanSwitch
 		}
 		
 		float easedT = GetEasedT();
-		Vector3 position = GetPointOnSpline(easedT);
 
-		movingPlatformOffset = rb.position - prevPosition;
+		if (player)
+		{
+			Vector3 playerPos = transform.InverseTransformPoint(player.transform.position);
 
-		prevPosition = rb.position;
-		rb.position = position;
+			transform.position = GetPointOnSpline(easedT);
+
+			var t = transform.TransformPoint(playerPos) - player.transform.position;
+			if (t.y < 0)
+			{
+				//need to disable collider if y less than 0, because otherwise the character controller will collide with it
+				platformCollider.enabled = false;
+				player.CharacterController.Move(transform.TransformPoint(playerPos) - player.transform.position);
+				platformCollider.enabled = true;
+			}
+			else
+			{
+				player.CharacterController.Move(transform.TransformPoint(playerPos) - player.transform.position);
+			}
+		}
+		else
+		{
+			transform.position = GetPointOnSpline(easedT);
+		}
 	}
 
 	Vector3 GetPointOnSpline(float t)
@@ -145,28 +164,13 @@ public class MovingPlatform : BooleanSwitch
 		if (useBezier)
 		{
 			iterateAmount = GetCurrentSpeed(prevPoint, points[i], intermediates[2 * i], intermediates[2 * i + 1], localT);
-			return startPosition + GetPointOnBezierCurve(prevPoint, points[i], intermediates[2 * i], intermediates[2 * i + 1], localT);
+			return TransformPoint(GetPointOnBezierCurve(prevPoint, points[i], intermediates[2 * i], intermediates[2 * i + 1], localT));
 		}
 		else
 		{
 			iterateAmount = GetCurrentSpeed(prevPoint, points[i]);
-			return startPosition + GetPointOnLine(prevPoint, points[i], localT);
+			return TransformPoint(GetPointOnLine(prevPoint, points[i], localT));
 		}
-	}
-
-	float ApproximateBezierCurveLength(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent)
-	{
-		float length = 0;
-		float t;
-		Vector3 previousPoint = start;
-		for (int i = 0; i < bezierCurveSteps; i++)
-		{
-			t = (float)(i + 1) / bezierCurveSteps;
-			Vector3 nextPoint = GetPointOnBezierCurve(start, end, startTangent, endTangent, t);
-			length += (nextPoint - previousPoint).magnitude;
-			previousPoint = nextPoint;
-		}
-		return length;
 	}
 
 	Vector3 GetPointOnBezierCurve(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent, float t)
@@ -183,16 +187,17 @@ public class MovingPlatform : BooleanSwitch
 
 	float GetCurrentSpeed(Vector3 start, Vector3 end)
 	{
-		Vector3 gradient = end - start;
+		gradient = end - start;
 		return speed / ((gradient).magnitude * points.Length);
 	}
 
+	Vector3 gradient = Vector3.zero;
 	float GetCurrentSpeed(Vector3 start, Vector3 end, Vector3 startTangent, Vector3 endTangent, float t)
 	{
 		//derivitive of displacement is velocity (with time as t axis), so this is just the derivitive of the bezier curve function
 		Vector3 b = startTangent + start;
 		Vector3 c = endTangent + end;
-		Vector3 gradient = t * t * (-3 * start + 9 * b - 9 * c + 3 * end) + t * (6 * start - 12 * b + 6 * c) + (-3 * start + 3 * b);
+		gradient = t * t * (-3 * start + 9 * b - 9 * c + 3 * end) + t * (6 * start - 12 * b + 6 * c) + (-3 * start + 3 * b);
 		return speed / (gradient.magnitude * points.Length);
 	}
 
@@ -204,12 +209,6 @@ public class MovingPlatform : BooleanSwitch
 	public void Pause()
 	{
 		playing = false;
-		movingPlatformOffset = Vector3.zero;
-	}
-
-	public Vector3 GetOffset()
-	{
-		return movingPlatformOffset;
 	}
 
 	float GetEasedT()
@@ -221,5 +220,38 @@ public class MovingPlatform : BooleanSwitch
 			default:
 				return t;
 		}
+	}
+
+	float GetEasedAcceleration()
+	{
+		switch (ease)
+		{
+			case EaseMode.INOUT:
+				return t < 0.5 ? 4 * t : 4 - 4*t;
+			default:
+				return 1;
+		}
+	}
+
+	public void AssignPlayer(PlayerController player)
+	{
+		if (this.player != null && player != this.player)
+		{
+			if (Time.timeScale != 0)
+			{
+				this.player.Motor.ForcesVelocity += StartRotation * gradient.normalized * iterateAmount * GetEasedAcceleration() / Time.unscaledDeltaTime * this.player.Motor.movingPlatformForceMultiplier;
+			}
+		}
+		this.player = player;
+	}
+
+	Vector3 TransformPoint(Vector3 vec)
+	{
+		return StartRotation * vec + StartPosition;
+	}
+
+	Vector3 InverseTransformPoint(Vector3 vec)
+	{
+		return Quaternion.Inverse(StartRotation) * (vec - StartPosition);
 	}
 }
