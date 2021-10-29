@@ -4,15 +4,18 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(RectTransform), typeof(CanvasGroup))]
+[RequireComponent(typeof(RectTransform))]
 public class GameWindow : MonoBehaviour
 {
+	public bool transitionScale = true;
 	RectTransform rectTransform;
 	CanvasGroup alphaGroup;
+	Image image;
 	TransitionState state = TransitionState.CLOSED;
 	Vector3 initialScale;
+	float initialAlpha;
 	Vector3 smallScale;
-	enum TransitionState
+	public enum TransitionState
 	{
 		OPEN,
 		OPENING,
@@ -24,10 +27,13 @@ public class GameWindow : MonoBehaviour
 	{
 		rectTransform = GetComponent<RectTransform>();
 		alphaGroup = GetComponent<CanvasGroup>();
+		image = GetComponent<Image>();
+		if (alphaGroup) initialAlpha = alphaGroup.alpha;
+		else if (image) initialAlpha = image.color.a;
+		else initialAlpha = 1;
 		initialScale = rectTransform.localScale;
-		smallScale = initialScale * 0.5f;
+		smallScale = initialScale * 0.75f;
 		smallScale.z = 1;
-		gameObject.SetActive(false);
 	}
 
 	public bool OpenWindow(bool openValue)
@@ -38,12 +44,16 @@ public class GameWindow : MonoBehaviour
 		{
 			gameObject.SetActive(true);
 			state = TransitionState.OPENING;
-			alphaGroup.alpha = 0;
+			if (transitionScale)
+				rectTransform.localScale = smallScale;
+			SetAlpha(0);
 		}
 		else
 		{
-			alphaGroup.alpha = 1;
+			if (transitionScale)
+				rectTransform.localScale = initialScale;
 			state = TransitionState.CLOSING;
+			SetAlpha(initialAlpha);
 		}
 		return true;
 	}
@@ -56,14 +66,16 @@ public class GameWindow : MonoBehaviour
 				if (t >= 1)
 				{
 					//done opening
-					rectTransform.localScale = initialScale;
+					if (transitionScale)
+						rectTransform.localScale = initialScale;
 					state = TransitionState.OPEN;
-					alphaGroup.alpha = 1;
+					SetAlpha(initialAlpha);
 				}
 				else
 				{
-					rectTransform.localScale = Vector3.Lerp(smallScale, initialScale, t);
-					alphaGroup.alpha = t;
+					if (transitionScale)
+						rectTransform.localScale = Vector3.Lerp(smallScale, initialScale, t);
+					SetAlpha(initialAlpha  * t);
 				}
 				
 				break;
@@ -72,18 +84,34 @@ public class GameWindow : MonoBehaviour
 				if (t >= 1)
 				{
 					//done closing
-					rectTransform.localScale = smallScale;
+					if (transitionScale)
+						rectTransform.localScale = smallScale;
 					state = TransitionState.CLOSED;
 					gameObject.SetActive(false);
-					alphaGroup.alpha = 0;
+					SetAlpha(0);
 				}
 				else
 				{
-					rectTransform.localScale = Vector3.Lerp(initialScale, smallScale, t);
-					alphaGroup.alpha = 1- t;
+					if (transitionScale)
+						rectTransform.localScale = Vector3.Lerp(initialScale, smallScale, t);
+					SetAlpha(initialAlpha * (1 - t));
 				}
 				break;
 		}
 		
+	}
+
+	void SetAlpha(float alpha)
+	{
+		if (alphaGroup)
+		{
+			alphaGroup.alpha = alpha;
+		}
+		else if (image)
+		{
+			var color = image.color;
+			color.a = alpha;
+			image.color = color;
+		}
 	}
 }

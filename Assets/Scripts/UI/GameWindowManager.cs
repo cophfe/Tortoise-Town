@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class GameWindowManager : MonoBehaviour
 {
 	[SerializeField] GameWindow[] gameWindows;
-	[SerializeField] Image backgroundPanel;
-
+	[SerializeField] GameWindow backgroundPanel;
 	[SerializeField] float windowOpenTime = 1;
 	float openTimer = 0;
 	int activeWindowIndex = -1;
@@ -15,23 +14,29 @@ public class GameWindowManager : MonoBehaviour
 
 	void Start()
 	{
-
+		for (int i = 0; i < gameWindows.Length; i++)
+		{
+			gameWindows[i].gameObject.SetActive(false);
+		}
+		backgroundPanel.gameObject.SetActive(false);
 	}
 
 	private void Update()
 	{
 		if (transitioning)
 		{
-			openTimer += Time.deltaTime;
+			openTimer += Time.unscaledDeltaTime;
 			float t = Ease.EaseOutQuad(openTimer / windowOpenTime);
-
+			if (openTimer >= windowOpenTime)
+			{
+				t = 1;
+				transitioning = false;
+				OnEndTransition();
+			}
 			for (int i = 0; i < gameWindows.Length; i++)
 			{
 				gameWindows[i].UpdateOpenState(t);
-			}
-			if (t >= 1)
-			{
-				transitioning = false;
+				backgroundPanel.UpdateOpenState(t);
 			}
 		}
 		
@@ -39,14 +44,15 @@ public class GameWindowManager : MonoBehaviour
 
 	public void SetCurrentWindow(string windowName)
 	{
+		if (transitioning) return;
 		bool success = false;
 		for (int i = 0; i < gameWindows.Length; i++)
 		{
 			if (gameWindows[i].gameObject.name == windowName)
 			{
-				if (i == activeWindowIndex) return;
-
-				gameWindows[i].OpenWindow(true);
+				if (i == activeWindowIndex || !gameWindows[i].OpenWindow(true)) return;
+				if (activeWindowIndex == -1)
+					backgroundPanel.OpenWindow(true);
 				activeWindowIndex = i;
 				for (int j = 0; j < gameWindows.Length; j++)
 				{
@@ -54,25 +60,28 @@ public class GameWindowManager : MonoBehaviour
 					gameWindows[j].OpenWindow(false);
 				}
 				success = true;
-				break;
+				transitioning = true;
+				OnStartTransition();
+				openTimer = 0;
+				return;
 			}
 		}
 
 		//if could not find window, close
 		if (!success)
 		{
-			for (int j = 0; j < gameWindows.Length; j++)
-			{
-				gameWindows[j].OpenWindow(false);
-			}
-			activeWindowIndex = -1;
+			CloseActiveWindows();
 		}
 
-		openTimer = 0;
+		
 	}
+
+	public GameWindow GetCurrentWindow() { if (activeWindowIndex < 0) return null;
+		else return gameWindows[activeWindowIndex]; }
 
 	public void CloseActiveWindows()
 	{
+		backgroundPanel.OpenWindow(false);
 		bool anyWindowsWereOpen = false;
 		for (int j = 0; j < gameWindows.Length; j++)
 		{
@@ -81,6 +90,41 @@ public class GameWindowManager : MonoBehaviour
 		activeWindowIndex = -1;
 
 		if (anyWindowsWereOpen)
+		{
+			OnStartTransition();
+			transitioning = true;
 			openTimer = 0;
+		}
+	}
+
+	public void ToggleWindows()
+	{
+		var current = GetCurrentWindow();
+		if (current == null || current.name == "Options")
+		{
+			GameManager.Instance.IsCursorRestricted = false;
+			Time.timeScale = 0;
+			GameManager.Instance.Player.InputIsEnabled = false;
+			SetCurrentWindow("Pause");
+		}
+		else if (current.name == "Pause")
+		{
+			CloseActiveWindows();
+		}
+	}
+
+	void OnStartTransition()
+	{
+	}
+
+	void OnEndTransition()
+	{
+		var current = GetCurrentWindow();
+		if (current == null)
+		{
+			GameManager.Instance.IsCursorRestricted = true;
+			GameManager.Instance.Player.InputIsEnabled = true;
+			Time.timeScale = 1;
+		}
 	}
 }
