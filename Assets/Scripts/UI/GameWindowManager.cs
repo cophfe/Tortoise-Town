@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameWindowManager : MonoBehaviour
 {
 	[SerializeField] GameWindow[] gameWindows;
-	[SerializeField] Image backgroundPanel;
+	[SerializeField] GameWindow backgroundPanel;
 	[SerializeField] float windowOpenTime = 1;
 	float openTimer = 0;
 	int activeWindowIndex = -1;
@@ -18,6 +18,7 @@ public class GameWindowManager : MonoBehaviour
 		{
 			gameWindows[i].gameObject.SetActive(false);
 		}
+		backgroundPanel.gameObject.SetActive(false);
 	}
 
 	private void Update()
@@ -35,6 +36,7 @@ public class GameWindowManager : MonoBehaviour
 			for (int i = 0; i < gameWindows.Length; i++)
 			{
 				gameWindows[i].UpdateOpenState(t);
+				backgroundPanel.UpdateOpenState(t);
 			}
 		}
 		
@@ -43,14 +45,14 @@ public class GameWindowManager : MonoBehaviour
 	public void SetCurrentWindow(string windowName)
 	{
 		if (transitioning) return;
-
 		bool success = false;
 		for (int i = 0; i < gameWindows.Length; i++)
 		{
 			if (gameWindows[i].gameObject.name == windowName)
 			{
 				if (i == activeWindowIndex || !gameWindows[i].OpenWindow(true)) return;
-				Debug.Log(windowName);
+				if (activeWindowIndex == -1)
+					backgroundPanel.OpenWindow(true);
 				activeWindowIndex = i;
 				for (int j = 0; j < gameWindows.Length; j++)
 				{
@@ -68,17 +70,7 @@ public class GameWindowManager : MonoBehaviour
 		//if could not find window, close
 		if (!success)
 		{
-			for (int j = 0; j < gameWindows.Length; j++)
-			{
-				if (gameWindows[j].OpenWindow(false))
-				{
-					OnStartTransition();
-					transitioning = true;
-				}
-
-			}
-			openTimer = 0;
-			activeWindowIndex = -1;
+			CloseActiveWindows();
 		}
 
 		
@@ -89,6 +81,7 @@ public class GameWindowManager : MonoBehaviour
 
 	public void CloseActiveWindows()
 	{
+		backgroundPanel.OpenWindow(false);
 		bool anyWindowsWereOpen = false;
 		for (int j = 0; j < gameWindows.Length; j++)
 		{
@@ -98,6 +91,7 @@ public class GameWindowManager : MonoBehaviour
 
 		if (anyWindowsWereOpen)
 		{
+			OnStartTransition();
 			transitioning = true;
 			openTimer = 0;
 		}

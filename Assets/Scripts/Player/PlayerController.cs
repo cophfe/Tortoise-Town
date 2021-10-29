@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerHealth)), DefaultExecutionOrder(2)]
 public class PlayerController : MonoBehaviour
 {
-	[SerializeField] OldCameraController cameraController = null;
+	[SerializeField] CameraController cameraController = null;
 	[SerializeField] GameplayUIManager gUI = null;
 	[SerializeField] float rollColliderRadius = 0.5f;
 	[SerializeField] Vector3 additionalRollColliderOffset = Vector3.zero;
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 	public CharacterController CharacterController { get; private set; }
 	public PlayerCombat Combat { get; private set; }
 	public PlayerHealth Health { get; private set; }
-	public OldCameraController MainCamera { get { return cameraController; }}
+	public CameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
 	public GameManager GameManager { get; private set; }
 	public GameplayUIManager GUI { get { return gUI; } }
@@ -43,8 +43,21 @@ public class PlayerController : MonoBehaviour
 	public Vector3 RollColliderOffset { get { return rollColliderOffset + additionalRollColliderOffset; } }
 	public float RollCameraOffset { get { return rollCameraYOffset; } }
 	public bool DrawDebug { get { return drawDebug; } }
-	public bool InputIsEnabled { get { return inputEnabled; } set { inputEnabled = value; if(value) controls.Enable(); else controls.Disable(); } }
-	bool inputEnabled = true;
+	public bool InputIsEnabled
+	{
+		set
+		{
+			cameraController.EnableInput = value;
+			if (value)
+			{
+				controls.Enable();
+			}
+			else
+			{
+				controls.Disable();
+			}
+		}
+	}
 	public bool InterpolateVisuals {
 		get
 		{
@@ -55,7 +68,7 @@ public class PlayerController : MonoBehaviour
 			if (visualInterpolator)
 			{
 				visualInterpolator.disable = !value;
-				MainCamera.movementUpdateType = value ? OldCameraController.MovementUpdateType.UPDATE : OldCameraController.MovementUpdateType.FIXEDUPDATE;
+				MainCamera.movementUpdateType = value ? CameraController.MovementUpdateType.UPDATE : CameraController.MovementUpdateType.FIXEDUPDATE;
 			}
 		}
 	}
@@ -74,7 +87,7 @@ public class PlayerController : MonoBehaviour
 		if (!gUI)
 			gUI = FindObjectOfType<GameplayUIManager>();
 		if (!MainCamera)
-			cameraController = FindObjectOfType<OldCameraController>();
+			cameraController = FindObjectOfType<CameraController>();
 		GameManager = GameManager.Instance;
 
 

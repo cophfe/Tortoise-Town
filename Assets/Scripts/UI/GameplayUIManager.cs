@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(GameWindowManager))]
 public class GameplayUIManager : MonoBehaviour
 {
+	[SerializeField]
+	bool disableMenuInput = false;
+
 	public Image crosshair;
 
 	GameWindowManager windowManager;
@@ -37,6 +40,7 @@ public class GameplayUIManager : MonoBehaviour
 
 	void OnMenuButton()
 	{
-		windowManager.ToggleWindows();
+		if (!disableMenuInput)
+			windowManager.ToggleWindows();
 	}
 }

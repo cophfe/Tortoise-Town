@@ -6,7 +6,7 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
 
 [RequireComponent(typeof(Camera)),DefaultExecutionOrder(11)]
-public partial class OldCameraController : MonoBehaviour
+public partial class CameraController : MonoBehaviour
 {
 	//INSPECTOR STUFF
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -19,8 +19,6 @@ public partial class OldCameraController : MonoBehaviour
 
 	[Header("Control")]
 	[Space(5)]
-	[Tooltip("Whether the camera accepts input or not.")]
-	public bool enableInput = true;
 	
 	[Tooltip("If input is inverted or not.")]
 	public bool inverted = false;
@@ -44,6 +42,23 @@ public partial class OldCameraController : MonoBehaviour
 	public LayerMask obstructionLayers;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	public bool EnableInput { set
+		{
+			if (controls == null) return;
+			if (value)
+			{
+				controls.Enable();
+			}
+			else
+			{
+				controls.Disable();
+				targetOrbit = currentOrbit;
+				rotation = targetOrbit.eulerAngles;
+				if (rotation.x > 90)
+					rotation.x -= 360;
+			}
+		}
+	}
 	public enum MovementUpdateType
 	{
 		UPDATE,
@@ -76,13 +91,25 @@ public partial class OldCameraController : MonoBehaviour
 	//camera shake
 	Vector3 cameraShake = Vector3.zero;
 
+	//Input
+	InputMaster controls = null;
+
+	private void Awake()
+	{
+		controls = new InputMaster();
+		controls.Camera.Look.performed += val => InputMove(val.ReadValue<Vector2>());
+	}
 	private void OnEnable()
 	{
 		data = ScriptableObject.CreateInstance<CameraData>();
+		if (controls != null)
+			controls.Enable();
 	}
 	private void OnDisable()
 	{
 		ScriptableObject.Destroy(data);
+		if (controls != null)
+			controls.Disable();
 	}
 	void Start()
 	{
@@ -208,8 +235,6 @@ public partial class OldCameraController : MonoBehaviour
 	/// <param name="input">A 2d vector representing a rotational movement on the x and y axis</param>
 	public void InputMove(Vector2 input)
 	{
-		if (!enableInput) return;
-
 		input *= inverted ? -sensitivity : sensitivity;
 		rotation += new Vector2(input.y, input.x);
 

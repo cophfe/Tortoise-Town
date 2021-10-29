@@ -280,7 +280,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 74606740}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1541178873}
+        m_TargetAssemblyTypeName: GameWindowManager, Assembly-CSharp
+        m_MethodName: CloseActiveWindows
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &169337622
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,6 +1183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e177383ffc9d54abe09aac22de4a26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionScale: 1
 --- !u!225 &397901451
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1855,7 +1868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00020812314}
+  m_AnchoredPosition: {x: 0, y: 0.00018638112}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &582577246
@@ -2213,13 +2226,15 @@ GameObject:
   - component: {fileID: 879960907}
   - component: {fileID: 879960909}
   - component: {fileID: 879960908}
+  - component: {fileID: 581070416}
+  - component: {fileID: 581070417}
   m_Layer: 5
   m_Name: Darkened Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &879960907
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2277,6 +2292,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &581070416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879960906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlPath: <Keyboard>/escape
+--- !u!114 &581070417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879960906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56e177383ffc9d54abe09aac22de4a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionScale: 0
 --- !u!1 &893286649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2950,7 +2991,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1222821086}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1541178873}
+        m_TargetAssemblyTypeName: GameWindowManager, Assembly-CSharp
+        m_MethodName: SetCurrentWindow
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Options
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1260441538
 GameObject:
   m_ObjectHideFlags: 0
@@ -3540,7 +3593,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2106912861}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.71560574
+  m_Size: 0.997168
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3948,6 +4001,7 @@ GameObject:
   - component: {fileID: 1526102334}
   - component: {fileID: 1526102333}
   - component: {fileID: 1526102332}
+  - component: {fileID: 6600806457071536710}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -4022,6 +4076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e177383ffc9d54abe09aac22de4a26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionScale: 1
 --- !u!114 &1526102332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4036,6 +4091,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!225 &6600806457071536710
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526102330}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1528171767
 GameObject:
   m_ObjectHideFlags: 0
@@ -4155,7 +4222,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1528171770}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1541178873}
+        m_TargetAssemblyTypeName: GameWindowManager, Assembly-CSharp
+        m_MethodName: ToggleWindows
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1548259691
 GameObject:
   m_ObjectHideFlags: 0
@@ -5536,12 +5615,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1533119652441385051}
   - component: {fileID: 1533119652441385050}
+  - component: {fileID: 1541178873}
   - component: {fileID: 7794664902230116391}
   - component: {fileID: 1533119652441385049}
   - component: {fileID: 1533119652441385048}
   - component: {fileID: 1530209253954327667}
   - component: {fileID: 8445608393372770071}
-  - component: {fileID: 1541178873}
   m_Layer: 5
   m_Name: CanvasGameplay
   m_TagString: Untagged
@@ -5593,6 +5672,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1541178873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533119652441385055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e648444eb526a4aa5c9ff892d2973c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameWindows:
+  - {fileID: 397901448}
+  - {fileID: 1526102333}
+  backgroundPanel: {fileID: 581070417}
+  windowOpenTime: 0.1
 --- !u!114 &7794664902230116391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5605,6 +5701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbc01d08cb9a0348bc444398031b472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disableMenuInput: 0
   crosshair: {fileID: 545574814}
 --- !u!114 &1533119652441385049
 MonoBehaviour:
@@ -5687,20 +5784,3 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
---- !u!114 &1541178873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533119652441385055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9e648444eb526a4aa5c9ff892d2973c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameWindows:
-  - {fileID: 397901448}
-  - {fileID: 1526102333}
-  backgroundPanel: {fileID: 0}
-  windowOpenTime: 0.1
