@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(PlayerController))]
 public class PlayerHealth : Health
 {
 	[SerializeField, Min(0)] float damageTimeout = 3;
@@ -15,7 +16,7 @@ public class PlayerHealth : Health
 
 	protected override void Start()
 	{
-		controller = GameManager.Instance.Player;
+		controller = GetComponent<PlayerController>();
 		base.Start();
 	}
 

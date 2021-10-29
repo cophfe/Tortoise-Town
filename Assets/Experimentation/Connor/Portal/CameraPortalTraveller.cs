@@ -5,12 +5,12 @@ using UnityEngine;
 public class CameraPortalTraveller : PortalTraveller
 {
 	public PortalRenderer portalRenderer;
-	OldCameraController cameraController;
+	CameraController cameraController;
 	//bool justTeleported;
 
 	void Start()
     {
-		cameraController = GetComponent<OldCameraController>();
+		cameraController = GetComponent<CameraController>();
 		if (!portalRenderer) portalRenderer = FindObjectOfType<PortalRenderer>();
 	}
 
