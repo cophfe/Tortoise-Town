@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5373185578883234791}
   - component: {fileID: 5373185578883234790}
-  - component: {fileID: 7229259216675406492}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -41,25 +40,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5373185578883234785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7f4c0067daa4b045b88bb5ffee713fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ad75ed4f4b2a5d4795469438c33d7d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  enemyManager: {fileID: 0}
   enableCursorRestriction: 1
   targetFrameRate: -1
   arrowPrefab: {fileID: 5496907085034195303, guid: f4033c1e1448ef143b0ff24c4fc51d5c, type: 3}
   arrowPoolAmount: 20
-  arrowPoolNotifyDistance: 3
---- !u!114 &7229259216675406492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5373185578883234785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95c7aeee98636914580b7c554ec7057f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  arrowPoolNotifyDistance: 4

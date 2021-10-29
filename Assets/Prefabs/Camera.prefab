@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4388463355891788020}
   - component: {fileID: 4388463355891788016}
   - component: {fileID: 4388463355891788017}
-  - component: {fileID: 1572272002}
   m_Layer: 2
   m_Name: Camera
   m_TagString: MainCamera
@@ -173,17 +172,3 @@ MonoBehaviour:
   m_DefaultActionMap: Camera
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 4388463355891788019}
---- !u!114 &1572272002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4388463355891788021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86887483cf7d0634c870fa34ca757d30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentsToDisable: []
-  portalRenderer: {fileID: 0}

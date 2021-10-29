@@ -11,7 +11,6 @@ using UnityEditor;
 public class MovingPlatformEditor : Editor
 {
 	MovingPlatform movingPlatform;
-	SerializedProperty startPosition;
 	SerializedProperty intermediates;
 	SerializedProperty points;
 	SerializedProperty bezier;
@@ -20,9 +19,11 @@ public class MovingPlatformEditor : Editor
 	SerializedProperty automaticallyCalculateBezierCurve;
 	bool intermediatePointsFoldedOut = true;
 
+	Vector3 currentStartPosition;
+	Quaternion currentStartRotation;
+
 	private void OnEnable()
 	{
-		startPosition = serializedObject.FindProperty("startPosition");
 		intermediates = serializedObject.FindProperty("intermediates");
 		points = serializedObject.FindProperty("points");
 		bezier = serializedObject.FindProperty("useBezier");
@@ -231,11 +232,16 @@ public class MovingPlatformEditor : Editor
 		Transform transform = movingPlatform.transform;
 		serializedObject.Update();
 		
-		Vector3 startPosition;
 		if (!Application.isPlaying)
-			startPosition = transform.position;
+		{
+			currentStartRotation = transform.rotation;
+			currentStartPosition = transform.position;
+		}
 		else
-			startPosition = this.startPosition.vector3Value;
+		{
+			currentStartRotation = movingPlatform.StartRotation;
+			currentStartPosition = movingPlatform.StartPosition;
+		}
 
 		Handles.color = Color.white;
 
@@ -246,25 +252,25 @@ public class MovingPlatformEditor : Editor
 		{
 			//first point
 			Vector3 nextPoint = points.GetArrayElementAtIndex(0).vector3Value;
-			Handles.DrawBezier(startPosition, startPosition + nextPoint, startPosition + intermediates.GetArrayElementAtIndex(0).vector3Value, startPosition + nextPoint+ intermediates.GetArrayElementAtIndex(1).vector3Value, Color.white, null, 1);
+			Handles.DrawBezier(currentStartPosition, TransformPoint(nextPoint), TransformPoint(intermediates.GetArrayElementAtIndex(0).vector3Value), TransformPoint(nextPoint + intermediates.GetArrayElementAtIndex(1).vector3Value), Color.white, null, 1);
 			//last point
 			Vector3 lastPoint = points.arraySize > 1 ? points.GetArrayElementAtIndex(points.arraySize - 2).vector3Value : Vector3.zero;
 			nextPoint = points.GetArrayElementAtIndex(points.arraySize - 1).vector3Value;
-			Handles.DrawBezier(startPosition + lastPoint, startPosition + nextPoint, startPosition + lastPoint + intermediates.GetArrayElementAtIndex(intermediates.arraySize - 2).vector3Value, startPosition + nextPoint + intermediates.GetArrayElementAtIndex(intermediates.arraySize - 1).vector3Value, Color.white, null, 1);
+			Handles.DrawBezier(TransformPoint(lastPoint), TransformPoint(nextPoint), TransformPoint(lastPoint + intermediates.GetArrayElementAtIndex(intermediates.arraySize - 2).vector3Value), TransformPoint(nextPoint + intermediates.GetArrayElementAtIndex(intermediates.arraySize - 1).vector3Value), Color.white, null, 1);
 			//middle points
 			for (int i = 1; i < movingPlatform.points.Length - 1; i ++)
 			{
 				lastPoint = points.GetArrayElementAtIndex(i - 1).vector3Value;
 				nextPoint = points.GetArrayElementAtIndex(i).vector3Value;
-				Handles.DrawBezier(startPosition + lastPoint, startPosition + nextPoint, startPosition + lastPoint + intermediates.GetArrayElementAtIndex(2 * i ).vector3Value, startPosition + nextPoint + intermediates.GetArrayElementAtIndex(2 * (i) + 1).vector3Value, Color.white, null, 1);
+				Handles.DrawBezier(TransformPoint(lastPoint), TransformPoint(nextPoint), TransformPoint(lastPoint + intermediates.GetArrayElementAtIndex(2 * i ).vector3Value), TransformPoint(nextPoint + intermediates.GetArrayElementAtIndex(2 * (i) + 1).vector3Value), Color.white, null, 1);
 			}
 		}
 		else
 		{
-			Handles.DrawLine(startPosition, startPosition + points.GetArrayElementAtIndex(0).vector3Value);
+			Handles.DrawLine(currentStartPosition, TransformPoint(points.GetArrayElementAtIndex(0).vector3Value));
 			for (int i = 1; i < movingPlatform.points.Length; i++)
 			{
-				Handles.DrawLine(startPosition + points.GetArrayElementAtIndex(i - 1).vector3Value, startPosition + points.GetArrayElementAtIndex(i).vector3Value);
+				Handles.DrawLine(TransformPoint(points.GetArrayElementAtIndex(i - 1).vector3Value), TransformPoint(points.GetArrayElementAtIndex(i).vector3Value));
 			}
 		}
 
@@ -273,8 +279,8 @@ public class MovingPlatformEditor : Editor
 		int length = movingPlatform.loopType == MovingPlatform.LoopType.LOOP ? points.arraySize - 1 : points.arraySize;
 		for (int i = 0; i < length; i++)
 		{
-			float handleSizeModifier = HandleUtility.GetHandleSize(points.GetArrayElementAtIndex(i).vector3Value + startPosition);
-			if ((selectedHandle != i || selectedBezier) && Handles.Button(points.GetArrayElementAtIndex(i).vector3Value + startPosition, Quaternion.identity, handleSizeModifier * 0.05f, handleSizeModifier* 0.1f, Handles.DotHandleCap))
+			float handleSizeModifier = HandleUtility.GetHandleSize(TransformPoint(points.GetArrayElementAtIndex(i).vector3Value));
+			if ((selectedHandle != i || selectedBezier) && Handles.Button(TransformPoint(points.GetArrayElementAtIndex(i).vector3Value), Quaternion.identity, handleSizeModifier * 0.05f, handleSizeModifier* 0.1f, Handles.DotHandleCap))
 			{
 				selectedHandle = i;
 				selectedBezier = false;
@@ -284,10 +290,10 @@ public class MovingPlatformEditor : Editor
 			if (!selectedBezier && selectedHandle == i)
 			{
 				EditorGUI.BeginChangeCheck();
-				Vector3 point = Handles.PositionHandle(points.GetArrayElementAtIndex(i).vector3Value + startPosition, Quaternion.identity);
+				Vector3 point = Handles.PositionHandle(TransformPoint(points.GetArrayElementAtIndex(i).vector3Value), currentStartRotation);
 				if (EditorGUI.EndChangeCheck())
 				{
-					points.GetArrayElementAtIndex(i).vector3Value = point - startPosition;
+					points.GetArrayElementAtIndex(i).vector3Value = InverseTransformPoint(point);
 					if (automaticallyCalculateBezierCurve.boolValue)
 						ResetBezierValues();
 				}
@@ -300,10 +306,10 @@ public class MovingPlatformEditor : Editor
 			{
 				int controlPointIndex = GetPointIndexFromIntermediateIndex(i);
 				Vector3 controlPoint = controlPointIndex >= 0 ? points.GetArrayElementAtIndex(controlPointIndex).vector3Value : Vector3.zero;
-				Vector3 worldPoint = intermediates.GetArrayElementAtIndex(i).vector3Value + startPosition + controlPoint;
+				Vector3 worldPoint = TransformPoint(intermediates.GetArrayElementAtIndex(i).vector3Value + controlPoint);
 				Handles.color = Color.green;
 				//LINES:
-				Handles.DrawLine(controlPoint + startPosition, worldPoint);
+				Handles.DrawLine(TransformPoint(controlPoint), worldPoint);
 			}
 
 			//HANDLES:
@@ -313,7 +319,7 @@ public class MovingPlatformEditor : Editor
 				{
 					int controlPointIndex = GetPointIndexFromIntermediateIndex(i);
 					Vector3 controlPoint = controlPointIndex >= 0 ? points.GetArrayElementAtIndex(controlPointIndex).vector3Value : Vector3.zero;
-					Vector3 worldPoint = intermediates.GetArrayElementAtIndex(i).vector3Value + startPosition + controlPoint;
+					Vector3 worldPoint = TransformPoint(intermediates.GetArrayElementAtIndex(i).vector3Value + controlPoint);
 					Handles.color = Color.grey;
 					float handleSizeModifier = HandleUtility.GetHandleSize(worldPoint);
 					if ((selectedHandle != i || !selectedBezier) && Handles.Button(worldPoint, Quaternion.identity, handleSizeModifier * 0.05f, handleSizeModifier * 0.1f, Handles.DotHandleCap))
@@ -325,10 +331,10 @@ public class MovingPlatformEditor : Editor
 					if (selectedBezier && selectedHandle == i)
 					{
 						EditorGUI.BeginChangeCheck();
-						Vector3 point = Handles.PositionHandle(worldPoint, Quaternion.identity);
+						Vector3 point = Handles.PositionHandle(worldPoint, currentStartRotation);
 						if (EditorGUI.EndChangeCheck())
 						{
-							intermediates.GetArrayElementAtIndex(i).vector3Value = point - startPosition - controlPoint;
+							intermediates.GetArrayElementAtIndex(i).vector3Value = InverseTransformPoint(point - controlPoint);
 
 							if (i >= intermediates.arraySize - 1 && (MovingPlatform.LoopType)loopType.enumValueIndex == MovingPlatform.LoopType.LOOP)
 							{
@@ -473,5 +479,15 @@ public class MovingPlatformEditor : Editor
 				intermediates.GetArrayElementAtIndex(modifyTangentIndex).vector3Value = -intermediates.GetArrayElementAtIndex(controlTangentIndex).vector3Value;
 				break;
 		}
+	}
+
+	Vector3 TransformPoint(Vector3 vec)
+	{
+		return currentStartRotation * vec + currentStartPosition;
+	}
+
+	Vector3 InverseTransformPoint(Vector3 vec)
+	{
+		return Quaternion.Inverse(currentStartRotation) * (vec - currentStartPosition);
 	}
 }
