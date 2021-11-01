@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
-	[SerializeField] GlobalEnemyManager enemyManager = null;
 
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
@@ -24,10 +23,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] int arrowPoolAmount = 20;
 	[Tooltip("Used to give arrows time to fade away")]
 	[SerializeField] int arrowPoolNotifyDistance = 4;
-	
-
 	public ObjectPool ArrowPool { get; private set; }
-	public GlobalEnemyManager EnemyManager { get { return enemyManager; } }
 	public PlayerController Player { get { return player; } }
 
     void Awake()
@@ -43,7 +39,6 @@ public class GameManager : MonoBehaviour
 			IsCursorRestricted = true;
 			ArrowPool = new ObjectPool(arrowPoolAmount, arrowPoolNotifyDistance, arrowPrefab, transform);
 			Application.targetFrameRate = targetFrameRate;
-			if (!enemyManager) enemyManager = GetComponent<GlobalEnemyManager>();  
 			if (!player) player = FindObjectOfType<PlayerController>();
 
 		}

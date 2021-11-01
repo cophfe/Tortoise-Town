@@ -10,7 +10,7 @@ public class PlayerMotor : MonoBehaviour
 {
 	#region Exposed Variables
 	//FORCES
-	[Header("Forces")]
+	[Header("Walking")]
 	[Tooltip("The acceleration applied to the player's input.")]
 	public float acceleration = 10;
 	[Tooltip("The target speed of a player's input")]
@@ -19,6 +19,8 @@ public class PlayerMotor : MonoBehaviour
 	public float gravity = 10;
 	[Tooltip("The maximum velocity overall.")]
 	public float maxVelocity = 1000;
+	[Tooltip("The percent of acceleration applied to input while in the air")]
+	[Range(0, 1)] public float airControlModifier = 0.5f;
 
 	//FRICTION
 	[Tooltip("The magnitude of velocity removed every second when in the air")]
@@ -45,11 +47,17 @@ public class PlayerMotor : MonoBehaviour
 	public float jumpCoyoteTime = 0.1f;
 
 	[Header("Dash")]
+	[Tooltip("The curve that dictates the players speed while dashing. Player only samples from 0 to 1")]
 	public AnimationCurve dashCurve;
+	[Tooltip("The target speed of the dash at a y value of one on the dash curve")]
 	public float dashSpeed = 4;
+	[Tooltip("The acceration of the player for getting to that speed")]
 	public float dashAcceleration = 200;
+	[Tooltip("The length of time a dash takes place over")]
 	public float dashDuration = 0.2f;
+	[Tooltip("How long after one dash you can do another one")]
 	public float dashCooldown = 2;
+	[Tooltip("How fast the players model turns to point in the direction of the dash")]
 	public float dashTurnSpeed = 40;
 
 	//COLLISION
@@ -62,11 +70,10 @@ public class PlayerMotor : MonoBehaviour
 	[Range(0,1)] public float bounciness = 0;
 	[Tooltip("The layers that do not affect input velocity when colliding")]
 	public LayerMask ignoredCollision;
+	[Tooltip("The maximum dot product magnitdude of a collision normal and velocity before a dash is cancelled")]
 	public float dashCancelDot = 0.5f;
-
-	//CONTROL
-	[Tooltip("The percent of acceleration applied to input while in the air")]
-	[Range(0, 1)] public float airControlModifier = 0.5f;
+	[Tooltip("The maximum dot product magnitdude of a collision normal and velocity before a jump is cancelled (only applies for ceiling collisions)")]
+	public float ceilingCancelDot = 0.5f;
 
 	//GROUND DETECTION 
 	[Header("Ground Detection")]
@@ -120,6 +127,9 @@ public class PlayerMotor : MonoBehaviour
 	[Tooltip("The speed at which the ball no longer attaches to the floor")]
 	public float ignoreGroundMagnetSpeed = 9;
 
+	[Header("Other")]
+	public float movingPlatformForceMultiplier = 2;
+
 	//EVENTS
 	[Header("Events")]
 	[Tooltip("The event called when leaving the grounded state")]
@@ -151,6 +161,7 @@ public class PlayerMotor : MonoBehaviour
 	float currentDashDuration;
 	float currentDashVelocity;
 	Vector3 currentDashDirection;
+	public AnimationCurve currentDashCurve;
 	float dashCooldownTimer = 0;
 	float dashTimer = 0;
 	bool dashing = false;
@@ -172,7 +183,6 @@ public class PlayerMotor : MonoBehaviour
 	float rollCooldownTimer = 0;
 	//MOVING PLATFORM
 	MovingPlatform movingPlatform = null;
-	Vector3 movingPlatformOffset = Vector3.zero;
 	//OTHER
 	MovementState state = MovementState.FALLING;
 	Vector3 inputForward;
@@ -210,10 +220,6 @@ public class PlayerMotor : MonoBehaviour
 
 	void Run()
 	{
-		if (movingPlatform)
-			movingPlatformOffset = movingPlatform.GetOffset();
-		else
-			movingPlatformOffset = Vector3.zero;
 
 		ScanForGround();
 		SetState();
@@ -229,8 +235,8 @@ public class PlayerMotor : MonoBehaviour
 		
 		//move player
 		playerController.CharacterController.Move(totalVelocity * Time.deltaTime 
-			+ groundMagnetOffset * Vector3.up + movingPlatformOffset);
-
+			+ groundMagnetOffset * Vector3.up);
+		lastCollider = null;
 		//Set all timers
 		jumpTimer -= Time.deltaTime;
 		jumpCoyoteTimer -= Time.deltaTime;
@@ -311,7 +317,7 @@ public class PlayerMotor : MonoBehaviour
 
 		if (dashing)
 		{
-			float t = dashCurve.Evaluate(1 - dashTimer / dashDuration);
+			float t = currentDashCurve.Evaluate(1 - dashTimer / dashDuration);
 			targetVelocity = currentDashDirection * currentDashVelocity * t;
 
 			//transition between the two velocities
@@ -544,38 +550,6 @@ public class PlayerMotor : MonoBehaviour
 		}
 		float radius = playerController.CharacterController.radius * groundDetectionRadiusModifier;
 
-		//for some reason this causes bugs even when no rigidbodies are near
-		//RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction,
-		//	length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround);
-
-		//RaycastHit hit = new RaycastHit();
-		//float minDistanceToCentre = float.PositiveInfinity;
-		//isGrounded = false;
-		//for (int i = 0; i < hits.Length; i++)
-		//{
-		//	if (hits[i].rigidbody)
-		//	{
-		//		Debug.Log("Hit a rigidbody named" + hits[i].collider.gameObject.name);
-		//		if (Vector3.Angle(hits[i].normal, Vector3.up) > playerController.CharacterController.slopeLimit)
-		//		{
-		//			continue;
-		//		}
-		//	}
-		//	float len = hits[i].distance;
-		//	if (len < minDistanceToCentre)
-		//	{
-		//		isGrounded = true;
-		//		minDistanceToCentre = len;
-		//		hit = hits[i];
-		//	}
-		//	else
-		//	{
-		//		Debug.Log("ground not good enough");
-				
-		//	}
-		//	break;
-		//}
-		//isGrounded = minDistanceToCentre != float.PositiveInfinity;
 		isGrounded = Physics.SphereCast(origin, radius, direction, out var hit,
 			length * (1 + groundDetectionAdditionalOffset) - radius, ~ignoredGround, QueryTriggerInteraction.Ignore);
 
@@ -607,8 +581,16 @@ public class PlayerMotor : MonoBehaviour
 			groundDistance = Mathf.Abs(Vector3.Dot(groundPosition - origin, direction));
 			groundNormal = hit.normal;
 			groundAngle = Vector3.Angle(groundNormal, Vector3.up);
-			if (hit.collider != groundCollider)
-				OnChangedCollider(hit.collider);
+			//if onChangedCollider needs to be called, and 
+			if (hit.collider != groundCollider && !OnChangedCollider(hit.collider))
+			{
+				groundNormal = Vector3.up;
+				groundAngle = 0;
+				groundCollider = null;
+				isGrounded = false;
+				enableGroundMagnet = false;
+				return;
+			}
 			groundCollider = hit.collider;
 			//if we need surface normal instead of collision normal:
 			//if (hit.collider.Raycast(new Ray(hit.point - direction, direction), out hit, 10) && Vector3.Angle(hit.normal, -direction) < 89.5f)
@@ -617,7 +599,7 @@ public class PlayerMotor : MonoBehaviour
 			//}
 
 			float offset = (playerController.CharacterController.height / 2 + playerController.CharacterController.skinWidth - groundDistance );
-			if (enableGroundMagnet && (offset < 0 || movingPlatformOffset != Vector3.zero))
+			if (enableGroundMagnet && (offset < 0 || movingPlatform != null))
 			{
 				groundMagnetOffset = offset;
 			}
@@ -630,6 +612,11 @@ public class PlayerMotor : MonoBehaviour
 			groundNormal = Vector3.up;
 			groundAngle = 0;
 			groundCollider = null;
+
+			////move input velocity into force velocity
+			//float fDot = Vector3.Dot(inputVelocity, groundNormal);
+			//forcesVelocity += fDot * groundNormal;
+			//inputVelocity -= fDot * groundNormal;
 		}
 	}
 
@@ -769,6 +756,7 @@ public class PlayerMotor : MonoBehaviour
 	{
 		currentDashVelocity = dashSpeed;
 		currentDashDuration = dashDuration;
+		currentDashCurve = dashCurve;
 
 		if (state != MovementState.GROUNDED)
 		{
@@ -811,8 +799,13 @@ public class PlayerMotor : MonoBehaviour
 	}
 
 	//a dash called by an external script
-	public void StartExternalDash(float dashSpeed, float dashDuration, Vector3 dashDirection, bool considerCooldown = false)
+	public void StartExternalDash(float dashSpeed, float dashDuration, Vector3 dashDirection, AnimationCurve dashCurve = null, bool considerCooldown = false)
 	{
+		if (dashCurve == null)
+			currentDashCurve = this.dashCurve;
+		else 
+			currentDashCurve = dashCurve;
+		
 		if (considerCooldown)
 		{
 			if (dashCooldownTimer > 0) return; 
@@ -828,6 +821,12 @@ public class PlayerMotor : MonoBehaviour
 		onDash.Invoke();
 	}
 
+	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection, AnimationCurve knockbackCurve = null)
+	{
+		//WILL START AN EXTERNAL DASH, BUT WILL ALSO DO SPECIFIC KNOCKBACK STUFF LIKE BREAKING OUT OF ROLL
+		StartExternalDash(dashSpeed, dashDuration, dashDirection, dashCurve, false);
+	}
+
 	void OnLand()
 	{
 		//call land event
@@ -836,11 +835,6 @@ public class PlayerMotor : MonoBehaviour
 		airJumpsLeft = airJumps;
 		dashedInThisJump = false;
 
-		if (isRolling)
-		{
-			inputVelocity += Vector3.ProjectOnPlane(forcesVelocity, Vector3.up);
-			forcesVelocity = Vector3.zero;
-		}
 		//if there is a jump buffered
 		if (jumpBufferTimer > 0)
 		{
@@ -863,9 +857,15 @@ public class PlayerMotor : MonoBehaviour
 		groundMagnetOffset = 0;
 		OnChangedCollider(null);
 		groundCollider = null;
+
+		if (inputVelocity.y > 0)
+		{
+			forcesVelocity.y += inputVelocity.y;
+			inputVelocity.y = 0;
+		}
 	}
 
-	void OnChangedCollider(Collider newCollider)
+	bool OnChangedCollider(Collider newCollider)
 	{
 		if (newCollider == null)
 		{
@@ -873,25 +873,33 @@ public class PlayerMotor : MonoBehaviour
 			if (movingPlatform != null)
 			{
 				//calculate velocity gained from leaving
-				float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-				Vector3 vel = movingPlatformOffset / time;
-				forcesVelocity += new Vector3(vel.x, Mathf.Max(vel.y, 0) , vel.z);
+				//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
+				//Vector3 vel = movingPlatformOffset / time;
+				//inputVelocity += new Vector3(vel.x,  0, vel.z) * movingPlatformForceMultiplier;
+				//forcesVelocity.y += Mathf.Max(vel.y, 0);
 
 				//disconnect from platform
-				movingPlatformOffset = Vector3.zero;
+				movingPlatform.AssignPlayer(null);
 				movingPlatform = null;
 				playerController.InterpolateVisuals = true;
 			}
 		}
 		else
 		{
+			//check for a player collider 
+			var pC = newCollider.GetComponent<PlayerCollision>();
+			if (pC && !pC.OnPlayerGrounded(this))
+			{
+				return false;
+			}
+
 			//connect to moving platform if there is a moving platform component
 			var mp = newCollider.GetComponent<MovingPlatform>();
 			if (mp != null)
 			{
 				//connect
 				movingPlatform = mp;
-				MovingPlatformOffset = movingPlatform.GetOffset();
+				movingPlatform.AssignPlayer(playerController);
 				playerController.InterpolateVisuals = false;
 			}
 			else
@@ -900,71 +908,98 @@ public class PlayerMotor : MonoBehaviour
 				if (movingPlatform)
 				{
 					//calculate velocity gained from leaving
-					float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-					Vector3 vel = movingPlatformOffset / time;
-					forcesVelocity += new Vector3(vel.x, 0, vel.z);
+					//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
+					//Vector3 vel = movingPlatformOffset / time;
+					//inputVelocity += new Vector3(vel.x, 0, vel.z) * movingPlatformForceMultiplier;
+					//forcesVelocity.y += Mathf.Max(vel.y, 0);
 
 					//disconnect from platform
-					movingPlatformOffset = Vector3.zero;
+					movingPlatform.AssignPlayer(null);
 					movingPlatform = null;
 					playerController.InterpolateVisuals = true;
 				}
 			}
+
+			
 		}
+		return true;
 	}
+
+	Collider lastCollider = null;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
 		if (hit.collider.isTrigger || (hit.gameObject.layer & ignoredCollision) != 0) return;
 
+		//prevent multiple collision responses per gameobject (usually only happens when there is one collider)
+		if (lastCollider == hit.collider)
+		{
+			return;
+		}
+		lastCollider = hit.collider;
+		
+		if (playerController.DrawDebug)
+		{
+			Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+		}
+
 		float angle = Vector3.Angle(hit.normal, Vector3.up);
 		Rigidbody rb = hit.rigidbody;
 		
+		//cancel dash if going into wall
 		if (dashing && Vector3.Dot(-inputVelocity.normalized, hit.normal) > dashCancelDot)
 		{
 			dashing = false;
 		}
-		
-		if (rb && !rb.isKinematic)
+
+		//if it doesn't have a collision react component or 
+		var playerCollision = hit.gameObject.GetComponent<PlayerCollision>();
+		if (!playerCollision || playerCollision.OnCollideWithPlayer(this, hit))
 		{
-			Vector3 rv = inputVelocity - rb.GetPointVelocity(hit.point);
-			float projRV = Vector3.Dot(rv, hit.normal);
-			if (projRV < 0)
+			if (rb && !rb.isKinematic)
 			{
-				float impulseMag = ((1 + bounciness) * projRV) / (1 / mass + 1 / rb.mass);
-
-				inputVelocity -= impulseMag * hit.normal / mass;
-				rb.AddForceAtPosition(impulseMag * hit.normal, hit.point, ForceMode.Impulse);
-			}
-
-			if (playerController.DrawDebug)
-			{
-				Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
-			}
-		}
-		else
-		{
-			//cancel input velocity going into collision
-			float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
-			if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
-			{
-				inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
-
-
-				if (playerController.DrawDebug)
+				Vector3 rv = inputVelocity - rb.GetPointVelocity(hit.point);
+				float projRV = Vector3.Dot(rv, hit.normal);
+				if (projRV < 0)
 				{
-					Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+					float impulseMag = ((1 + bounciness) * projRV) / (1 / mass + 1 / rb.mass);
+
+					inputVelocity -= impulseMag * hit.normal / mass;
+					rb.AddForceAtPosition(impulseMag * hit.normal, hit.point, ForceMode.Impulse);
+				}
+			}
+			else
+			{
+				//cancel input velocity going into collision
+				float inputHitAmount = Vector3.Dot(hit.normal, inputVelocity);
+				if ((hit.gameObject.layer & ignoredCollision) == 0 && inputHitAmount < -minCollisionVelocity)
+				{
+					inputVelocity -= ((1 - minCollisionVelocity) * inputHitAmount) * hit.normal;
+
+
+					if (playerController.DrawDebug)
+					{
+						Debug.DrawRay(hit.point, hit.normal, Color.red, 1);
+					}
+				}
+			}
+
+			if (state == MovementState.FALLING || isRolling)
+			{
+				float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity + inputVelocity);
+				if (forcesHitAmount < 0)
+				{
+					forcesVelocity -= forcesHitAmount * hit.normal;
+					inputVelocity = Vector3.ProjectOnPlane(inputVelocity, hit.normal);
 				}
 			}
 		}
 
-		if (state == MovementState.FALLING)
+		//if top of head hit the ceiling cancel jump
+		if (!IsRolling && (state == MovementState.JUMPING || state == MovementState.RISING) && Vector3.Dot(hit.normal, forcesVelocity.normalized) < -ceilingCancelDot && hit.point.y - transform.position.y > playerController.CharacterController.height - playerController.CharacterController.radius) 
 		{
-			float forcesHitAmount = Vector3.Dot(hit.normal, forcesVelocity);
-			if (forcesHitAmount < 0)
-			{
-				forcesVelocity -= forcesHitAmount * hit.normal;
-			}
+			state = MovementState.FALLING;
+			forcesVelocity.y = 0;
 		}
 		//check if collision is on bottom part of sphere and is under the controller slope limit (and therefore can be detected as onground)
 		//if it is, the groundmagnet will be enabled, leading to better ground detection
@@ -978,8 +1013,9 @@ public class PlayerMotor : MonoBehaviour
 	public MovementState State { get { return state; } }
 	public Vector3 TotalVelocity { get { return totalVelocity; } }
 	public Vector3 TargetVelocity { get { return targetVelocity; } }
+	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
+	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 MovingPlatformOffset { get { return movingPlatformOffset; } set { movingPlatformOffset = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
 	public float TargetSpeedManipulator { get; set; }
