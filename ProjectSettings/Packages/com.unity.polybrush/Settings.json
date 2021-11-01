@@ -31,7 +31,7 @@
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "Scattering.UsePivotForPlacement",
-                "value": "{\"m_Value\":false}"
+                "value": "{\"m_Value\":true}"
             },
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
@@ -91,12 +91,12 @@
             {
                 "type": "UnityEditor.Polybrush.PrefabLoadout, Unity.Polybrush.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "ScatteringEditor.userLoadout",
-                "value": "{\"m_Value\":{\"infos\":[{\"palette\":{\"fileID\":11400000,\"guid\":\"e8606865a4bc5ac4aa9e9950c1846d30\",\"type\":2},\"prefab\":{\"fileID\":8197428601276748742,\"guid\":\"30162b8db9c0ca848ad3e537b106ebfd\",\"type\":3}},{\"palette\":{\"fileID\":11400000,\"guid\":\"e8606865a4bc5ac4aa9e9950c1846d30\",\"type\":2},\"prefab\":{\"fileID\":993887862930275732,\"guid\":\"2ccb861381ca38b4b9e78633ffe11a18\",\"type\":3}}]}}"
+                "value": "{\"m_Value\":{\"infos\":[{\"palette\":{\"fileID\":11400000,\"guid\":\"e8606865a4bc5ac4aa9e9950c1846d30\",\"type\":2},\"prefab\":{\"fileID\":3769034825955673958,\"guid\":\"58505a068d6572e43937eb9f05fa9233\",\"type\":3}}]}}"
             },
             {
                 "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "ScatteringEditor.PreviewThumSize",
-                "value": "{\"m_Value\":64}"
+                "value": "{\"m_Value\":77}"
             },
             {
                 "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
