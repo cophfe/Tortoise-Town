@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameWindowManager : MonoBehaviour
 {
-	[SerializeField] GameWindow[] gameWindows;
-	[SerializeField] GameWindow backgroundPanel;
+	[SerializeField] GameWindow[] gameWindows = null;
+	[SerializeField] GameWindow backgroundPanel = null;
 	[SerializeField] float windowOpenTime = 1;
 	float openTimer = 0;
 	int activeWindowIndex = -1;

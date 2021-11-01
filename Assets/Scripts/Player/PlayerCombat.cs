@@ -111,14 +111,11 @@ public class PlayerCombat : MonoBehaviour
 		{
 			//charge bow
 			chargeUpPercent = Mathf.Min(chargeUpPercent + Time.deltaTime * rangedChargeUpSpeed, 1);
-			
+
 			//draw hit position
-			if (playerController.DrawDebug)
+			if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
 			{
-				if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
-				{
-					Debug.DrawRay(hit.point, hit.normal, Color.red, Time.deltaTime, false);
-				}
+				ArrowAimPoint = hit.point;
 			}
 
 			//SHOOT BOW
@@ -226,6 +223,7 @@ public class PlayerCombat : MonoBehaviour
 		playerController.Animator.AnimateAttack();
 		chargeUpPercent = 0.001f;
 		equippedArrow.transform.parent = null;
+		equippedArrow.transform.localScale = Vector3.one;
 		equippedArrow.ignoredInPool = false;
 		equippedArrow = null;
 	}
@@ -301,4 +299,5 @@ public class PlayerCombat : MonoBehaviour
 	}
 
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
+	public Vector3 ArrowAimPoint { get; private set; }
 }

@@ -7,6 +7,8 @@ public class PlayerAnimator : MonoBehaviour
 {
 	#region Inspector Fields
 	public Animator animator = null;
+	public MeshRenderer ball;
+	public SkinnedMeshRenderer player;
 	public float speedChangeMultiplier = 1;
 	public float verticalSpeedChangeMultiplier = 1;
 	public float verticalMaxMultiplier = 2.5f;
@@ -114,6 +116,8 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.CharacterController.center = playerController.RollColliderOffset;
 						playerController.MainCamera.GetCameraData().targetOffset.y = playerController.RollCameraOffset;
 						switchingColliderSize = false;
+						ball.enabled = true;
+						player.enabled = false;
 					}
 					else
 					{
@@ -161,7 +165,8 @@ public class PlayerAnimator : MonoBehaviour
 			{
 				//look toward camera
 				animator.SetLookAtWeight(1, lookBodyWeight, lookHeadWeight, 0, turnPercent);
-				animator.SetLookAtPosition(transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance);
+				Vector3 lookPosition = transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance;
+				animator.SetLookAtPosition(lookPosition);
 			}
 
 			//now make feet move to position
@@ -262,9 +267,13 @@ public class PlayerAnimator : MonoBehaviour
 		if (switchingIntoRoll)
 			rollColliderTransitionTime = rollColliderTransitionTimeIn;
 		else
+		{
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;
+			ball.enabled = false;
+			player.enabled = true;
+		}
 	}
-
+ 
 	public void AnimateAttack()
 	{
 		animator.SetTrigger(attackId);
