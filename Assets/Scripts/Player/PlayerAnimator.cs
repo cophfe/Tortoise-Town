@@ -166,6 +166,10 @@ public class PlayerAnimator : MonoBehaviour
 				//look toward camera
 				animator.SetLookAtWeight(1, lookBodyWeight, lookHeadWeight, 0, turnPercent);
 				Vector3 lookPosition = transform.position + Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up) * lookDistance;
+				//if (playerController.Combat && playerController.Combat.ChargePercentage > 0)
+				//{
+				//	lookPosition = Vector3.Lerp(lookPosition, playerController.Combat.ArrowAimPoint, playerController.Combat.ChargePercentage);
+				//}
 				animator.SetLookAtPosition(lookPosition);
 			}
 
