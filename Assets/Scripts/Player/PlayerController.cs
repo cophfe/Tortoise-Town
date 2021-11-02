@@ -136,6 +136,19 @@ public class PlayerController : MonoBehaviour
 			controls.Disable();
 	}
 
+	public void ResetPlayerToDefault()
+	{
+		if (!Health) return;
+
+		Health.Revive(10000);
+		Animator.transform.rotation = Quaternion.identity;
+		Motor.ResetMotor();
+		InputIsEnabled = true;
+		Animator.AnimateDeath(false);
+		Interpolator.ResetPosition();
+		//Reset player and camera to default state
+	}
+
 	#region Evaluate Functions
 
 	public bool EvaluateJumpPressed()

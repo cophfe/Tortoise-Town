@@ -68,4 +68,14 @@ public class ObjectPool
 		poolable.transform.parent = poolParent;
 		poolable.gameObject.SetActive(false);
 	}
+
+	public void ResetToDefault()
+	{
+		//Reset everything to how it was right after creation
+		for (int i = 0; i < pool.Count; i++)
+		{
+			ReturnPooledObject(pool[i]);
+		}
+		currentIndex = 0;
+	}
 }
