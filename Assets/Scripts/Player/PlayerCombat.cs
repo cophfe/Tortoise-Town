@@ -111,14 +111,15 @@ public class PlayerCombat : MonoBehaviour
 		{
 			//charge bow
 			chargeUpPercent = Mathf.Min(chargeUpPercent + Time.deltaTime * rangedChargeUpSpeed, 1);
-			
+
 			//draw hit position
-			if (playerController.DrawDebug)
+			if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
 			{
-				if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
-				{
-					Debug.DrawRay(hit.point, hit.normal, Color.red, Time.deltaTime, false);
-				}
+				ArrowAimPoint = hit.point;
+			}
+			else
+			{
+				ArrowAimPoint = playerController.MainCamera.transform.forward * 100 + playerController.MainCamera.transform.position;
 			}
 
 			//SHOOT BOW
@@ -152,7 +153,6 @@ public class PlayerCombat : MonoBehaviour
 		{
 			playerController.Motor.alwaysLookAway = false;
 		}
-
 	}
 
 	void ShootBow()
@@ -162,15 +162,6 @@ public class PlayerCombat : MonoBehaviour
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
 		//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 		//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
-		Vector3 hitPoint;
-		if (!Physics.Raycast(cam.position, cam.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
-		{
-			hitPoint = cam.forward * 100 + cam.position;
-		}
-		else
-		{
-			hitPoint = hit.point;
-		}
 
 		var arrow = equippedArrow.GetComponent<Arrow>();
 		float initialSpeed = arrowData.maxInitialSpeed * chargeUpPercent;
@@ -178,12 +169,12 @@ public class PlayerCombat : MonoBehaviour
 
 		//convert 3d problem into 2d problem like this:
 		//calculate x axis
-		Vector3 xAxis = (hitPoint - equippedArrow.transform.position);
+		Vector3 xAxis = (ArrowAimPoint - equippedArrow.transform.position);
 		xAxis.y = 0;
 		xAxis.Normalize();
 		//convert 3d point into 2d point
-		Vector2 positionToHit = new Vector2(Vector3.Dot(hitPoint, xAxis)
-			- Vector3.Dot(equippedArrow.transform.position, xAxis), hitPoint.y - equippedArrow.transform.position.y);
+		Vector2 positionToHit = new Vector2(Vector3.Dot(ArrowAimPoint, xAxis)
+			- Vector3.Dot(equippedArrow.transform.position, xAxis), ArrowAimPoint.y - equippedArrow.transform.position.y);
 
 		//now calculate tan(0) of arrow angle and turns it into direction vector
 		//https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)
@@ -226,6 +217,7 @@ public class PlayerCombat : MonoBehaviour
 		playerController.Animator.AnimateAttack();
 		chargeUpPercent = 0.001f;
 		equippedArrow.transform.parent = null;
+		equippedArrow.transform.localScale = Vector3.one;
 		equippedArrow.ignoredInPool = false;
 		equippedArrow = null;
 	}
@@ -301,4 +293,5 @@ public class PlayerCombat : MonoBehaviour
 	}
 
 	public float ChargePercentage { get { return Mathf.Clamp01(chargeUpPercent); } }
+	public Vector3 ArrowAimPoint { get; private set; }
 }
