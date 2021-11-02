@@ -11,6 +11,8 @@ public class GameplayUIManager : MonoBehaviour
 	bool disableMenuInput = false;
 
 	public Image crosshair;
+	public Animator fadeAnimator;
+	public float fadeTime = 1;
 
 	GameWindowManager windowManager;
 	InputMaster input;
@@ -42,5 +44,10 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		if (!disableMenuInput)
 			windowManager.ToggleWindows();
+	}
+
+	public void Fade(bool fadeIn)
+	{
+		fadeAnimator.SetBool("FadeIn", fadeIn);
 	}
 }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[DefaultExecutionOrder(1)]
+[DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
 	static GameManager instance;
 	public static GameManager Instance { get { return instance; } set { instance = value; } }
 
+	[Header("General Stuff")]
+	[SerializeField] float deathTime = 6;
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
 
@@ -25,6 +27,10 @@ public class GameManager : MonoBehaviour
 	[SerializeField] int arrowPoolNotifyDistance = 4;
 	public ObjectPool ArrowPool { get; private set; }
 	public PlayerController Player { get { return player; } }
+	public SaveManager SaveManager { get; private set; } = new SaveManager();
+
+	Vector3 initialPlayerPosition;
+	Quaternion initialPlayerRotation;
 
     void Awake()
     {
@@ -41,12 +47,60 @@ public class GameManager : MonoBehaviour
 			Application.targetFrameRate = targetFrameRate;
 			if (!player) player = FindObjectOfType<PlayerController>();
 
+			initialPlayerPosition = player.transform.position;
+			initialPlayerRotation = player.transform.rotation;
 		}
+	}
+
+	private void Start()
+	{
+		SaveManager.Start();
+		SetSceneFromSavedData();
 	}
 
 	public void OnPlayerDeath()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		player.InputIsEnabled = false;
+		player.Animator.AnimateDeath(true);
+		if (player.Motor.IsRolling)
+		{
+			player.Motor.CancelRoll();
+		}
+		StartCoroutine(ResetScene());
+	}
+
+	public IEnumerator ResetScene()
+	{
+		yield return new WaitForSeconds(deathTime);
+		player.GUI.Fade(true);
+		yield return new WaitForSeconds(player.GUI.fadeTime);
+		SetSceneFromSavedData();
+		player.ResetPlayerToDefault();
+		player.MainCamera.ResetCameraData();
+		player.MainCamera.MoveToTarget();
+		ArrowPool.ResetToDefault();
+		player.GUI.Fade(false);
+	}
+
+	void SetSceneFromSavedData()
+	{
+		SaveManager.SetSceneFromSaveData();
+		var checkpoint = SaveManager.GetCurrentCheckpoint();
+		if (checkpoint != null)
+		{
+			player.transform.position = checkpoint.GetSpawnPosition();
+			player.RotateChild.localRotation = checkpoint.GetSpawnRotation();
+		}
+		else
+		{
+			player.transform.position = initialPlayerPosition;
+			player.RotateChild.localRotation = initialPlayerRotation;
+		}
+	}
+
+	public void OnPlayerEnterCheckPoint()
+	{
+		//save current cleared areas
 	}
 
 	private void OnValidate()
@@ -81,6 +135,8 @@ public class GameManager : MonoBehaviour
 		if (instance == this)
 		{
 			instance = null;
+			if (Application.isEditor)
+				SaveManager.ClearSaveData();
 		}
 	}
 }

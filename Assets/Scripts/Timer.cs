@@ -17,6 +17,11 @@ public class Timer : BooleanSwitch
 		}
 	}
 
+	protected override void Start()
+	{
+		base.Start();
+	}
+
 	public override void Switch(bool on)
 	{	
 		if (on)

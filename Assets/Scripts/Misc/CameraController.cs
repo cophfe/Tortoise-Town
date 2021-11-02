@@ -42,7 +42,10 @@ public partial class CameraController : MonoBehaviour
 	public LayerMask obstructionLayers;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	public bool EnableInput { set
+	public bool EnableInput
+	{
+		get { return controls.asset.enabled; }
+		set
 		{
 			if (controls == null) return;
 			if (value)
@@ -118,16 +121,7 @@ public partial class CameraController : MonoBehaviour
 		cam = GetComponent<Camera>();
 
 		//set default values for camera
-		rotation = new Vector2(-15, 180 + target.rotation.eulerAngles.y);
-		targetOrbit = Quaternion.Euler(rotation);
-		currentOrbit = targetOrbit;
-		orbitVector = currentOrbit * Vector3.forward;
-		currentPivotPosition = target.position;
-		SetOrbitDistance();
-		orbitVector = orbitVector.normalized * targetDistance;
-		currentDistance = targetDistance;
-		transform.position = currentPivotPosition + orbitVector;
-		transform.forward = -orbitVector;
+		MoveToTarget();
 
 		//set camera box extents, used for obstruction checking
 		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
@@ -151,7 +145,7 @@ public partial class CameraController : MonoBehaviour
 		if (m > 0.001f)
 		{
 			Vector3 shakeVector = cameraShake + cameraShake.magnitude * Random.insideUnitSphere * shakeNoiseMag;
-			if (!Physics.BoxCast(transform.position, cameraBoxHalfExtents, shakeVector.normalized, transform.rotation, shakeVector.magnitude, obstructionLayers.value))
+			if (!Physics.BoxCast(transform.position, cameraBoxHalfExtents, shakeVector.normalized, transform.rotation, shakeVector.magnitude, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 			{
 				transform.position += shakeVector;
 			}
@@ -177,7 +171,7 @@ public partial class CameraController : MonoBehaviour
 			Vector3 additionDirection = target.TransformDirection(offset / additionMagnitude);
 			offset.y += yOffset * data.yOffsetMagnitude;
 
-			if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, additionDirection, out RaycastHit hit, transform.rotation, additionMagnitude, obstructionLayers.value))
+			if (Physics.BoxCast(transform.position, cameraBoxHalfExtents, additionDirection, out RaycastHit hit, transform.rotation, additionMagnitude, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 			{
 				transform.position += additionDirection * hit.distance;
 			}
@@ -273,14 +267,14 @@ public partial class CameraController : MonoBehaviour
 	{		
 		//check if camera is obstructed
 
-		Collider[] c = Physics.OverlapBox(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, transform.rotation, obstructionLayers.value);
+		Collider[] c = Physics.OverlapBox(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, transform.rotation, obstructionLayers.value, QueryTriggerInteraction.Ignore);
 
 		//check if obstructing object is inside box used for raycast (if this is the case the raycast does not detect it)
 		//if so, do not change target distance
 		if (c.Length == 0)
 		{
 			if (Physics.BoxCast(((cam.nearClipPlane) / 2) * orbitVector + currentPivotPosition, cameraBoxHalfExtents, orbitVector,
-			out RaycastHit boxHit, transform.rotation, data.maxFollowDistance, obstructionLayers.value))
+			out RaycastHit boxHit, transform.rotation, data.maxFollowDistance, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 			{
 				targetDistance = boxHit.distance;
 			}
@@ -371,6 +365,22 @@ public partial class CameraController : MonoBehaviour
 		data.yOffsetMagnitude = newData.yOffsetMagnitude;
 		data.yOffsetStartDistance = newData.yOffsetStartDistance;
 		data.zoomOutSpeed = newData.zoomOutSpeed;
+	}
+
+	public void MoveToTarget()
+	{
+		if (!target) return;
+		//set default values for camera
+		rotation = new Vector2(-15, 180 + target.rotation.eulerAngles.y);
+		targetOrbit = Quaternion.Euler(rotation);
+		currentOrbit = targetOrbit;
+		orbitVector = currentOrbit * Vector3.forward;
+		currentPivotPosition = target.position;
+		SetOrbitDistance();
+		orbitVector = orbitVector.normalized * targetDistance;
+		currentDistance = targetDistance;
+		transform.position = currentPivotPosition + orbitVector;
+		transform.forward = -orbitVector;
 	}
 
 	public void ResetCameraData()

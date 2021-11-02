@@ -10,11 +10,11 @@ public abstract class PlayerCollision : MonoBehaviour
 	/// Called by player when it's character controller collides with this gameobject
 	/// </summary>
 	/// <returns>Whether the player should continue with the collision implementation or not</returns>
-	public abstract bool OnCollideWithPlayer(PlayerMotor player, ControllerColliderHit hit);
+	public abstract bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit);
 
 	/// <summary>
 	/// Called by player when it sets this gameobject as the floor
 	/// </summary>
 	/// <returns>Whether the player should continue with this gameobject as the floor or not</returns>
-	public abstract bool OnPlayerGrounded(PlayerMotor player);
+	public abstract bool OnPlayerGrounded(PlayerController player);
 }
