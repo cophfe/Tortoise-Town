@@ -140,19 +140,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21aef45820c796c4e88387abc9d38032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playOnAwake: 1
+  testSwitch: 0
+  SwitchOnAwake: 1
+  onSwitchOn:
+    m_PersistentCalls:
+      m_Calls: []
+  onSwitchOff:
+    m_PersistentCalls:
+      m_Calls: []
   align: 0
   useBezier: 1
   automaticallyCalculateBezierCurve: 0
   intermediateType: 2
   stopTime: 0
+  startDelay: 0
   speed: 3
   points:
   - {x: 0, y: 5, z: 0}
   - {x: 0, y: 0, z: 0}
   ease: 0
   loopType: 1
-  startPosition: {x: 57.78, y: -0.02, z: -12.17053}
   intermediates:
   - {x: 3.1415024, y: 0, z: 0}
   - {x: 3.1415, y: 0, z: 0}

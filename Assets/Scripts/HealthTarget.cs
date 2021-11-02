@@ -15,4 +15,10 @@ public class HealthTarget : Health
 		base.OnDeath();
 		gameObject.SetActive(false);
 	}
+
+	public void ResetTarget()
+	{
+		gameObject.SetActive(true);
+		Revive(100000);
+	}
 }

@@ -15,6 +15,7 @@ MonoBehaviour:
   damageAmount: 1
   knockbackAmount: 10
   knockbackDuration: 0.4
+  cameraShakeAmount: 0.2
   knockbackCurve:
     serializedVersion: 2
     m_Curve:
