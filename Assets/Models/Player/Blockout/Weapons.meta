@@ -1,8 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Models/Player/Blockout/Weapons.meta
 guid: 92f22cfa116136a40944ec92453d817c
 folderAsset: yes
+=======
+guid: d1c0b77896049554fa4b635531caf741
+timeCreated: 1533059192
+licenseType: Store
+>>>>>>> Stashed changes:Assets/AmplifyShaderEditor/Examples/HDRP Samples.unitypackage.meta
 DefaultImporter:
-  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
