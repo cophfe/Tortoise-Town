@@ -258,6 +258,7 @@ Shader /*ase_name*/ "Hidden/Universal/PBR" /*end*/
 		}
 		Cull Back
 		AlphaToMask Off
+		/*ase_stencil*/
 		HLSLINCLUDE
 		#pragma target 2.0
 
