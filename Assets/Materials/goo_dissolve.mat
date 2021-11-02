@@ -93,7 +93,7 @@ Material:
     - _Cutoff: 0.5
     - _CutoffHeight: 0
     - _DstBlend: 0
-    - _EdgeWidth: 1
+    - _EdgeWidth: 0.1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
