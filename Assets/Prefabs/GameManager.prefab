@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathTime: 3
+  winWaitTime: 1
+  menuSceneName: Main_Menu
   player: {fileID: 0}
   enableCursorRestriction: 1
   targetFrameRate: -1

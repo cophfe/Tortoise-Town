@@ -46,7 +46,7 @@ public class Health : MonoBehaviour
 
 	public virtual bool Revive(float healAmount)
 	{
-		if (IsDead && healAmount > 0)
+		if (healAmount > 0)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
 			IsDead = false;
