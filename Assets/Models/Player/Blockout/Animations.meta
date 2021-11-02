@@ -1,8 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Models/Player/Blockout/Animations.meta
 guid: c1ce260edbe3d764a83b9171de0afa7f
 folderAsset: yes
+=======
+guid: dff05fea7446d7b4e9029bfab77455d2
+timeCreated: 1559836117
+licenseType: Store
+>>>>>>> Stashed changes:Assets/AmplifyShaderEditor/Examples/HDRP Samples (Legacy).unitypackage.meta
 DefaultImporter:
-  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
