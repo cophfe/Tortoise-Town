@@ -872,6 +872,12 @@ public class PlayerMotor : MonoBehaviour
 		}
 	}
 
+	public void CancelGroundMagnet()
+	{
+		groundMagnetOffset = 0;
+		collisionGroundDetected = false;
+	}
+
 	bool OnChangedCollider(Collider newCollider)
 	{
 		if (newCollider == null)
@@ -889,7 +895,7 @@ public class PlayerMotor : MonoBehaviour
 		{
 			//check for a player collider 
 			var pC = newCollider.GetComponent<PlayerCollision>();
-			if (pC && pC.enabled && !pC.OnPlayerGrounded(playerController))
+			if (pC && pC.enabled && !playerController.Health.IsDead && !pC.OnPlayerGrounded(playerController))
 			{
 				return false;
 			}
@@ -925,8 +931,15 @@ public class PlayerMotor : MonoBehaviour
 	{
 		OnChangedCollider(null);
 		dashing = false;
-		isRolling = false;
-		state = MovementState.GROUNDED;
+		if (isRolling)
+		{
+			OnLeaveRoll();
+		}
+		if (state != MovementState.GROUNDED)
+		{
+			state = MovementState.GROUNDED;
+			OnLand();
+		}
 
 		forcesVelocity = Vector3.zero;
 		inputVelocity = Vector3.zero;
@@ -962,7 +975,7 @@ public class PlayerMotor : MonoBehaviour
 
 		//if it doesn't have a collision react component or 
 		var playerCollision = hit.gameObject.GetComponent<PlayerCollision>();
-		if (!playerCollision || !playerCollision.enabled || playerCollision.OnCollideWithPlayer(playerController, hit))
+		if (!playerCollision || !playerCollision.enabled || playerController.Health.IsDead || playerCollision.OnCollideWithPlayer(playerController, hit))
 		{
 			if (rb && !rb.isKinematic)
 			{

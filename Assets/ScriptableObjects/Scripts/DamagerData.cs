@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GooDamageData", menuName = "ScriptableObjects/GooDamageData", order = 1)]
-public class GooDamageData : ScriptableObject
+[CreateAssetMenu(fileName = "DamagerData", menuName = "ScriptableObjects/DamagerData", order = 1)]
+public class DamagerData : ScriptableObject
 {
 	public int damageAmount = 1;
 	public float knockbackAmount = 2;

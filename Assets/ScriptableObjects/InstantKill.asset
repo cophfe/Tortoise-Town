@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d86be9445a6632448aa747e345c8e55, type: 3}
-  m_Name: EnemyDamage
+  m_Name: InstantKill
   m_EditorClassIdentifier: 
-  damageAmount: 1
-  knockbackAmount: 10
-  knockbackDuration: 0.4
-  cameraShakeAmount: 0.2
+  damageAmount: 1000
+  knockbackAmount: 5
+  knockbackDuration: 0.1
+  cameraShakeAmount: 2
   knockbackCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.9999913
-      inSlope: -0.094374366
-      outSlope: -0.094374366
+      value: 1
+      inSlope: -0.06265024
+      outSlope: -0.06265024
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.40376377
+      outWeight: 0.11293634
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -2.0029032
-      outSlope: -2.0029032
+      inSlope: -2.5994234
+      outSlope: -2.5994234
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.0791831
+      inWeight: 0.03901446
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

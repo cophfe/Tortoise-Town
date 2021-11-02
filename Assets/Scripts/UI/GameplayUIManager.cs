@@ -14,15 +14,19 @@ public class GameplayUIManager : MonoBehaviour
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
 
-	GameWindowManager windowManager;
+	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
 
 	private void Awake()
 	{
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
+		WindowManager = GetComponent<GameWindowManager>();
+	}
 
-		windowManager = GetComponent<GameWindowManager>();
+	private void Start()
+	{
+		Fade(false);
 	}
 	public void OnEnable()
 	{
@@ -42,10 +46,48 @@ public class GameplayUIManager : MonoBehaviour
 
 	void OnMenuButton()
 	{
-		if (!disableMenuInput)
-			windowManager.ToggleWindows();
+		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
+			WindowManager.ToggleWindows();
 	}
 
+	public void OnRestartButtonPressed()
+	{
+		StartCoroutine(RestartGame());
+	}
+
+	IEnumerator RestartGame()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		if (GameManager.Instance.WonGame)
+		{
+			GameManager.Instance.SaveManager.ClearSaveData();
+			GameManager.Instance.ReloadScene();
+		}
+		else
+		{
+			WindowManager.InstantCloseAll();
+			Time.timeScale = 1;
+			GameManager.Instance.SetSceneFromSavedData();
+			GameManager.Instance.Player.Animator.ResetPlayerAnimation();
+		}
+	}
+
+	public void OnExitButtonPressed()
+	{
+		StartCoroutine(ExitGame());
+	}
+
+	IEnumerator ExitGame()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		if (GameManager.Instance.WonGame)
+			GameManager.Instance.SaveManager.ClearSaveData();
+		GameManager.Instance.ExitToMenu();
+	}
 	public void Fade(bool fadeIn)
 	{
 		fadeAnimator.SetBool("FadeIn", fadeIn);

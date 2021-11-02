@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
 
 	[Header("General Stuff")]
 	[SerializeField] float deathTime = 6;
+	[SerializeField] float winWaitTime = 3;
+	[SerializeField] string menuSceneName = "Main_Menu";
+
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
 
@@ -28,11 +32,14 @@ public class GameManager : MonoBehaviour
 	public ObjectPool ArrowPool { get; private set; }
 	public PlayerController Player { get { return player; } }
 	public SaveManager SaveManager { get; private set; } = new SaveManager();
+	public bool WonGame { get; private set; } = false;
 
 	Vector3 initialPlayerPosition;
 	Quaternion initialPlayerRotation;
+	int currentDissolverCount;
+	int totalDissolverCount;
 
-    void Awake()
+	void Awake()
     {
 		if (instance)
 		{
@@ -55,7 +62,19 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		SaveManager.Start();
-		SetSceneFromSavedData();
+		var checkpoint = SaveManager.GetCurrentCheckpoint();
+		if (checkpoint != null)
+		{
+			player.transform.position = checkpoint.GetSpawnPosition();
+			player.RotateChild.localRotation = checkpoint.GetSpawnRotation();
+		}
+		else
+		{
+			player.transform.position = initialPlayerPosition;
+			player.RotateChild.localRotation = initialPlayerRotation;
+		}
+		CalculateTotalDissolvers();
+		currentDissolverCount = totalDissolverCount;
 	}
 
 	public void OnPlayerDeath()
@@ -69,20 +88,27 @@ public class GameManager : MonoBehaviour
 		StartCoroutine(ResetScene());
 	}
 
-	public IEnumerator ResetScene()
+	IEnumerator ResetScene()
 	{
 		yield return new WaitForSeconds(deathTime);
 		player.GUI.Fade(true);
 		yield return new WaitForSeconds(player.GUI.fadeTime);
 		SetSceneFromSavedData();
-		player.ResetPlayerToDefault();
-		player.MainCamera.ResetCameraData();
-		player.MainCamera.MoveToTarget();
-		ArrowPool.ResetToDefault();
-		player.GUI.Fade(false);
 	}
 
-	void SetSceneFromSavedData()
+	public void ReloadScene()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
+	public IEnumerator ResetSceneFromMenu()
+	{
+		player.GUI.Fade(true);
+		yield return new WaitForSeconds(player.GUI.fadeTime);
+		
+	}
+
+	public void SetSceneFromSavedData()
 	{
 		SaveManager.SetSceneFromSaveData();
 		var checkpoint = SaveManager.GetCurrentCheckpoint();
@@ -96,11 +122,59 @@ public class GameManager : MonoBehaviour
 			player.transform.position = initialPlayerPosition;
 			player.RotateChild.localRotation = initialPlayerRotation;
 		}
+		player.ResetPlayerToDefault();
+		player.MainCamera.ResetCameraData();
+		player.MainCamera.MoveToTarget();
+		ArrowPool.ResetToDefault();
+		player.GUI.Fade(false);
 	}
 
-	public void OnPlayerEnterCheckPoint()
+	public void ExitToMenu()
 	{
-		//save current cleared areas
+		try
+		{
+			SceneManager.LoadScene(menuSceneName);
+		}
+		catch (Exception e)
+		{
+			Debug.LogWarning("Error loading scene:\n"+ e.Message);
+		}
+	}
+
+	public void CalculateTotalDissolvers()
+	{
+		totalDissolverCount = 0;
+		foreach (var dissolver in SaveManager.GetGooDissolverList())
+		{
+			if (dissolver.requiredForWin) totalDissolverCount++;
+		}
+	}
+	public void CalculateCurrentDissolverCount()
+	{
+		currentDissolverCount = 0;
+		foreach(var dissolver in SaveManager.GetGooDissolverList())
+		{
+			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
+		}
+		if (currentDissolverCount <= 0) OnWin();
+	}
+	public void OnGooDissolve()
+	{
+		currentDissolverCount--;
+		if (currentDissolverCount <= 0) OnWin();
+	}
+	public void OnWin()
+	{
+		WonGame = true;
+		StartCoroutine(WinGame());
+	}
+
+	IEnumerator WinGame()
+	{
+		yield return new WaitForSecondsRealtime(winWaitTime);
+		IsCursorRestricted = false;
+		Time.timeScale = 0;
+		Player.GUI.WindowManager.SetCurrentWindow("Win");
 	}
 
 	private void OnValidate()
@@ -137,6 +211,8 @@ public class GameManager : MonoBehaviour
 			instance = null;
 			if (Application.isEditor)
 				SaveManager.ClearSaveData();
+			Time.timeScale = 1;
+			enableCursorRestriction = false;
 		}
 	}
 }
