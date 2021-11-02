@@ -18,8 +18,6 @@ public class GooDissolve : MonoBehaviour
 	float currentCutOffHeight = 0;
 	bool dissolving = false;
 	MaterialPropertyBlock block = null;
-
-	public bool startDissolving = false;
 	public bool Dissolved { get; private set; }
 	int aliveTargetCount;
 
