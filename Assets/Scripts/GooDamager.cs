@@ -5,29 +5,50 @@ using UnityEngine;
 public class GooDamager : PlayerCollision
 {
 	[SerializeField] GooDamageData data = null;
-	
-	public override bool OnCollideWithPlayer(PlayerMotor player, ControllerColliderHit hit)
+	[SerializeField] bool disableColliderOnDissolve = false;
+
+	public override bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit)
 	{
-		player.GetComponent<PlayerHealth>().Damage(data.damageAmount);
+		//if in the process of bouncing from knockback, do not inflict knockback or damage
+		if (player.Motor.IsDashing && player.Motor.IsExternalDash) return true;
+		if (player.Health.Damage(data.damageAmount))
+			player.MainCamera.AddCameraShake(hit.normal * data.cameraShakeAmount);
+
 		//knockback
-		Vector3 direction = hit.normal;
-		
-		player.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
+		AddKnockback(player, hit.normal);
 		return true;
 	}
 
-	public override bool OnPlayerGrounded(PlayerMotor player)
+	public override bool OnPlayerGrounded(PlayerController player)
 	{
-		player.GetComponent<PlayerHealth>().Damage(data.damageAmount);
+		//if in the process of bouncing from knockback, do not inflict knockback or damage
+		if (player.Motor.IsDashing && player.Motor.IsExternalDash) return true;
+
 		//knockback
-		Vector3 direction = -player.InputVelocity.normalized;
-		//knockback doesn't push you into the floor
-		if (direction.y < 0)
-		{
-			direction.y = 0;
-			direction.Normalize();
-		}
-		player.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
+		AddKnockback(player, player.Motor.GroundNormal);
+		//damage player
+		if (player.Health.Damage(data.damageAmount))
+			player.MainCamera.AddCameraShake(player.Motor.GroundNormal * data.cameraShakeAmount);
+
 		return true;
+	}
+
+	void AddKnockback(PlayerController player, Vector3 direction)
+	{
+		player.Motor.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
+	}
+
+	public void Dissolve()
+	{
+		if (disableColliderOnDissolve)
+			GetComponent<Collider>().enabled = false;
+		enabled = false;
+	}
+
+	public void Undissolve()
+	{
+		if (disableColliderOnDissolve)
+			GetComponent<Collider>().enabled = true;
+		enabled = true;
 	}
 }

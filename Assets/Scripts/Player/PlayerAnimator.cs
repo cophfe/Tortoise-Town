@@ -287,5 +287,10 @@ public class PlayerAnimator : MonoBehaviour
 	{
 		animator.SetBool(equipId, equip);
 	}
+
+	public void AnimateDeath(bool isDead)
+	{
+		animator.SetBool("Dead", isDead);
+	}
 	#endregion
 }

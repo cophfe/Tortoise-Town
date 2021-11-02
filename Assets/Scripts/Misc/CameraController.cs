@@ -121,16 +121,7 @@ public partial class CameraController : MonoBehaviour
 		cam = GetComponent<Camera>();
 
 		//set default values for camera
-		rotation = new Vector2(-15, 180 + target.rotation.eulerAngles.y);
-		targetOrbit = Quaternion.Euler(rotation);
-		currentOrbit = targetOrbit;
-		orbitVector = currentOrbit * Vector3.forward;
-		currentPivotPosition = target.position;
-		SetOrbitDistance();
-		orbitVector = orbitVector.normalized * targetDistance;
-		currentDistance = targetDistance;
-		transform.position = currentPivotPosition + orbitVector;
-		transform.forward = -orbitVector;
+		MoveToTarget();
 
 		//set camera box extents, used for obstruction checking
 		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
@@ -374,6 +365,22 @@ public partial class CameraController : MonoBehaviour
 		data.yOffsetMagnitude = newData.yOffsetMagnitude;
 		data.yOffsetStartDistance = newData.yOffsetStartDistance;
 		data.zoomOutSpeed = newData.zoomOutSpeed;
+	}
+
+	public void MoveToTarget()
+	{
+		if (!target) return;
+		//set default values for camera
+		rotation = new Vector2(-15, 180 + target.rotation.eulerAngles.y);
+		targetOrbit = Quaternion.Euler(rotation);
+		currentOrbit = targetOrbit;
+		orbitVector = currentOrbit * Vector3.forward;
+		currentPivotPosition = target.position;
+		SetOrbitDistance();
+		orbitVector = orbitVector.normalized * targetDistance;
+		currentDistance = targetDistance;
+		transform.position = currentPivotPosition + orbitVector;
+		transform.forward = -orbitVector;
 	}
 
 	public void ResetCameraData()

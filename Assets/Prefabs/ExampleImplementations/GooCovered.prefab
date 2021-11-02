@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 0
 --- !u!1 &1234277737900830175
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 1
 --- !u!1 &1234277737906604343
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,6 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 0
 --- !u!1 &1234277738275840962
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,6 +441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 0
 --- !u!1 &1234277738711237219
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,6 +551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 1
 --- !u!1 &1234277739025442387
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,7 +564,7 @@ GameObject:
   - component: {fileID: 1234277739025442385}
   m_Layer: 0
   m_Name: GooCovered
-  m_TagString: Untagged
+  m_TagString: Dissolver
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -597,12 +602,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf4939c935b2ba44b7dc18a3ba109a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dissolveShader: {fileID: 4800000, guid: 2799475514de1e346945a4a345372040, type: 3}
-  vineShader: {fileID: 4800000, guid: 43ca15d3603fb8f488d598dddbde837f, type: 3}
-  dissolveSpeed: 10
+  data: {fileID: 11400000, guid: ebe8bf8781daffb4ab54d147cd3f7064, type: 2}
   startCutoffHeight: 0
   endCutoffHeight: 10
-  easeIn: 1
   startDissolving: 0
 --- !u!1 &1234277739292709581
 GameObject:
@@ -713,6 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 09ca635240c07be48a154718fed0ee90, type: 2}
+  disableColliderOnDissolve: 0
 --- !u!1 &1234277739332579627
 GameObject:
   m_ObjectHideFlags: 0

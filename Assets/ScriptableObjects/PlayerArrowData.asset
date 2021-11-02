@@ -16,7 +16,7 @@ MonoBehaviour:
   rotateSpeed: 10
   damage: 1
   gravity: 6
-  arrowPenetratePercent: 0.2
+  arrowPenetratePercent: 0.85
   ignoreCollisionLayers:
     serializedVersion: 2
     m_Bits: 1284

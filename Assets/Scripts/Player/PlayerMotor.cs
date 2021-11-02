@@ -725,6 +725,11 @@ public class PlayerMotor : MonoBehaviour
 		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastNonZeroInputVelocity, Vector3.up), Vector3.up);
 	}
 
+	public void CancelRoll()
+	{
+		OnLeaveRoll(false);
+	}
+
 	void OnJump()
 	{
 		//set state
@@ -796,6 +801,7 @@ public class PlayerMotor : MonoBehaviour
 		}
 		OnRoll();
 		onDash.Invoke();
+		IsExternalDash = false;
 	}
 
 	//a dash called by an external script
@@ -819,6 +825,7 @@ public class PlayerMotor : MonoBehaviour
 		dashTimer = currentDashDuration;
 		currentDashDirection = dashDirection;
 		onDash.Invoke();
+		IsExternalDash = true;
 	}
 
 	public void AddKnockback(float dashSpeed, float dashDuration, Vector3 dashDirection, AnimationCurve knockbackCurve = null)
@@ -872,12 +879,6 @@ public class PlayerMotor : MonoBehaviour
 			//leave the platform if no new collider && was on platform
 			if (movingPlatform != null)
 			{
-				//calculate velocity gained from leaving
-				//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-				//Vector3 vel = movingPlatformOffset / time;
-				//inputVelocity += new Vector3(vel.x,  0, vel.z) * movingPlatformForceMultiplier;
-				//forcesVelocity.y += Mathf.Max(vel.y, 0);
-
 				//disconnect from platform
 				movingPlatform.AssignPlayer(null);
 				movingPlatform = null;
@@ -888,7 +889,7 @@ public class PlayerMotor : MonoBehaviour
 		{
 			//check for a player collider 
 			var pC = newCollider.GetComponent<PlayerCollision>();
-			if (pC && !pC.OnPlayerGrounded(this))
+			if (pC && pC.enabled && !pC.OnPlayerGrounded(playerController))
 			{
 				return false;
 			}
@@ -907,12 +908,6 @@ public class PlayerMotor : MonoBehaviour
 				//Disconnect from platform if new collider has no moving platform component
 				if (movingPlatform)
 				{
-					//calculate velocity gained from leaving
-					//float time = Time.timeScale == 0 ? Mathf.Infinity : Time.deltaTime;
-					//Vector3 vel = movingPlatformOffset / time;
-					//inputVelocity += new Vector3(vel.x, 0, vel.z) * movingPlatformForceMultiplier;
-					//forcesVelocity.y += Mathf.Max(vel.y, 0);
-
 					//disconnect from platform
 					movingPlatform.AssignPlayer(null);
 					movingPlatform = null;
@@ -925,6 +920,19 @@ public class PlayerMotor : MonoBehaviour
 		return true;
 	}
 
+
+	public void ResetMotor()
+	{
+		OnChangedCollider(null);
+		dashing = false;
+		isRolling = false;
+		state = MovementState.GROUNDED;
+
+		forcesVelocity = Vector3.zero;
+		inputVelocity = Vector3.zero;
+		totalVelocity = Vector3.zero;
+
+	}
 	Collider lastCollider = null;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -954,7 +962,7 @@ public class PlayerMotor : MonoBehaviour
 
 		//if it doesn't have a collision react component or 
 		var playerCollision = hit.gameObject.GetComponent<PlayerCollision>();
-		if (!playerCollision || playerCollision.OnCollideWithPlayer(this, hit))
+		if (!playerCollision || !playerCollision.enabled || playerCollision.OnCollideWithPlayer(playerController, hit))
 		{
 			if (rb && !rb.isKinematic)
 			{
@@ -1018,6 +1026,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 GroundNormal { get { return groundNormal; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
+	public bool IsExternalDash { get; private set; }
 	public float TargetSpeedManipulator { get; set; }
 	#endregion
 
