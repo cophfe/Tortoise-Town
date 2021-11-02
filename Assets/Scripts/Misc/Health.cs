@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-	[SerializeField] protected int maxHealth = 1;
+	[SerializeField] protected float maxHealth = 1;
 	
 
-	public int CurrentHealth { get; protected set; }
+	public float CurrentHealth { get; protected set; }
 	public bool IsDead { get; protected set; }
 
 	protected virtual void Start()
@@ -16,7 +16,7 @@ public class Health : MonoBehaviour
 		IsDead = false;
 	}
 
-	public virtual bool Damage(int damageAmount)
+	public virtual bool Damage(float damageAmount)
 	{
 		if (IsDead)
 			return false;
@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
 		return true;
 	}
 
-	public virtual bool Heal(int healAmount)
+	public virtual bool Heal(float healAmount)
 	{
 		if (IsDead)
 			return false;
@@ -44,9 +44,9 @@ public class Health : MonoBehaviour
 		return true;
 	}
 
-	public virtual bool Revive(int healAmount)
+	public virtual bool Revive(float healAmount)
 	{
-		if (IsDead && healAmount > 0)
+		if (healAmount > 0)
 		{
 			CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
 			IsDead = false;

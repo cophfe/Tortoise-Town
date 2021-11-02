@@ -5,12 +5,13 @@ using UnityEngine;
 public class Door : BooleanSwitch
 {
 	public Animator doorAnimator;
-
-    void Start()
+    
+	protected override void Start()
     {
 		if (!doorAnimator)
 			doorAnimator = GetComponentInChildren<Animator>();
-    }
+		base.Start();
+	}
 
 	public override bool SwitchValue 
 	{

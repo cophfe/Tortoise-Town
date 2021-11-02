@@ -8,7 +8,6 @@ public class MovingPlatform : BooleanSwitch
 {
 	Rigidbody rb;
 
-	public bool playOnAwake = true;
 	[HideInInspector] public bool align = false;
 	[HideInInspector, SerializeField] bool useBezier = false;
 	[HideInInspector, SerializeField] public bool automaticallyCalculateBezierCurve = false;
@@ -67,15 +66,14 @@ public class MovingPlatform : BooleanSwitch
 		} 
 	}
 
-	void Start()
+	protected override void Start()
     {
 		rb = GetComponent<Rigidbody>();
 		StartPosition = rb.position;
 		StartRotation = rb.rotation;
 		stopTimer = stopTime + startDelay;
 		platformCollider = GetComponentInChildren<BoxCollider>();
-		if (playOnAwake)
-			Play();
+		base.Start();
 	}
 	
 	void FixedUpdate()

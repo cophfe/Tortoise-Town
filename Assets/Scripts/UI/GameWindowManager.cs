@@ -36,8 +36,8 @@ public class GameWindowManager : MonoBehaviour
 			for (int i = 0; i < gameWindows.Length; i++)
 			{
 				gameWindows[i].UpdateOpenState(t);
-				backgroundPanel.UpdateOpenState(t);
 			}
+			backgroundPanel.UpdateOpenState(t);
 		}
 		
 	}
@@ -111,6 +111,21 @@ public class GameWindowManager : MonoBehaviour
 		{
 			CloseActiveWindows();
 		}
+	}
+
+	public void InstantCloseAll()
+	{
+		backgroundPanel.OpenWindow(false);
+		bool anyWindowsWereOpen = false;
+		for (int j = 0; j < gameWindows.Length; j++)
+		{
+			anyWindowsWereOpen |= gameWindows[j].OpenWindow(false);
+		}
+		activeWindowIndex = -1;
+
+		OnStartTransition();
+		transitioning = true;
+		openTimer = windowOpenTime;
 	}
 
 	void OnStartTransition()

@@ -287,5 +287,19 @@ public class PlayerAnimator : MonoBehaviour
 	{
 		animator.SetBool(equipId, equip);
 	}
+
+	public void AnimateDeath(bool isDead)
+	{
+		animator.SetBool("Dead", isDead);
+	}
+
+	public void ResetPlayerAnimation()
+	{
+		animator.Play("IdleWalkRun", -1, 0);
+		playerController.CharacterController.radius = playerController.RollColliderRadius;
+		playerController.CharacterController.height = playerController.RollColliderRadius * 2;
+		playerController.CharacterController.center = playerController.RollColliderOffset;
+		playerController.MainCamera.GetCameraData().targetOffset.y =  playerController.RollCameraOffset;
+	}
 	#endregion
 }
