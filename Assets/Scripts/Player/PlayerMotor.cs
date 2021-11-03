@@ -690,7 +690,7 @@ public class PlayerMotor : MonoBehaviour
 	void EvaluateRoll()
 	{
 		//start roll
-		if (playerController.EvaluateCrouchPressed() && rollCooldownTimer <= 0 && state == MovementState.GROUNDED)
+		if (playerController.EvaluateCrouchPressed() && rollCooldownTimer <= 0)
 		{
 			if (isRolling)
 			{

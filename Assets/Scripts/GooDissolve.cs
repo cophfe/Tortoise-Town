@@ -5,6 +5,7 @@ using UnityEngine;
 public class GooDissolve : MonoBehaviour
 {
 	[SerializeField] GooDissolveData data = null;
+	[SerializeField] float dissolveSpeed = 10;
 	[SerializeField] float startCutoffHeight = 0;
 	[SerializeField] float endCutoffHeight = 100;
 	public bool requiredForWin = true;
@@ -132,11 +133,11 @@ public class GooDissolve : MonoBehaviour
 			if (data.easeIn)
 			{
 				float t = (currentCutOffHeight - startCutoffHeight) / (endCutoffHeight);
-				currentCutOffHeight += Time.deltaTime * data.dissolveSpeed * (2 * t * t + .25f);
+				currentCutOffHeight += Time.deltaTime * dissolveSpeed * (2 * t * t + .25f);
 			}
 			else
 			{
-				currentCutOffHeight += Time.deltaTime * data.dissolveSpeed;
+				currentCutOffHeight += Time.deltaTime * dissolveSpeed;
 			}
 			if (currentCutOffHeight >= endCutoffHeight)
 			{
