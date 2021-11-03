@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/ScriptableObjects/GooShot.asset.meta
 guid: 3eda039e9e3009a48a8cadafaf3cef18
 NativeFormatImporter:
+=======
+guid: fe4c2d055d4e24a4b8e72586cb280e9b
+DefaultImporter:
+>>>>>>> main:Assets/AmplifyShaderEditor/Examples/URP Samples.unitypackage.meta
   externalObjects: {}
   mainObjectFileID: 0
   userData: 

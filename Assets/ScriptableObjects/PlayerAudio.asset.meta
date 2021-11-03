@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/ScriptableObjects/PlayerAudio.asset.meta
 guid: 559f6c19532eeda4ab030e7ff7baf460
 NativeFormatImporter:
+=======
+guid: 607e955246a68cb4abec89ef0dcfe275
+DefaultImporter:
+>>>>>>> main:Assets/AmplifyShaderEditor/Plugins/EditorResources/Templates/CustomRTTemplates.unitypackage.meta
   externalObjects: {}
   mainObjectFileID: 0
   userData: 

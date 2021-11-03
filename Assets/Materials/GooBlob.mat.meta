@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Materials/GooBlob.mat.meta
 guid: 53761510e5ab15340b09ead4eae191f7
 NativeFormatImporter:
+=======
+guid: ba5f6734862765849b1ce6246778e206
+DefaultImporter:
+>>>>>>> main:Assets/AmplifyShaderEditor/Examples/LWRP Samples.unitypackage.meta
   externalObjects: {}
   mainObjectFileID: 0
   userData: 

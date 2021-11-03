@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Prefabs/Enemy/GooEnemy.prefab.meta
 guid: e5f137a5c489bc6488e22365bb26a586
 PrefabImporter:
+=======
+guid: 6b08e2deed376cb438541660d9e009f2
+DefaultImporter:
+>>>>>>> main:Assets/AmplifyShaderEditor/Examples/HDRP Samples 7xx - 9xx (Legacy).unitypackage.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
