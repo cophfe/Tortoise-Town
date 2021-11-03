@@ -160,6 +160,7 @@ public class PlayerCombat : MonoBehaviour
 		Transform cam = playerController.MainCamera.transform;
 		//first add camera shake
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
+		playerController.PlayAudioOnce(playerController.AudioData.arrowShoot);
 		//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 		//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
 
@@ -229,6 +230,7 @@ public class PlayerCombat : MonoBehaviour
 		playerController.Animator.AnimateEquip(true);
 		charging = true;
 		cameraChanged = true;
+		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
 
 		if (playerController.GUI)
 			playerController.GUI.EnableCrossHair(true);
@@ -237,6 +239,7 @@ public class PlayerCombat : MonoBehaviour
 	public void EndChargeUp()
 	{
 		charging = false;
+		playerController.PlayerAudio.Stop();
 		if (playerController.GUI)
 			playerController.GUI.EnableCrossHair(false);
 	}

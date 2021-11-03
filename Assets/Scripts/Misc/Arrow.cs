@@ -60,6 +60,7 @@ public class Arrow : Poolable
 				{
 					health.Damage(data.damage);
 				}
+				OnCollide();
 			}
 			else
 			{
@@ -68,6 +69,10 @@ public class Arrow : Poolable
 		}
     }
 
+	protected virtual void OnCollide()
+	{
+
+	}
 	private void Update()
 	{
 		if (!shooting)
