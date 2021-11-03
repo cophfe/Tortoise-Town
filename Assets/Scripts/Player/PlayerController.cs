@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float rollCameraYOffset = 0;
 	[SerializeField] private Transform rotatableChild = null;
 	[SerializeField] InterpolateChild visualInterpolator = null;
+	[SerializeField] PlayerAudioData audioData = null;
 	[SerializeField] bool drawDebug = false;
 	Vector3 rollColliderOffset;
 
@@ -35,6 +36,10 @@ public class PlayerController : MonoBehaviour
 	public GameManager GameManager { get; private set; }
 	public GameplayUIManager GUI { get { return gUI; } }
 	public InterpolateChild Interpolator { get { return visualInterpolator; } }
+
+	public AudioSource PlayerAudio { get; private set; }
+	public AudioSource FootstepAudio { get; private set; }
+	public PlayerAudioData AudioData { get { return audioData; } }
 	public float InitialColliderHeight { get; private set; }
 	public float InitialColliderRadius { get; private set; }
 	public Vector3 InitialColliderOffset { get; private set; }
@@ -89,7 +94,8 @@ public class PlayerController : MonoBehaviour
 		if (!MainCamera)
 			cameraController = FindObjectOfType<CameraController>();
 		GameManager = GameManager.Instance;
-
+		FootstepAudio = GetComponent<AudioSource>();
+		PlayerAudio = Interpolator.GetComponent<AudioSource>();
 
 		if (rotatableChild == null)
 		{
@@ -147,6 +153,12 @@ public class PlayerController : MonoBehaviour
 		Animator.AnimateDeath(false);
 		Interpolator.ResetPosition();
 		//Reset player and camera to default state
+	}
+
+	public void PlayAudioOnce(AudioClipList clipList, bool doNotOverlap = false)
+	{
+		if (doNotOverlap && PlayerAudio.isPlaying) return;
+		PlayerAudio.PlayOneShot(clipList.GetRandom());
 	}
 
 	#region Evaluate Functions

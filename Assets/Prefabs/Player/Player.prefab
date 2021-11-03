@@ -163,6 +163,7 @@ MonoBehaviour:
   rollCameraYOffset: 0.5
   rotatableChild: {fileID: 4770109565418618105}
   visualInterpolator: {fileID: 1397292555341873546}
+  audioData: {fileID: 11400000, guid: 559f6c19532eeda4ab030e7ff7baf460, type: 2}
   drawDebug: 1
 --- !u!114 &3923705860234160769
 MonoBehaviour:
@@ -361,9 +362,9 @@ AudioSource:
   m_GameObject: {fileID: 3923705860234160775}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8659167707096012901, guid: c6dcb8f38aeb45f4e9a69706655abe3b, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
