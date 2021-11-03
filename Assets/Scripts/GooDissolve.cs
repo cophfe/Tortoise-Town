@@ -9,8 +9,8 @@ public class GooDissolve : MonoBehaviour
 	[SerializeField] float startCutoffHeight = 0;
 	[SerializeField] float endCutoffHeight = 100;
 	public bool requiredForWin = true;
-	List<MeshRenderer> renderersToDissolve = new List<MeshRenderer>();
-	List<MeshRenderer> renderersToDissappear = new List<MeshRenderer>();
+	List<Renderer> renderersToDissolve = new List<Renderer>();
+	List<Renderer> renderersToDissappear = new List<Renderer>();
 
 	HealthTarget[] targets = null;
 	GooDamager[] damagers = null;
@@ -37,7 +37,7 @@ public class GooDissolve : MonoBehaviour
 			targets[i].deathlegate += OnTargetKilled;
 		}
 		//Get renderers
-		MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		//add to lists
 		for (int i = 0; i < renderers.Length; i++)
 		{
