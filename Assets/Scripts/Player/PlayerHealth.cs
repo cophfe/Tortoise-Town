@@ -62,7 +62,6 @@ public class PlayerHealth : Health
 			//set GUI
 
 			//set Animation and sound effects
-
 			return true;
 		}
 		else return false;
@@ -70,6 +69,7 @@ public class PlayerHealth : Health
 	
 	protected override void OnDeath()
 	{
+		controller.PlayAudioOnce(controller.AudioData.death);
 		GameManager.Instance.OnPlayerDeath();
 		base.OnDeath();
 	}

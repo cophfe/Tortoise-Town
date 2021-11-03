@@ -7,8 +7,8 @@ public class Activator : MonoBehaviour
 {
 	[SerializeField] protected BooleanSwitch[] bSwitch;
 	[SerializeField]  protected bool activateOnce = false;
-	[SerializeField] UnityEvent onActivate;
-	[SerializeField] UnityEvent onDeactivate;
+	[SerializeField] UnityEvent onActivate = null;
+	[SerializeField] UnityEvent onDeactivate = null;
 	protected bool activated = false;
 	public virtual void Switch()
 	{
