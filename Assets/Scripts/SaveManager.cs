@@ -45,7 +45,10 @@ public class SaveManager
 		if (Application.isEditor)
 			ClearSaveData();
 		else
+		{
 			LoadSaveData();
+		}
+
 		InitialSetSceneFromSaveData();
 	}
 
@@ -116,6 +119,10 @@ public class SaveManager
 
 				newSaveData.currentCheckpointIndex = reader.ReadInt32();
 				newSaveData.gooDissolverStates = new bool[reader.ReadInt32()];
+				if (newSaveData.gooDissolverStates.Length != gooDissolvers.Count)
+				{
+					throw new Exception("Save data contained incorrect number of goo dissolvers");
+				}
 				for (int i = 0; i < newSaveData.gooDissolverStates.Length; i++)
 				{
 					newSaveData.gooDissolverStates[i] = reader.ReadBoolean();
@@ -162,7 +169,8 @@ public class SaveManager
 		saveData = new SaveData();
 		saveData.currentCheckpointIndex = -1;
 		saveData.gooDissolverStates = new bool[gooDissolvers.Count];
-		WriteSaveData();
+		if (File.Exists(Application.persistentDataPath + "/save.tt"))
+			File.Delete(Application.persistentDataPath + "/save.tt");
 	}
 
 	public SaveData GetSaveData() { return saveData; }

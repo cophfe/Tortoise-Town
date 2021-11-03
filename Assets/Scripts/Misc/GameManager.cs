@@ -175,6 +175,9 @@ public class GameManager : MonoBehaviour
 		IsCursorRestricted = false;
 		Time.timeScale = 0;
 		Player.GUI.WindowManager.SetCurrentWindow("Win");
+		GameManager.Instance.Player.InputIsEnabled = false;
+		//and begone save data
+		SaveManager.ClearSaveData();
 	}
 
 	private void OnValidate()
