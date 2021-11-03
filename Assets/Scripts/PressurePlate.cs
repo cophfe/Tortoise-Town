@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlate : Activator
 {
 	[SerializeField] bool switchOnLeave = true;
 	[SerializeField] Animator pressurePlateAnimator = null;
 	[SerializeField] LayerMask getPressedByLayers = 0;
+
 	int collisionCount = 0;
 	int boolId;
 

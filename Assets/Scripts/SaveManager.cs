@@ -20,6 +20,7 @@ public class SaveManager
 	{
 		gooDissolvers.Add(gooDissolve);
 	}
+	public List<GooDissolve> GetGooDissolverList() { return gooDissolvers; }
 
 	public void Start()
 	{
@@ -45,6 +46,7 @@ public class SaveManager
 			ClearSaveData();
 		else
 			LoadSaveData();
+		InitialSetSceneFromSaveData();
 	}
 
 	public bool SetCurrentCheckpoint(Checkpoint checkpoint)
@@ -139,8 +141,19 @@ public class SaveManager
 				gooDissolvers[i].SetAlreadyDissolved();
 			else
 				gooDissolvers[i].ResetDissolve();
-
 		}
+		GameManager.Instance.CalculateCurrentDissolverCount();
+		checkpointIndex = saveData.currentCheckpointIndex;
+	}
+
+	public void InitialSetSceneFromSaveData()
+	{
+		for (int i = 0; i < gooDissolvers.Count; i++)
+		{
+			if (saveData.gooDissolverStates[i])
+				gooDissolvers[i].SetAlreadyDissolved();
+		}
+		GameManager.Instance.CalculateCurrentDissolverCount();
 		checkpointIndex = saveData.currentCheckpointIndex;
 	}
 
