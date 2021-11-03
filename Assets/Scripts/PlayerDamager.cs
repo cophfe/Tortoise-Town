@@ -8,6 +8,8 @@ public class PlayerDamager : PlayerCollision
 
 	public override bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit)
 	{
+		player = GameManager.Instance.Player;
+
 		//if in the process of bouncing from knockback, do not inflict knockback or damage
 		if (player.Motor.IsDashing && player.Motor.IsExternalDash) return true;
 
@@ -22,6 +24,7 @@ public class PlayerDamager : PlayerCollision
 
 	public override bool OnPlayerGrounded(PlayerController player)
 	{
+		player = GameManager.Instance.Player;
 		//if in the process of bouncing from knockback, do not inflict knockback or damage
 		if (player.Motor.IsDashing && player.Motor.IsExternalDash) return true;
 
@@ -37,6 +40,6 @@ public class PlayerDamager : PlayerCollision
 
 	void AddKnockback(PlayerController player, Vector3 direction)
 	{
-		player.Motor.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
+		GameManager.Instance.Player.Motor.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
 	}
 }

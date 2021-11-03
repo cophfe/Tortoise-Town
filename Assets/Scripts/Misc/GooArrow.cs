@@ -7,6 +7,6 @@ public class GooArrow : Arrow
 	protected override void OnCollide()
 	{
 		gameObject.SetActive(false);
-		ignoredInPool = false;
+		ignoredInPool = false; 
 	}
 }
