@@ -109,7 +109,6 @@ public class GooShooter : BooleanSwitch
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log(other.gameObject.layer + " " + (playerLayer & (1 >> other.gameObject.layer)));
 		if ((playerLayer & (1 << other.gameObject.layer)) != 0)
 		{
 			attackPlayer = true;
