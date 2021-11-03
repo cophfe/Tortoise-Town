@@ -62,6 +62,7 @@ public class GameplayUIManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(fadeTime);
 		if (GameManager.Instance.WonGame)
 		{
+			Time.timeScale = 1;
 			GameManager.Instance.SaveManager.ClearSaveData();
 			GameManager.Instance.ReloadScene();
 		}
