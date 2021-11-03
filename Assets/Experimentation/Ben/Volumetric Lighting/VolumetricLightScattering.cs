@@ -87,7 +87,7 @@ public class VolumetricLightScattering : ScriptableRendererFeature
         // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if(!occluderMaterial || !radialBlurMaterial)
+            if(!occluderMaterial || !radialBlurMaterial || !RenderSettings.sun)
             {
                 return;
             }
@@ -107,7 +107,7 @@ public class VolumetricLightScattering : ScriptableRendererFeature
                 drawingSettings.overrideMaterial = occluderMaterial;
 
                 context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
-
+            
                 Vector3 sunDirectionWorldSpace = RenderSettings.sun.transform.forward;
                 Vector3 cameraPositionWorldSpace = camera.transform.position;
                 Vector3 sunPositionWorldSpace = cameraPositionWorldSpace + sunDirectionWorldSpace;
