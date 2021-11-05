@@ -10,7 +10,6 @@ public class GooDissolve : MonoBehaviour
 	[SerializeField] float endCutoffHeight = 100;
 	public bool requiredForWin = true;
 	List<Renderer> renderersToDissolve = new List<Renderer>();
-	List<Renderer> renderersToDissappear = new List<Renderer>();
 
 	HealthTarget[] targets = null;
 	GooDamager[] damagers = null;
@@ -41,10 +40,11 @@ public class GooDissolve : MonoBehaviour
 		//add to lists
 		for (int i = 0; i < renderers.Length; i++)
 		{
-			if (renderers[i].sharedMaterial.shader == data.dissolveShader)
-				renderersToDissolve.Add(renderers[i]);
-			else if (renderers[i].sharedMaterial.shader == data.vineShader)
-				renderersToDissappear.Add(renderers[i]);
+			for (int j = 0; j < data.dissolveShader.Length; j++)
+			{
+				if (renderers[i].sharedMaterial.shader == data.dissolveShader[j])
+					renderersToDissolve.Add(renderers[i]);
+			}
 		}
 		damagers = GetComponentsInChildren<GooDamager>();
 		activators = GetComponentsInChildren<GooActivator>();
@@ -157,10 +157,6 @@ public class GooDissolve : MonoBehaviour
 		for (int i = 0; i < renderersToDissolve.Count; i++)
 		{
 			renderersToDissolve[i].SetPropertyBlock(block);
-		}
-		for (int i = 0; i < renderersToDissappear.Count; i++)
-		{
-			renderersToDissappear[i].SetPropertyBlock(block);
 		}
 	}
 
