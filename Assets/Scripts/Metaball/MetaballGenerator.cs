@@ -64,6 +64,12 @@ public class MetaballGenerator : MonoBehaviour
 
 	public void GenerateMesh()
 	{
+		if (metaShapes.Count == 0)
+		{
+			GetComponent<MeshFilter>().mesh.Clear();
+			return;
+		}
+
 		//this will include every point including duplicates
 		OrderedVector3HashSet vertexSet = new OrderedVector3HashSet();
 		List<int> triangleList= new List<int>();

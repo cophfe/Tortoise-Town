@@ -10,15 +10,11 @@ public class MetaballGeneratorEditor : Editor
 	SerializedProperty threshold;
 	SerializedProperty resolution;
 
-	private void Awake()
+	public override void OnInspectorGUI()
 	{
 		generator = (MetaballGenerator)target;
 		threshold = serializedObject.FindProperty("threshold");
 		resolution = serializedObject.FindProperty("resolution");
-	}
-
-	public override void OnInspectorGUI()
-	{
 		serializedObject.Update();
 
 		EditorGUILayout.PropertyField(threshold);
@@ -41,20 +37,14 @@ public class MetaballGeneratorEditor : Editor
 		GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Generate Mesh"))
 			{
-				if (generator.metaShapes.Count > 0)
-				{
-					generator.GenerateMeta();
-					generator.GenerateMesh();
-				}
+				generator.GenerateMeta();
+				generator.GenerateMesh();
 			}
 			if (GUILayout.Button("Clear Mesh"))
 			{
-				if (generator.metaShapes.Count > 0)
-				{
-					generator.GenerateMeta();
-					generator.GenerateMesh();
-				}
+				generator.GetComponent<MeshFilter>().mesh.Clear();
 			}
+
 		GUILayout.EndHorizontal();
 		serializedObject.ApplyModifiedProperties();
 	}
