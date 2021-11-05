@@ -87,7 +87,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0.5
     - _AlphaCutoff: 0.5
-    - _AngleChangeSpeed: 3
+    - _AngleChangeSpeed: 1.5
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
@@ -111,7 +111,7 @@ Material:
     - _ReceiveShadows: 1
     - _RoughnessAmount: 0
     - _ScrollSpeed: 0.05
-    - _SlimeScale: 2.98
+    - _SlimeScale: 2.1
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -125,11 +125,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColour: {r: 15.999998, g: 3.183246, b: 0, a: 1}
-    - _GooSlimeColor: {r: 1, g: 0, b: 0.009047508, a: 1}
+    - _GooSlimeColor: {r: 0.8106098, g: 0, b: 1, a: 1}
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
     - _MossAlbedo: {r: 0, g: 0, b: 0, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _SlimeShapness: {r: 0, g: 3, b: 0, a: 0}
+    - _SlimeShapness: {r: 0.73, g: 3, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Strech: {r: 1, g: 1, b: 1, a: 0}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
