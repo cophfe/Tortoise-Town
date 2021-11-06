@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
@@ -14,112 +13,182 @@ using UnityEngine;
 public class MetaballGenerator : MonoBehaviour
 {
 	public float resolution = 5;
+	public bool smooth = true;
+	public bool addWallsAtBounds = true;
+	public bool autoGenerateBounds = false;
 	public Bounds meshBounds;
-	public HashSet<MetaShape> metaShapes = new HashSet<MetaShape>();
+	MetaShape[] metaShapes;
 	public float threshold = 1;
 	public bool generateMesh = true;
 
-	MeshFilter filter;
-
-	float[,,] metaValues;
+	float[,,] isoValues;
 	Vector3 startPoint;
 	float inverseResolution;
 
-	private void OnValidate()
+	public void Generate()
 	{
-		if (generateMesh)
-		{
-			if (metaShapes.Count == 0) return;
-			GenerateMeta();
-			GenerateMesh();
-			generateMesh = false;
-		}
+		metaShapes = GetComponentsInChildren<MetaShape>(false);
+		GenerateBounds();
+		GenerateMeta();
+		GenerateMesh();
+		isoValues = null;
 	}
 
-	public void GenerateMeta()
+	public void GenerateBounds()
 	{
-		metaValues = new float[(int)(meshBounds.extents.x * resolution), (int)(meshBounds.extents.y * resolution), (int)(meshBounds.extents.z * resolution)];
-		startPoint = -meshBounds.extents;
+		if (!autoGenerateBounds) return;
+
+		if (metaShapes.Length == 0)
+		{
+			meshBounds = new Bounds();
+			return;
+		}	
+
+		Bounds bounds = metaShapes[0].GetInfluenceBounds(threshold, transform);
+		Vector3 bottomLeft = bounds.center - bounds.size / 2;
+		Vector3 topRight = bounds.center + bounds.size / 2;
+
+		for (int i = 1; i < metaShapes.Length; i++)
+		{
+			bounds = metaShapes[i].GetInfluenceBounds(threshold, transform);
+			Vector3 newBottomLeft = bounds.center - bounds.size / 2;
+			Vector3 newTopRight = bounds.center + bounds.size / 2;
+
+			bottomLeft.x = bottomLeft.x < newBottomLeft.x ? bottomLeft.x : newBottomLeft.x;
+			bottomLeft.y = bottomLeft.y < newBottomLeft.y ? bottomLeft.y : newBottomLeft.y;
+			bottomLeft.z = bottomLeft.z < newBottomLeft.z ? bottomLeft.z : newBottomLeft.z;
+
+			topRight.x = topRight.x > newTopRight.x ? topRight.x : newTopRight.x;
+			topRight.y = topRight.y > newTopRight.y ? topRight.y : newTopRight.y;
+			topRight.z = topRight.z > newTopRight.z ? topRight.z : newTopRight.z;
+		}
+
+		Vector3 v = Vector3.one / resolution;
+		meshBounds.center = Vector3.Lerp(bottomLeft, topRight, 0.5f) + v/2;
+		meshBounds.size = (topRight - bottomLeft) + v;
+	}
+	void GenerateMeta()
+	{
+		if (metaShapes.Length == 0) return;
+
+		isoValues = new float[Mathf.CeilToInt(meshBounds.size.x * resolution), Mathf.CeilToInt(meshBounds.size.y * resolution), Mathf.CeilToInt(meshBounds.size.z * resolution)];
+		startPoint = meshBounds.center - meshBounds.size/2;
 		inverseResolution = 1 / resolution;
 
-		for (int i = 0; i < metaValues.GetLength(0); i++)
+		for (int i = 0; i < isoValues.GetLength(0); i++)
 		{
-			for (int j = 0; j < metaValues.GetLength(1); j++)
+			for (int j = 0; j < isoValues.GetLength(1); j++)
 			{
-				for (int k = 0; k < metaValues.GetLength(2); k++)
+				for (int k = 0; k < isoValues.GetLength(2); k++)
 				{
-					metaValues[i, j, k] = GetDistanceValue(CalculatePositionAtIndex(i, j, k));
+					isoValues[i, j, k] = GetIsoValue(CalculatePositionAtIndex(i, j, k));
+				}
+			}
+		}
+
+		if (addWallsAtBounds
+			&& !(isoValues.GetLength(0) == 0 || isoValues.GetLength(1) == 0 || isoValues.GetLength(2) == 0))
+		{
+			for (int i = 0; i < isoValues.GetLength(0); i++)
+			{
+				for (int j = 0; j < isoValues.GetLength(1); j++)
+				{
+					isoValues[i, j, 0] = Mathf.Min(threshold, isoValues[i,j,0]);
+					isoValues[i, j, isoValues.GetLength(2) - 1] = Mathf.Min(threshold, isoValues[i, j, isoValues.GetLength(2) - 1]);
+				}
+			}
+
+			for (int i = 0; i < isoValues.GetLength(0); i++)
+			{
+				for (int k = 0; k < isoValues.GetLength(2); k++)
+				{
+					isoValues[i,0, k] = Mathf.Min(threshold, isoValues[i, 0, k]);
+					isoValues[i,isoValues.GetLength(1) - 1, k] = Mathf.Min(threshold, isoValues[i, isoValues.GetLength(1) - 1, k]);
+				}
+			}
+
+			for (int j = 0; j < isoValues.GetLength(1); j++)
+			{
+				for (int k = 0; k < isoValues.GetLength(2); k++)
+				{
+					isoValues[0, j, k] = Mathf.Min(threshold, isoValues[0, j, k]);
+					isoValues[isoValues.GetLength(0) - 1, j, k] = Mathf.Min(threshold, isoValues[isoValues.GetLength(0) - 1, j, k]);
 				}
 			}
 		}
 	}
 
-	float GetDistanceValue(Vector3 point)
+	float GetIsoValue(Vector3 point)
 	{
 		float metaValue = 0;
 		foreach (var shape in metaShapes)
-			metaValue += shape.GetDistance(point);
+			metaValue += shape.GetIsoValue(point, transform);
 		return metaValue;
 	}
 
-	public void GenerateMesh()
+	void GenerateMesh()
 	{
-		if (metaShapes.Count == 0)
+		if (metaShapes.Length == 0)
 		{
-			GetComponent<MeshFilter>().mesh.Clear();
+			GetComponent<MeshFilter>().mesh = null;
 			return;
 		}
-
 		//this will include every point including duplicates
 		OrderedVector3HashSet vertexSet = new OrderedVector3HashSet();
 		List<int> triangleList= new List<int>();
 
+		MarchingCubesData data = new MarchingCubesData();
 		Vector3[] vertexList = new Vector3[12];
+		Vector3Int[] corners = new Vector3Int[8];
 		//using cube xyz, not point xyz
-		for (int x = 0; x < metaValues.GetLength(0) - 1; x++)
+		for (int x = 0; x < isoValues.GetLength(0) - 1; x++)
 		{
-			for (int y = 0; y < metaValues.GetLength(1) - 1; y++)
+			for (int y = 0; y < isoValues.GetLength(1) - 1; y++)
 			{
-				for (int z = 0; z < metaValues.GetLength(2) - 1; z++)
+				for (int z = 0; z < isoValues.GetLength(2) - 1; z++)
 				{
 					byte index = GetCubeIndex(x, y, z);
-					
+
 					//no triangles to be generated in this case
-					if (MarchingCubesData.edgeTable[index] == 0) continue;
+					if (data.edgeTable[index] == 0) continue;
 
-					if ((MarchingCubesData.edgeTable[index] & 1) != 0)
-						vertexList[0] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 0), GetCornerValueFromCubeIndex(x, y, z, 1));
-					if ((MarchingCubesData.edgeTable[index] & 2) != 0)
-						vertexList[1] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 1), GetCornerValueFromCubeIndex(x, y, z, 2));
-					if ((MarchingCubesData.edgeTable[index] & 4) != 0)
-						vertexList[2] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 2), GetCornerValueFromCubeIndex(x, y, z, 3));
-					if ((MarchingCubesData.edgeTable[index] & 8) != 0)
-						vertexList[3] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 3), GetCornerValueFromCubeIndex(x, y, z, 0));
-					if ((MarchingCubesData.edgeTable[index] & 16) != 0)
-						vertexList[4] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 4), GetCornerValueFromCubeIndex(x, y, z, 5));
-					if ((MarchingCubesData.edgeTable[index] & 32) != 0)
-						vertexList[5] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 5), GetCornerValueFromCubeIndex(x, y, z, 6));
-					if ((MarchingCubesData.edgeTable[index] & 64) != 0)
-						vertexList[6] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 6), GetCornerValueFromCubeIndex(x, y, z, 7));
-					if ((MarchingCubesData.edgeTable[index] & 128) != 0)
-						vertexList[7] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 7), GetCornerValueFromCubeIndex(x, y, z, 4));
-					if ((MarchingCubesData.edgeTable[index] & 256) != 0)
-						vertexList[8] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 0), GetCornerValueFromCubeIndex(x, y, z, 4));
-					if ((MarchingCubesData.edgeTable[index] & 512) != 0)
-						vertexList[9] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 1), GetCornerValueFromCubeIndex(x, y, z, 5));
-					if ((MarchingCubesData.edgeTable[index] & 1024) != 0)
-						vertexList[10] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 2), GetCornerValueFromCubeIndex(x, y, z, 6));
-					if ((MarchingCubesData.edgeTable[index] & 2048) != 0)
-						vertexList[11] = GetPointBetweenPoints(GetCornerValueFromCubeIndex(x, y, z, 3), GetCornerValueFromCubeIndex(x, y, z, 7));
+					SetCorners(x, y, z, corners);
 
-					for (int i = 0; MarchingCubesData.triTable[index][i] != -1; i++)
+					if ((data.edgeTable[index] & 1) != 0)
+						vertexList[0] = GetPointBetweenPoints(corners[0], corners[1]);
+					if ((data.edgeTable[index] & 2) != 0)
+						vertexList[1] = GetPointBetweenPoints(corners[1], corners[2]);
+					if ((data.edgeTable[index] & 4) != 0)
+						vertexList[2] = GetPointBetweenPoints(corners[2], corners[3]);
+					if ((data.edgeTable[index] & 8) != 0)
+						vertexList[3] = GetPointBetweenPoints(corners[3], corners[0]);
+					if ((data.edgeTable[index] & 16) != 0)
+						vertexList[4] = GetPointBetweenPoints(corners[4], corners[5]);
+					if ((data.edgeTable[index] & 32) != 0)
+						vertexList[5] = GetPointBetweenPoints(corners[5], corners[6]);
+					if ((data.edgeTable[index] & 64) != 0)
+						vertexList[6] = GetPointBetweenPoints(corners[6], corners[7]);
+					if ((data.edgeTable[index] & 128) != 0)
+						vertexList[7] = GetPointBetweenPoints(corners[7], corners[4]);
+					if ((data.edgeTable[index] & 256) != 0)
+						vertexList[8] = GetPointBetweenPoints(corners[0], corners[4]);
+					if ((data.edgeTable[index] & 512) != 0)
+						vertexList[9] = GetPointBetweenPoints(corners[1], corners[5]);
+					if ((data.edgeTable[index] & 1024) != 0)
+						vertexList[10] = GetPointBetweenPoints(corners[2], corners[6]);
+					if ((data.edgeTable[index] & 2048) != 0)
+						vertexList[11] = GetPointBetweenPoints(corners[3], corners[7]);
+
+					//the lookup table is super smart and uses this to access the vertices. all the valid vertices are lined up first then the rest of the values are negitive
+					for (int i = 0; data.triTable[index][i] != -1; i++)
 					{
-						Vector3 vertex = vertexList[MarchingCubesData.triTable[index][i]];
+						Vector3 vertex = vertexList[data.triTable[index][i]];
 						int vertexIndex = vertexSet.IndexOf(vertex);
 						if (vertexIndex == -1)
 						{
 							triangleList.Add(vertexSet.Count);
 							vertexSet.Add(vertex);
+							
 						}
 						else
 						{
@@ -131,42 +200,64 @@ public class MetaballGenerator : MonoBehaviour
 		}
 
 		Mesh newMesh = new Mesh();
+		newMesh.name = "generated mesh";
+
+		
 		Vector3[] vertexArray = new Vector3[vertexSet.Count];
 		vertexSet.CopyTo(vertexArray, 0);
 		newMesh.vertices = vertexArray;
 		newMesh.triangles = triangleList.ToArray();
+
+		//calculate UVs
+		Vector2[] uvList = new Vector2[vertexArray.Length];
+		for (int i = 0; i < vertexArray.Length; i++)
+		{
+			uvList[i] = new Vector2(vertexArray[i].x % 1, vertexArray[i].z % 1);
+		}
+		newMesh.uv = uvList;
+		
 		newMesh.RecalculateNormals();
 		newMesh.RecalculateBounds();
 		newMesh.RecalculateTangents();
-		GetComponent<MeshFilter>().mesh = newMesh;
+			
+
+		var filter = GetComponent<MeshFilter>();
+		filter.sharedMesh = null;
+		filter.mesh = newMesh;
 	}
 
 	Vector3 GetPointBetweenPoints(Vector3Int index1, Vector3Int index2)
 	{
-		float v1 = metaValues[index1.x, index1.y, index1.z];
-		float v2 = metaValues[index2.x, index2.y, index2.z];
-		float t = (threshold - v1) / (v2 - v1);
+		if (smooth)
+		{
+			float v1 = isoValues[index1.x, index1.y, index1.z];
+			float v2 = isoValues[index2.x, index2.y, index2.z];
+			float t = (threshold - v1) / (v2 - v1);
 
-		//this is so the hashset can detect duplicates properly
-		if (Mathf.Abs(threshold - v1) < 0.00001f || Mathf.Abs(v1 - v2) < 0.00001f)
-			return CalculatePositionAtIndex(index1);
-		if (Mathf.Abs(threshold - v2) < 0.00001f)
-			return CalculatePositionAtIndex(index2);
+			//this is so the hashset can detect duplicates better
+			if (Mathf.Abs(threshold - v1) < 0.00001f || Mathf.Abs(v1 - v2) < 0.00001f)
+				return CalculatePositionAtIndex(index1);
+			if (Mathf.Abs(threshold - v2) < 0.00001f)
+				return CalculatePositionAtIndex(index2);
 
-		//return Vector3.Lerp(CalculatePositionAtIndex(index1), CalculatePositionAtIndex(index2), 0.5f);
-		return Vector3.Lerp(CalculatePositionAtIndex(index1), CalculatePositionAtIndex(index2), t);
+			return Vector3.Lerp(CalculatePositionAtIndex(index1), CalculatePositionAtIndex(index2), t);
+		}
+		else
+		{
+			return Vector3.Lerp(CalculatePositionAtIndex(index1), CalculatePositionAtIndex(index2), 0.5f);
+		}
+		
 	}
 
-	private void OnDrawGizmosSelected()
+	private void OnDrawGizmos()
 	{
 		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
-		
 	}
 
 	Vector3 CalculatePositionAtIndex(int x, int y, int z)
 	{
-		return 2 * new Vector3(x * inverseResolution, y * inverseResolution, z * inverseResolution) + startPoint;
+		return new Vector3(x * inverseResolution, y * inverseResolution, z * inverseResolution) + startPoint;
 	}
 	Vector3 CalculatePositionAtIndex(Vector3Int index)
 	{
@@ -177,45 +268,48 @@ public class MetaballGenerator : MonoBehaviour
 	byte GetCubeIndex(int x, int y, int z)
 	{
 		byte index = 0;
-		if (metaValues[x, y, z] > threshold)
+		if (isoValues[x, y, z] > threshold)
 			index |= 1;		
-		if (metaValues[x, y + 1, z] > threshold)
+		if (isoValues[x, y + 1, z] > threshold)
 			index |= 2;		
-		if (metaValues[x + 1, y + 1, z] > threshold)
+		if (isoValues[x + 1, y + 1, z] > threshold)
 			index |= 4;		
-		if (metaValues[x + 1, y, z] > threshold)
+		if (isoValues[x + 1, y, z] > threshold)
 			index |= 8;	
-		if (metaValues[x, y, z + 1] > threshold)
+		if (isoValues[x, y, z + 1] > threshold)
 			index |= 16;	
-		if (metaValues[x, y + 1, z + 1] > threshold)
+		if (isoValues[x, y + 1, z + 1] > threshold)
 			index |= 32;	
-		if (metaValues[x + 1, y + 1, z + 1] > threshold)
+		if (isoValues[x + 1, y + 1, z + 1] > threshold)
 			index |= 64;	
-		if (metaValues[x + 1, y, z + 1] > threshold)
+		if (isoValues[x + 1, y, z + 1] > threshold)
 			index |= 128;
 		return index;
 	}
 
+	void SetCorners(int x, int y, int z, Vector3Int[] cornerArray)
+	{
+		cornerArray[0] = new Vector3Int(x, y, z);
+		cornerArray[1] = new Vector3Int(x, y + 1, z);
+		cornerArray[2] = new Vector3Int(x + 1, y + 1, z);
+		cornerArray[3] = new Vector3Int(x + 1, y, z);
+		cornerArray[4] = new Vector3Int(x, y, z + 1);
+		cornerArray[5] = new Vector3Int(x, y + 1, z + 1);
+		cornerArray[6] = new Vector3Int(x + 1, y + 1, z + 1);
+		cornerArray[7] = new Vector3Int(x + 1, y, z + 1);
+	}
 	Vector3Int GetCornerValueFromCubeIndex(int x, int y, int z, int index)
 	{
 		switch (index)
 		{
-			case 0:
-				return new Vector3Int(x, y, z);
-			case 1:
-				return new Vector3Int(x, y + 1, z);
-			case 2:
-				return new Vector3Int(x + 1, y + 1, z);
-			case 3:
-				return new Vector3Int(x + 1, y, z);
-			case 4:					  	
-				return new Vector3Int(x, y, z + 1);
-			case 5:					  ;	
-				return new Vector3Int(x, y + 1, z + 1);
-			case 6:					  ;	
-				return new Vector3Int(x + 1, y + 1, z + 1);
-			default:					  ;	
-				return new Vector3Int(x + 1, y, z + 1);
+			case 0:	return new Vector3Int(x, y, z);
+			case 1:	return new Vector3Int(x, y + 1, z);
+			case 2:	return new Vector3Int(x + 1, y + 1, z);
+			case 3:	return new Vector3Int(x + 1, y, z);
+			case 4: return new Vector3Int(x, y, z + 1);
+			case 5:	return new Vector3Int(x, y + 1, z + 1);
+			case 6:	return new Vector3Int(x + 1, y + 1, z + 1);
+			default: return new Vector3Int(x + 1, y, z + 1);
 
 		}
 	}
@@ -241,9 +335,18 @@ public class MetaballGenerator : MonoBehaviour
 		}
 	}
 
-	static class MarchingCubesData
+	class MarchingCubesData
 	{
-		public static readonly short[] edgeTable = new short[256]{
+		public readonly Vector2[] uvValues = new Vector2[6] 
+		{
+			new Vector2(0, 1),
+			new Vector2(1, 0),
+			new Vector2(0, 0),
+			new Vector2(0, 1),
+			new Vector2(1, 1),
+			new Vector2(1, 0)
+		};
+		public readonly short[] edgeTable = new short[256]{
 			0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
 			0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
 			0x190, 0x99 , 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c,
@@ -278,7 +381,7 @@ public class MetaballGenerator : MonoBehaviour
 			0x70c, 0x605, 0x50f, 0x406, 0x30a, 0x203, 0x109, 0x0   
 		};
 
-		public static readonly sbyte[][] triTable = new sbyte[][]
+		public readonly sbyte[][] triTable = new sbyte[][]
 		{
 			new sbyte[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 			new sbyte[] {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
