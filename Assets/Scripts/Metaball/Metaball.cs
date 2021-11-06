@@ -6,17 +6,21 @@ public class Metaball : MetaShape
 {
 	public float radius = 1;
 
-	public override float GetDistance(Vector3 point)
+	public override float GetIsoValue(Vector3 point, Transform generator)
 	{
-		Vector3 delta = point - transform.localPosition;
-		float dist = (radius * radius) / (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
-		return negative ? -dist : dist;
+		Vector3 delta = transform.InverseTransformPoint(generator.TransformPoint(point));
+		float iso = (radius * radius) / (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+		return negative ? -iso : iso;
 	}
 
-	private void OnDrawGizmosSelected()
+	public override Bounds GetInfluenceBounds(float threshold, Transform generator)
 	{
-		Gizmos.color = Color.red;
-		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+		float r = 3 * (radius / threshold);
+		return new Bounds(generator.InverseTransformPoint(transform.position), transform.TransformVector(new Vector3(r, r, r)));
+	}
+
+	protected override void DrawMetaGizmos()
+	{
 		Gizmos.DrawWireSphere(Vector3.zero, radius);
 	}
 }

@@ -17,7 +17,7 @@ public class GooShooter : BooleanSwitch
 	Arrow currentArrow;
 	public Animator animator;
 
-	void Start()
+	protected override void Start()
     {
 		arrowPool = new ObjectPool(arrowCount, 1, gooShotPrefab, transform);
 		shootTimer = shootIntervel;
