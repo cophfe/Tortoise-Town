@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aacad514a48fbd42a3d8689fc92fcd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d86be9445a6632448aa747e345c8e55, type: 3}
   m_Name: EnemyDamage
   m_EditorClassIdentifier: 
   damageAmount: 1
   knockbackAmount: 10
   knockbackDuration: 0.4
+  cameraShakeAmount: 0.2
   knockbackCurve:
     serializedVersion: 2
     m_Curve:

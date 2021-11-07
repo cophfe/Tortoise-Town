@@ -4,50 +4,58 @@ using UnityEngine;
 
 public class GooDissolve : MonoBehaviour
 {
-	[SerializeField] Shader dissolveShader = null;
-	[SerializeField] Shader vineShader = null;
+	[SerializeField] GooDissolveData data = null;
 	[SerializeField] float dissolveSpeed = 10;
 	[SerializeField] float startCutoffHeight = 0;
 	[SerializeField] float endCutoffHeight = 100;
-	[SerializeField] bool easeIn = true;
-	List<MeshRenderer> renderersToDissolve = new List<MeshRenderer>();
-	List<MeshRenderer> renderersToDissappear = new List<MeshRenderer>();
+	public bool requiredForWin = true;
+	List<Renderer> renderersToDissolve = new List<Renderer>();
 
 	HealthTarget[] targets = null;
+	GooDamager[] damagers = null;
+	GooActivator[] activators = null;
 	int cutOffHeightId = 0;
 	float currentCutOffHeight = 0;
 	bool dissolving = false;
 	MaterialPropertyBlock block = null;
-
-	public bool startDissolving = false;
+	public bool Dissolved { get; private set; }
 	int aliveTargetCount;
 
-	private void Start()
+	private void Awake()
 	{
+		GameManager.Instance.SaveManager.RegisterGooDissolver(this);
 		cutOffHeightId = Shader.PropertyToID("_CutoffHeight");
 		currentCutOffHeight = startCutoffHeight;
 
 		//Get targets
 		targets = GetComponentsInChildren<HealthTarget>();
+
 		aliveTargetCount = targets.Length;
 		for (int i = 0; i < targets.Length; i++)
 		{
 			targets[i].deathlegate += OnTargetKilled;
 		}
 		//Get renderers
-		MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		//add to lists
 		for (int i = 0; i < renderers.Length; i++)
 		{
-			if (renderers[i].sharedMaterial.shader == dissolveShader)
-				renderersToDissolve.Add(renderers[i]);
-			else if (renderers[i].sharedMaterial.shader == vineShader)
-				renderersToDissappear.Add(renderers[i]);
+			for (int j = 0; j < data.dissolveShader.Length; j++)
+			{
+				if (renderers[i].sharedMaterial.shader == data.dissolveShader[j])
+					renderersToDissolve.Add(renderers[i]);
+			}
 		}
+		damagers = GetComponentsInChildren<GooDamager>();
+		activators = GetComponentsInChildren<GooActivator>();
 
 		//make the property block
 		block = new MaterialPropertyBlock();
 		SetCutoffHeight(currentCutOffHeight);
+	}
+
+	private void Start()
+	{
 	}
 
 	private void OnTargetKilled()
@@ -63,13 +71,66 @@ public class GooDissolve : MonoBehaviour
 	{
 		currentCutOffHeight = startCutoffHeight;
 		dissolving = true;
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Dissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Dissolve();
+		}
+		Dissolved = true;
+	}
+
+	public void SetAlreadyDissolved()
+	{
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Dissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Dissolve();
+		}
+		Dissolved = true;
+		currentCutOffHeight = endCutoffHeight;
+		SetCutoffHeight(currentCutOffHeight);
+		enabled = false;
+		dissolving = false;
+		aliveTargetCount = 0;
+		for (int i = 0; i < targets.Length; i++)
+		{
+			targets[i].gameObject.SetActive(false);
+		}
+	}
+
+	public void ResetDissolve()
+	{
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Undissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Undissolve();
+		}
+		for (int i = 0; i < targets.Length; i++)
+		{
+			targets[i].ResetTarget();
+		}
+		aliveTargetCount = targets.Length;
+		Dissolved = false;
+		currentCutOffHeight = startCutoffHeight;
+		SetCutoffHeight(currentCutOffHeight);
+		enabled = true;
+		dissolving = false;
 	}
 
 	private void Update()
 	{
 		if (dissolving)
 		{
-			if (easeIn)
+			if (data.easeIn)
 			{
 				float t = (currentCutOffHeight - startCutoffHeight) / (endCutoffHeight);
 				currentCutOffHeight += Time.deltaTime * dissolveSpeed * (2 * t * t + .25f);
@@ -83,6 +144,7 @@ public class GooDissolve : MonoBehaviour
 				currentCutOffHeight = endCutoffHeight;
 				SetCutoffHeight(currentCutOffHeight);
 				enabled = false;
+				GameManager.Instance.OnGooDissolve();
 			}
 			else SetCutoffHeight(currentCutOffHeight);
 		}
@@ -95,10 +157,6 @@ public class GooDissolve : MonoBehaviour
 		for (int i = 0; i < renderersToDissolve.Count; i++)
 		{
 			renderersToDissolve[i].SetPropertyBlock(block);
-		}
-		for (int i = 0; i < renderersToDissappear.Count; i++)
-		{
-			renderersToDissappear[i].SetPropertyBlock(block);
 		}
 	}
 

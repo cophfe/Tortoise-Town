@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083f3f42554404f49abfddc36130b509, type: 3}
+  m_Name: PlayerAudio
+  m_EditorClassIdentifier: 
+  jumpSounds:
+    clips:
+    - {fileID: 8300000, guid: 50e47dcd32b429e4e8903003c5206e6f, type: 3}
+  dash:
+    clips:
+    - {fileID: 8300000, guid: 2bccaefdcd270224bb104258fd8ec1d0, type: 3}
+    - {fileID: 8300000, guid: 2f693085860b2054fb6c9741b0d3cd96, type: 3}
+  land:
+    clips:
+    - {fileID: 8300000, guid: 3c9ba2ac98d85494680e489eea2d9b25, type: 3}
+  rollTuck:
+    clips:
+    - {fileID: 8300000, guid: 69ab79dac8669264188ddfe60a98b6e0, type: 3}
+  rollPop:
+    clips:
+    - {fileID: 8300000, guid: 33ce97f2df87fed46b1d700338dd3f83, type: 3}
+  jumpRollPop:
+    clips:
+    - {fileID: 8300000, guid: 4798c9baed4d66e4d8cfac0367266b0f, type: 3}
+  ballRoll:
+    clips:
+    - {fileID: 8300000, guid: a8ba84449e9361d43983394bc4cdd561, type: 3}
+  hitWallRolling:
+    clips:
+    - {fileID: 8300000, guid: 99451647d36bdde42ae9fea865ae2dd5, type: 3}
+  ballBounce:
+    clips:
+    - {fileID: 8300000, guid: 8f1aa27f36703bc4eb6a92e13dc55655, type: 3}
+    - {fileID: 8300000, guid: 2bee57d2ed37d254caaa062196e1facd, type: 3}
+  arrowCharge:
+    clips:
+    - {fileID: 8300000, guid: 879a188b65f72de44b30ff5c40e03dad, type: 3}
+  arrowShoot:
+    clips:
+    - {fileID: 8300000, guid: d767f314a3961f147995f3c6f0b5d99f, type: 3}
+  death:
+    clips:
+    - {fileID: 8300000, guid: c122a4cc971d18242bccc6b5cef8049c, type: 3}

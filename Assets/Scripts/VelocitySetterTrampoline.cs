@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class VelocitySetterTrampoline : PlayerCollision
 {
 	[Tooltip("The percentage of velocity that will be added in the opposite direction of the trampoline direction")]
@@ -10,26 +11,45 @@ public class VelocitySetterTrampoline : PlayerCollision
 	[SerializeField] bool useTransformUp = true;
 	[Tooltip("The minimum velocity into the trampoline before it bounces")]
 	[SerializeField, Min(0)] float minBounceVelocity = 1;
+	[SerializeField] AudioClipList launchSounds = null;
+	AudioSource source;
 
-	public override bool OnCollideWithPlayer(PlayerMotor player, ControllerColliderHit hit)
+	private void Start()
+	{
+		source = GetComponent<AudioSource>();
+	}
+	public override bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit)
 	{
 		Vector3 trampolineUp = useTransformUp ? transform.up : hit.normal;
-
-		if (Vector3.Dot(player.TotalVelocity, trampolineUp) < -minBounceVelocity)
+		
+		if (Vector3.Dot(player.Motor.TotalVelocity, trampolineUp) < -minBounceVelocity)
 		{
-			player.ForcesVelocity = velocityMagnitude * trampolineUp;
-			player.InputVelocity = Vector3.zero; ;
-
+			player.Motor.ForcesVelocity = velocityMagnitude * trampolineUp;
+			player.Motor.InputVelocity = Vector3.zero;
+			if (launchSounds.CanBePlayed())
+			{
+				source.clip = launchSounds.GetRandom();
+				source.Play();
+			}
 		}
-		//do implement the player's default collision implementation, since it won't break anything in this situation
-		return true;
+		
+		//dont implement collision just cuz
+		return false;
 	}
 
-	public override bool OnPlayerGrounded(PlayerMotor player)
+	public override bool OnPlayerGrounded(PlayerController player)
 	{
 		Vector3 trampolineUp = transform.up;
-		float tDot = Vector3.Dot(player.TotalVelocity, trampolineUp);
-		
+		float tDot = Vector3.Dot(player.Motor.TotalVelocity, trampolineUp);
+		if (tDot < -minBounceVelocity)
+		{
+			if (launchSounds.CanBePlayed())
+			{
+				source.clip = launchSounds.GetRandom();
+				source.Play();
+			}
+		}
+
 		return (tDot >= -minBounceVelocity && tDot <= 0);
 	}
 }

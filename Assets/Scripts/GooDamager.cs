@@ -2,32 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GooDamager : PlayerCollision
+public class GooDamager : PlayerDamager
 {
-	[SerializeField] GooDamageData data = null;
-	
-	public override bool OnCollideWithPlayer(PlayerMotor player, ControllerColliderHit hit)
+	[SerializeField] bool disableColliderOnDissolve = false;
+
+	public void Dissolve()
 	{
-		player.GetComponent<PlayerHealth>().Damage(data.damageAmount);
-		//knockback
-		Vector3 direction = hit.normal;
-		
-		player.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
-		return true;
+		if (disableColliderOnDissolve)
+			GetComponent<Collider>().enabled = false;
+		enabled = false;
 	}
 
-	public override bool OnPlayerGrounded(PlayerMotor player)
+	public void Undissolve()
 	{
-		player.GetComponent<PlayerHealth>().Damage(data.damageAmount);
-		//knockback
-		Vector3 direction = -player.InputVelocity.normalized;
-		//knockback doesn't push you into the floor
-		if (direction.y < 0)
-		{
-			direction.y = 0;
-			direction.Normalize();
-		}
-		player.AddKnockback(data.knockbackAmount, data.knockbackDuration, direction, data.knockbackCurve);
-		return true;
+		if (disableColliderOnDissolve)
+			GetComponent<Collider>().enabled = true;
+		enabled = true;
 	}
 }

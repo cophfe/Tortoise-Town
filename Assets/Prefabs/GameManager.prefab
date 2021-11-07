@@ -43,6 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad75ed4f4b2a5d4795469438c33d7d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathTime: 3
+  winWaitTime: 1
+  menuSceneName: Main_Menu
   player: {fileID: 0}
   enableCursorRestriction: 1
   targetFrameRate: -1

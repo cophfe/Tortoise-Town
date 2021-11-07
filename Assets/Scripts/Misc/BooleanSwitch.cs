@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class BooleanSwitch : MonoBehaviour
 {
 	[SerializeField] bool testSwitch = false;
+	[SerializeField] bool SwitchOnAwake = false;
 	public UnityEvent onSwitchOn;
 	public UnityEvent onSwitchOff;
 	
@@ -19,7 +20,10 @@ public class BooleanSwitch : MonoBehaviour
 		
 		testSwitch = false;
 	}
-
+	protected virtual void Start()
+	{
+		if (SwitchOnAwake) Switch(true);
+	}
 
 	public virtual void Switch(bool on)
 	{
