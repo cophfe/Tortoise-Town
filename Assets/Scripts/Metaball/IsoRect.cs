@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MetaRect : MetaShape
+public class IsoRect : IsoShape
 {
 	public Vector3 size = Vector3.one;
 
@@ -10,8 +10,8 @@ public class MetaRect : MetaShape
 	{
 		Vector3 delta = transform.InverseTransformPoint(generator.TransformPoint(point));
 		Vector3 r = size / 2;
-		//last bit is just getting the biggest component value unless it is positive
-		float iso = Mathf.Min((r.x*r.x)/(delta.x*delta.x), (r.y * r.y) / (delta.y * delta.y), (r.z * r.z) / (delta.z * delta.z));
+		//this is technically a bit wrong but it doesn't reeeally affect anything
+		float iso = strength * Mathf.Min((r.x*r.x)/(delta.x*delta.x), (r.y * r.y) / (delta.y * delta.y), (r.z * r.z) / (delta.z * delta.z));
 		return negative ? -iso : iso;
 	}
 

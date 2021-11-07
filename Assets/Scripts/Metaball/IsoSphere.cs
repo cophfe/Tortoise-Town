@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Metaball : MetaShape
+public class IsoSphere : IsoShape
 {
 	public float radius = 1;
 
 	public override float GetIsoValue(Vector3 point, Transform generator)
 	{
 		Vector3 delta = transform.InverseTransformPoint(generator.TransformPoint(point));
-		float iso = (radius * radius) / (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+		float iso = strength * (radius * radius) / (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
 		return negative ? -iso : iso;
 	}
 
