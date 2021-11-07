@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MetaShape : MonoBehaviour
+public abstract class IsoShape : MonoBehaviour
 {
 	public bool negative = false;
-	MetaballGenerator generator = null;
+	public float strength = 1;
+	IsosurfaceGenerator generator = null;
 
 	public abstract float GetIsoValue(Vector3 point, Transform generator);
 
 	public abstract Bounds GetInfluenceBounds(float threshold, Transform generator);
 
-	protected MetaballGenerator GetGenerator()
+	protected IsosurfaceGenerator GetGenerator()
 	{
 		if (generator == null)
-			generator = GetComponentInParent<MetaballGenerator>();
+			generator = GetComponentInParent<IsosurfaceGenerator>();
 		return generator;
 	}
 
