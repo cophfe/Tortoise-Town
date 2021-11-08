@@ -12,25 +12,31 @@ public class IsosurfaceGeneratorEditor : Editor
 	SerializedProperty smooth;
 	SerializedProperty meshBounds;
 	SerializedProperty autoGenerateBounds;
-	SerializedProperty addWallsAtBounds;
 	SerializedProperty UVtiling;
+	SerializedProperty useParallel;
 
 	bool areYouSure = false;
-	public override void OnInspectorGUI()
-	{
-		generator = (IsosurfaceGenerator)target;
-		GUI.enabled = false;
-		//draw the script reference
-		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(generator), typeof(IsosurfaceGenerator), false);
-		GUI.enabled = true;
 
+	private void OnEnable()
+	{
 		threshold = serializedObject.FindProperty("threshold");
 		resolution = serializedObject.FindProperty("resolution");
 		smooth = serializedObject.FindProperty("smooth");
 		meshBounds = serializedObject.FindProperty("meshBounds");
 		autoGenerateBounds = serializedObject.FindProperty("autoGenerateBounds");
-		addWallsAtBounds = serializedObject.FindProperty("addWallsAtBounds");
 		UVtiling = serializedObject.FindProperty("UVtiling");
+		useParallel = serializedObject.FindProperty("useParallel");
+		generator = (IsosurfaceGenerator)target;
+		generator.GenerateBounds();
+	}
+	public override void OnInspectorGUI()
+	{
+		GUI.enabled = false;
+		//draw the script reference
+		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(generator), typeof(IsosurfaceGenerator), false);
+		GUI.enabled = true;
+
+		
 		serializedObject.Update();
 
 		EditorGUI.BeginChangeCheck();
@@ -41,9 +47,9 @@ public class IsosurfaceGeneratorEditor : Editor
 			generator.GenerateBounds();
 		}
 		EditorGUILayout.PropertyField(smooth);
-		EditorGUILayout.PropertyField(addWallsAtBounds);
 		EditorGUILayout.PropertyField(autoGenerateBounds);
 		EditorGUILayout.PropertyField(UVtiling, new GUIContent("UV Tiling"));
+		EditorGUILayout.PropertyField(useParallel);
 		if (generator.autoGenerateBounds)
 		{
 			GUI.enabled = false;
@@ -123,9 +129,13 @@ public class IsosurfaceGeneratorEditor : Editor
 			}
 		}
 
-		int totalPoints = Mathf.CeilToInt(generator.meshBounds.size.x * generator.resolution) * Mathf.CeilToInt(generator.meshBounds.size.y * generator.resolution) * Mathf.CeilToInt(generator.meshBounds.size.z * generator.resolution);
+		Vector3Int extents = new Vector3Int(Mathf.CeilToInt(generator.meshBounds.size.x * generator.resolution), Mathf.CeilToInt(generator.meshBounds.size.y * generator.resolution), Mathf.CeilToInt(generator.meshBounds.size.z * generator.resolution));
+		int totalPoints = extents.x * extents.y * extents.z;
 		if (totalPoints > 100000)
-			EditorGUILayout.HelpBox($"Careful! This may take a while to generate (there are {totalPoints} points to sample)", MessageType.Warning);
+			EditorGUILayout.HelpBox($"Careful! This may take a while to generate.\n" +
+				$"The estimated sample amount is {totalPoints} (x: {extents.x} y: {extents.y} z: {extents.z}", MessageType.Warning);
+		else
+			EditorGUILayout.HelpBox($"The estimated sample amount is {totalPoints} (x: {extents.x} y: {extents.y} z: {extents.z})", MessageType.Info);
 
 		GUI.backgroundColor = before;
 

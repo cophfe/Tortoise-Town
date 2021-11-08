@@ -13,7 +13,9 @@ public class GameplayUIManager : MonoBehaviour
 	public Image crosshair;
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
-
+	public GameWindow pauseMenu;
+	public GameWindow winMenu;
+	
 	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
 
@@ -47,7 +49,16 @@ public class GameplayUIManager : MonoBehaviour
 	void OnMenuButton()
 	{
 		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
-			WindowManager.ToggleWindows();
+		{
+			if (WindowManager.GetCurrentWindow() == null)
+			{
+				WindowManager.AddToQueue(pauseMenu);
+			}
+			else
+			{
+				WindowManager.RemoveFromQueue();
+			}
+		}
 	}
 
 	public void OnRestartButtonPressed()

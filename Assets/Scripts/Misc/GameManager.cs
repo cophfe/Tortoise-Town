@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(winWaitTime);
 		IsCursorRestricted = false;
 		Time.timeScale = 0;
-		Player.GUI.WindowManager.SetCurrentWindow("Win");
+		Player.GUI.WindowManager.AddToQueue(player.GUI.winMenu);
 		GameManager.Instance.Player.InputIsEnabled = false;
 		//and begone save data
 		SaveManager.ClearSaveData();
