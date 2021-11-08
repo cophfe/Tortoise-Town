@@ -111,7 +111,7 @@ Material:
     - _ReceiveShadows: 1
     - _RoughnessAmount: 0
     - _ScrollSpeed: 0.05
-    - _SlimeScale: 2.1
+    - _SlimeScale: 5
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
