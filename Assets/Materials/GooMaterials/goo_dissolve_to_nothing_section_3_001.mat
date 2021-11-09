@@ -31,12 +31,18 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _TopTexture0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaClip: 0.5
     - _AlphaCutoff: 0.5
-    - _AngleChangeSpeed: 1
+    - _AngleChangeSpeed: 5
+    - _AnimationScale: 0.1
     - _CutoffHeight: 1000
+    - _DisplacementSpeed: 5
     - _EdgeWidth: 0.05
     - _Float0: 0.1
     - _Metallic: 0
@@ -44,7 +50,7 @@ Material:
     - _NoiseScale: 50
     - _NoiseStrength: 1
     - _ScrollSpeed: 0.01
-    - _SlimeScale: 1.26
+    - _SlimeScale: 5.13
     - _Smoothness: 0
     - _TwirlSpeed: 0.08
     - _TwirlStrength: 20
