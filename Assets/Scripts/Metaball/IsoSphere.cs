@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Jobs;
 
 public class IsoSphere : IsoShape
 {
@@ -9,8 +10,19 @@ public class IsoSphere : IsoShape
 	public override float GetIsoValue(Vector3 point, Transform generator)
 	{
 		Vector3 delta = transform.InverseTransformPoint(generator.TransformPoint(point));
-		float iso = strength * (radius * radius) / (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
-		return negative ? -iso : iso;
+
+		float ir = radius / delta.sqrMagnitude;
+		float iso = negativeMultiplier * strength * ir * ir;
+		return iso;
+	}
+
+	public override float GetIsoValueParallel(Vector3 point, ref TransformCapturedState generator)
+	{
+		Vector3 delta = generator.TransformPoint(point);
+		delta = transformState.InverseTransformPoint(delta);
+		float ir = radius/delta.sqrMagnitude;
+		float iso = negativeMultiplier * strength * ir * ir;
+		return iso;
 	}
 
 	public override Bounds GetInfluenceBounds(float threshold, Transform generator)
