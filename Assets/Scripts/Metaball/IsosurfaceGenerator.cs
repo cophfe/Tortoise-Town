@@ -32,24 +32,23 @@ public class IsosurfaceGenerator : MonoBehaviour
 
 	public void Generate()
 	{
-		var watch = new System.Diagnostics.Stopwatch();
+		//var watch = new System.Diagnostics.Stopwatch();
 		
-		watch.Start();
+		//watch.Start();
 		InitializeForParallel();
 		GenerateBounds();
 		GenerateMeta();
-
-		watch.Stop();
-		long eS = watch.ElapsedMilliseconds;
-		Debug.Log("Time for generating isovalues: " + eS + " ms.");
-		watch.Restart();
+		//watch.Stop();
+		//long eS = watch.ElapsedMilliseconds;
+		//Debug.Log("Time for generating isovalues: " + eS + " ms.");
+		//watch.Restart();
 		if (useParallel)
 			GenerateMeshParallel();
 		else
 			GenerateMesh();
-		watch.Stop();
-		Debug.Log("Time for generating mesh: " + (watch.ElapsedMilliseconds) + " ms.");
-		Debug.Log("Total time with useParallel set to " + useParallel + ": " + (watch.ElapsedMilliseconds  + eS) + " ms.");
+		//watch.Stop();
+		//Debug.Log("Time for generating mesh: " + (watch.ElapsedMilliseconds) + " ms.");
+		//Debug.Log("Total time with useParallel set to " + useParallel + ": " + (watch.ElapsedMilliseconds  + eS) + " ms.");
 		isoValues = null;
 	}
 
@@ -274,11 +273,6 @@ public class IsosurfaceGenerator : MonoBehaviour
 		filter.mesh = newMesh;
 	}
 
-	struct Tri
-	{
-		public Vector3[] vertices;
-	}
-
 	void GenerateMeshParallel()
 	{
 		if (metaShapes.Length == 0)
@@ -289,14 +283,17 @@ public class IsosurfaceGenerator : MonoBehaviour
 
 		MarchingCubesData data = new MarchingCubesData();
 		
-		var tris = new ConcurrentBag<Tri>();
-		var vertices = new List<Tri>();
+		var vertices = new List<Vector3>();
+		var triangles = new List<int>();
 
 		var result = Parallel.For(0, isoValues.GetLength(0) - 1,  x =>
 		{
 			Vector3[] vertexList = new Vector3[12];
 			Vector3Int[] corners = new Vector3Int[8];
 			//using cube xyz, not point xyz
+			List<Vector3> planeVertices = new List<Vector3>();
+			List<int> verticeIndexes = new List<int>();
+
 			for (int y = 0; y < isoValues.GetLength(1) - 1; y++)
 			{
 				for (int z = 0; z < isoValues.GetLength(2) - 1; z++)
@@ -333,20 +330,31 @@ public class IsosurfaceGenerator : MonoBehaviour
 					if ((data.edgeTable[index] & 2048) != 0)
 						vertexList[11] = GetPointBetweenPoints(corners[3], corners[7]);
 
-					for (int i = 0; data.triTable[index].Length > i; i += 3)
+					for (int i = 0; data.triTable[index].Length > i; i++)
 					{
-						Tri triangle = new Tri();
-						triangle.vertices = new Vector3[3];
-						triangle.vertices[0] = vertexList[data.triTable[index][i]];
-						triangle.vertices[1] = vertexList[data.triTable[index][i + 1]];
-						triangle.vertices[2] = vertexList[data.triTable[index][i + 2]];
+						Vector3 vertex = vertexList[data.triTable[index][i]];
 
-						lock (vertices)
+						int vertexIndex = planeVertices.LastIndexOf(vertex);
+						if (vertexIndex == -1)
 						{
-							vertices.Add(triangle);
+							verticeIndexes.Add(planeVertices.Count);
+							planeVertices.Add(vertex);
 						}
-						//tris.Add(triangle);
+						else
+						{
+							verticeIndexes.Add(vertexIndex);
+						}
 					}
+				}
+			}
+			lock(vertices) lock (triangles)
+			{
+				int verticesCount = vertices.Count;
+				vertices.AddRange(planeVertices);
+				triangles.Capacity += verticeIndexes.Count;
+				for (int i = 0; i < verticeIndexes.Count; i++)
+				{
+					triangles.Add(verticeIndexes[i] + verticesCount);
 				}
 			}
 		});
@@ -354,27 +362,16 @@ public class IsosurfaceGenerator : MonoBehaviour
 		Mesh newMesh = new Mesh();
 		newMesh.name = "generated mesh";
 
-		var triArray = vertices.ToArray();
-		Vector3[] verticesArray = new Vector3[triArray.Length * 3];
-		for (int i = 0; i < triArray.Length; i++)
-		{
-			verticesArray[3 * i] = triArray[i].vertices[0];
-			verticesArray[3 * i + 1] = triArray[i].vertices[1];
-			verticesArray[3 * i + 2] = triArray[i].vertices[2];
-		}
-		int[] triIndexArray = new int[verticesArray.Length];
-		for (int i = 0; i < verticesArray.Length; i++)
-		{
-			triIndexArray[i] = i;
-		}
-		newMesh.vertices = verticesArray;
-		newMesh.triangles = triIndexArray;
+		var vertexArray = vertices.ToArray();
+		newMesh.vertices = vertexArray;
+		var triangleArray = triangles.ToArray();
+		newMesh.triangles = triangleArray;
 
 		//calculate UVs
-		Vector2[] uvList = new Vector2[verticesArray.Length];
-		for (int i = 0; i < tris.Count; i++)
+		Vector2[] uvList = new Vector2[vertexArray.Length];
+		for (int i = 0; i < vertexArray.Length; i++)
 		{
-			uvList[i] = new Vector2(verticesArray[i].x * UVtiling, verticesArray[i].z * UVtiling);
+			uvList[i] = new Vector2(vertexArray[i].x * UVtiling, vertexArray[i].z * UVtiling);
 		}
 		newMesh.uv = uvList;
 

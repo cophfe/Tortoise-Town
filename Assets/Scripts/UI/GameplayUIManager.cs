@@ -61,17 +61,17 @@ public class GameplayUIManager : MonoBehaviour
 		}
 	}
 
-	public void OnRestartButtonPressed()
+	public void OnRestartButtonPressed(bool reloadSceneCompletely)
 	{
-		StartCoroutine(RestartGame());
+		StartCoroutine(RestartGame(reloadSceneCompletely));
 	}
 
-	IEnumerator RestartGame()
+	IEnumerator RestartGame(bool reloadSceneCompletely)
 	{
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
-		if (GameManager.Instance.WonGame)
+		if (reloadSceneCompletely)
 		{
 			Time.timeScale = 1;
 			GameManager.Instance.SaveManager.ClearSaveData();
