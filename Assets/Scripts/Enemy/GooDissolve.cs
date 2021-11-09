@@ -6,8 +6,8 @@ public class GooDissolve : MonoBehaviour
 {
 	[SerializeField] GooDissolveData data = null;
 	[SerializeField] float dissolveSpeed = 10;
-	[SerializeField] float startCutoffHeight = 0;
-	[SerializeField] float endCutoffHeight = 100;
+	[SerializeField] float minimumCutOffHeight = 0;
+	[SerializeField] float maximumCutOffHeight = 100;
 	public bool requiredForWin = true;
 	List<Renderer> renderersToDissolve = new List<Renderer>();
 
@@ -23,9 +23,9 @@ public class GooDissolve : MonoBehaviour
 
 	private void Awake()
 	{
-		GameManager.Instance.SaveManager.RegisterGooDissolver(this);
+		GameManager.Instance.RegisterGooDissolver(this);
 		cutOffHeightId = Shader.PropertyToID("_CutoffHeight");
-		currentCutOffHeight = startCutoffHeight;
+		currentCutOffHeight = maximumCutOffHeight;
 
 		//Get targets
 		targets = GetComponentsInChildren<HealthTarget>();
@@ -52,6 +52,8 @@ public class GooDissolve : MonoBehaviour
 		//make the property block
 		block = new MaterialPropertyBlock();
 		SetCutoffHeight(currentCutOffHeight);
+
+		GameManager.Instance.SaveManager.onResetScene += OnResetScene;
 	}
 
 	private void Start()
@@ -69,7 +71,7 @@ public class GooDissolve : MonoBehaviour
 
 	void StartDissolving()
 	{
-		currentCutOffHeight = startCutoffHeight;
+		currentCutOffHeight = maximumCutOffHeight;
 		dissolving = true;
 		for (int i = 0; i < damagers.Length; i++)
 		{
@@ -80,6 +82,26 @@ public class GooDissolve : MonoBehaviour
 			activators[i].Dissolve();
 		}
 		Dissolved = true;
+	}
+
+	public void OnResetScene()
+	{
+		aliveTargetCount = 0;
+		for (int i = 0; i < targets.Length; i++)
+		{
+			if (!targets[i].IsDead)
+			{
+				aliveTargetCount++;
+			}
+		}
+		if (aliveTargetCount == 0)
+		{
+			SetAlreadyDissolved();
+		}
+		else
+		{
+			ResetDissolve();
+		}
 	}
 
 	public void SetAlreadyDissolved()
@@ -93,15 +115,10 @@ public class GooDissolve : MonoBehaviour
 			activators[i].Dissolve();
 		}
 		Dissolved = true;
-		currentCutOffHeight = endCutoffHeight;
+		currentCutOffHeight = minimumCutOffHeight;
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = false;
 		dissolving = false;
-		aliveTargetCount = 0;
-		for (int i = 0; i < targets.Length; i++)
-		{
-			targets[i].gameObject.SetActive(false);
-		}
 	}
 
 	public void ResetDissolve()
@@ -114,13 +131,8 @@ public class GooDissolve : MonoBehaviour
 		{
 			activators[i].Undissolve();
 		}
-		for (int i = 0; i < targets.Length; i++)
-		{
-			targets[i].ResetTarget();
-		}
-		aliveTargetCount = targets.Length;
 		Dissolved = false;
-		currentCutOffHeight = startCutoffHeight;
+		currentCutOffHeight = maximumCutOffHeight;
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = true;
 		dissolving = false;
@@ -132,16 +144,16 @@ public class GooDissolve : MonoBehaviour
 		{
 			if (data.easeIn)
 			{
-				float t = (currentCutOffHeight - startCutoffHeight) / (endCutoffHeight);
-				currentCutOffHeight += Time.deltaTime * dissolveSpeed * (2 * t * t + .25f);
+				float t = (currentCutOffHeight - minimumCutOffHeight) / (maximumCutOffHeight);
+				currentCutOffHeight -= Time.deltaTime * dissolveSpeed * (2 * t * t + .25f);
 			}
 			else
 			{
-				currentCutOffHeight += Time.deltaTime * dissolveSpeed;
+				currentCutOffHeight -= Time.deltaTime * dissolveSpeed;
 			}
-			if (currentCutOffHeight >= endCutoffHeight)
+			if (currentCutOffHeight <= minimumCutOffHeight)
 			{
-				currentCutOffHeight = endCutoffHeight;
+				currentCutOffHeight = minimumCutOffHeight;
 				SetCutoffHeight(currentCutOffHeight);
 				enabled = false;
 				GameManager.Instance.OnGooDissolve();
@@ -162,8 +174,7 @@ public class GooDissolve : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		//if (block != null)
-		//block.SetFloat(cutOffHeightId, endCutoffHeight);
+		
 	}
 
 	private void OnDrawGizmosSelected()
@@ -171,11 +182,11 @@ public class GooDissolve : MonoBehaviour
 		Vector3 pos = transform.position;
 		Vector3 scale = new Vector3(2, 0.02f, 2);
 		Gizmos.color = Color.blue;
-		Gizmos.DrawCube(new Vector3(pos.x, startCutoffHeight, pos.z), scale);
+		Gizmos.DrawCube(new Vector3(pos.x, minimumCutOffHeight, pos.z), scale);
 		Gizmos.color = Color.magenta;
-		Gizmos.DrawCube(new Vector3(pos.x, endCutoffHeight, pos.z), scale);
+		Gizmos.DrawCube(new Vector3(pos.x, maximumCutOffHeight, pos.z), scale);
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireCube(new Vector3(pos.x, (startCutoffHeight + endCutoffHeight)/2, pos.z), new Vector3(scale.x, endCutoffHeight - startCutoffHeight, scale.z));
+		Gizmos.DrawWireCube(new Vector3(pos.x, (minimumCutOffHeight + maximumCutOffHeight)/2, pos.z), new Vector3(scale.x, maximumCutOffHeight - minimumCutOffHeight, scale.z));
 		if (Application.isPlaying)
 			Gizmos.DrawCube(new Vector3(pos.x, currentCutOffHeight, pos.z), scale);
 
