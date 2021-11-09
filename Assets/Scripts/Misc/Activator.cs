@@ -18,6 +18,7 @@ public class Activator : MonoBehaviour, IBooleanSaveable
 	protected virtual void Awake()
 	{
 		InitialSaveState = activated;
+		GameManager.Instance.SaveManager.RegisterSaveable(this);
 	}
 
 	public virtual void Switch()
