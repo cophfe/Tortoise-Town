@@ -59,6 +59,6 @@ Material:
     - _EmissionColour: {r: 6.498301, g: 0.702519, b: 0, a: 0}
     - _GooSlimeColor: {r: 8.47419, g: 0, b: 7.098798, a: 0}
     - _MainColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SlimeShapness: {r: 0.5, g: 2, b: 0, a: 0}
+    - _SlimeShapness: {r: 0, g: 1, b: 0, a: 0}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
