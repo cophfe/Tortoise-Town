@@ -13,7 +13,9 @@ public class GameplayUIManager : MonoBehaviour
 	public Image crosshair;
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
-
+	public GameWindow pauseMenu;
+	public GameWindow winMenu;
+	
 	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
 
@@ -47,21 +49,31 @@ public class GameplayUIManager : MonoBehaviour
 	void OnMenuButton()
 	{
 		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
-			WindowManager.ToggleWindows();
+		{
+			if (WindowManager.GetCurrentWindow() == null)
+			{
+				WindowManager.AddToQueue(pauseMenu);
+			}
+			else
+			{
+				WindowManager.RemoveFromQueue();
+			}
+		}
 	}
 
-	public void OnRestartButtonPressed()
+	public void OnRestartButtonPressed(bool reloadSceneCompletely)
 	{
-		StartCoroutine(RestartGame());
+		StartCoroutine(RestartGame(reloadSceneCompletely));
 	}
 
-	IEnumerator RestartGame()
+	IEnumerator RestartGame(bool reloadSceneCompletely)
 	{
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
-		if (GameManager.Instance.WonGame)
+		if (reloadSceneCompletely)
 		{
+			Time.timeScale = 1;
 			GameManager.Instance.SaveManager.ClearSaveData();
 			GameManager.Instance.ReloadScene();
 		}

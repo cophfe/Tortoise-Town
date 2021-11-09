@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb6aad90de240d42bcdc0ee4a48efec, type: 3}
   m_Name: DissolveData
   m_EditorClassIdentifier: 
-  dissolveShader: {fileID: 4800000, guid: 2799475514de1e346945a4a345372040, type: 3}
-  vineShader: {fileID: 4800000, guid: 43ca15d3603fb8f488d598dddbde837f, type: 3}
-  dissolveSpeed: 10
+  dissolveShader:
+  - {fileID: 4800000, guid: 2799475514de1e346945a4a345372040, type: 3}
+  - {fileID: 4800000, guid: 43ca15d3603fb8f488d598dddbde837f, type: 3}
+  - {fileID: 4800000, guid: f000fc8f3688289439d4e8102f72b0a3, type: 3}
   easeIn: 1

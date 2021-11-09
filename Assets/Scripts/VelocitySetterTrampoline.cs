@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class VelocitySetterTrampoline : PlayerCollision
 {
 	[Tooltip("The percentage of velocity that will be added in the opposite direction of the trampoline direction")]
@@ -10,7 +11,13 @@ public class VelocitySetterTrampoline : PlayerCollision
 	[SerializeField] bool useTransformUp = true;
 	[Tooltip("The minimum velocity into the trampoline before it bounces")]
 	[SerializeField, Min(0)] float minBounceVelocity = 1;
+	[SerializeField] AudioClipList launchSounds = null;
+	AudioSource source;
 
+	private void Start()
+	{
+		source = GetComponent<AudioSource>();
+	}
 	public override bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit)
 	{
 		Vector3 trampolineUp = useTransformUp ? transform.up : hit.normal;
@@ -18,18 +25,35 @@ public class VelocitySetterTrampoline : PlayerCollision
 		if (Vector3.Dot(player.Motor.TotalVelocity, trampolineUp) < -minBounceVelocity)
 		{
 			player.Motor.ForcesVelocity = velocityMagnitude * trampolineUp;
-			player.Motor.InputVelocity = Vector3.zero; ;
-
+			player.Motor.InputVelocity = Vector3.zero;
+			if (launchSounds.CanBePlayed())
+			{
+				source.clip = launchSounds.GetRandom();
+				source.Play();
+			}
+			player.Motor.RefreshDash();
 		}
-		//do implement the player's default collision implementation, since it won't break anything in this situation
-		return true;
+		
+		//dont implement collision just cuz
+		return false;
 	}
 
 	public override bool OnPlayerGrounded(PlayerController player)
 	{
 		Vector3 trampolineUp = transform.up;
 		float tDot = Vector3.Dot(player.Motor.TotalVelocity, trampolineUp);
-		
-		return (tDot >= -minBounceVelocity && tDot <= 0);
+		if (tDot < -minBounceVelocity)
+		{
+			player.Motor.ForcesVelocity = velocityMagnitude * trampolineUp;
+			player.Motor.InputVelocity = Vector3.zero;
+			if (launchSounds.CanBePlayed())
+			{
+				source.clip = launchSounds.GetRandom();
+				source.Play();
+			}
+			player.Motor.RefreshDash();
+		}
+
+		return false;
 	}
 }
