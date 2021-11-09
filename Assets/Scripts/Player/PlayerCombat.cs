@@ -286,6 +286,7 @@ public class PlayerCombat : MonoBehaviour
 		data.yOffsetMagnitude =	Mathf.Lerp(aData.yOffsetMagnitude, aimingCameraData.yOffsetMagnitude, t);
 		data.yOffsetStartDistance = Mathf.Lerp(aData.yOffsetStartDistance, aimingCameraData.yOffsetStartDistance, t);
 		data.zoomOutSpeed =	Mathf.Lerp(aData.zoomOutSpeed, aimingCameraData.zoomOutSpeed, t);
+		data.sensitivityMultiplier = Mathf.Lerp(aData.sensitivityMultiplier, aimingCameraData.sensitivityMultiplier, t);
 		if (playerController.Motor.IsRolling)
 		{
 			data.targetOffset =	Vector3.Lerp(new Vector3(aData.targetOffset.x, playerController.RollCameraOffset, aData.targetOffset.z), aimingCameraData.targetOffset, t);
