@@ -183,7 +183,7 @@ public class SaveManager
 		{
 			savedHealths[i].ResetTo(saveData.savedHealths[i]);
 		}
-		for (int i = 0; i < savedHealths.Count; i++)
+		for (int i = 0; i < saveables.Count; i++)
 		{
 			saveables[i].SetToState(saveData.saveableStates[i]);
 		}
