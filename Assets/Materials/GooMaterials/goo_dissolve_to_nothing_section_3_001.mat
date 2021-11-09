@@ -40,19 +40,19 @@ Material:
     - _EdgeWidth: 0.05
     - _Float0: 0.1
     - _Metallic: 0
-    - _MoveStength: 4
+    - _MoveStength: 6
     - _NoiseScale: 50
     - _NoiseStrength: 1
     - _ScrollSpeed: 0.01
     - _SlimeScale: 1.26
     - _Smoothness: 0
-    - _TwirlSpeed: 0.1
+    - _TwirlSpeed: 0.08
     - _TwirlStrength: 20
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColour: {r: 6.498301, g: 0.702519, b: 0, a: 0}
-    - _GooSlimeColor: {r: 97.00588, g: 0, b: 81.261475, a: 0}
+    - _GooSlimeColor: {r: 8.47419, g: 0, b: 7.098798, a: 0}
     - _MainColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SlimeShapness: {r: 0, g: 13.99, b: 0, a: 0}
+    - _SlimeShapness: {r: 0, g: 1, b: 0, a: 0}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
