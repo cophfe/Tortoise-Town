@@ -7,18 +7,29 @@ public class HealthTarget : Health
 	public delegate void DeathDelegate();
 	public DeathDelegate deathlegate;
 
+	private void Awake()
+	{
+		GameManager.Instance.SaveManager.RegisterHealth(this);
+	}
 	protected override void OnDeath()
 	{
-		if (deathlegate != null)
-			deathlegate();
+		deathlegate?.Invoke();
 
 		base.OnDeath();
 		gameObject.SetActive(false);
 	}
 
-	public void ResetTarget()
+	public override void ResetTo(float healthValue)
 	{
-		gameObject.SetActive(true);
-		Revive(100000);
+		base.ResetTo(healthValue);
+		if (IsDead)
+		{
+			gameObject.SetActive(false);
+		}
+		else
+		{
+			CurrentHealth = maxHealth;
+			gameObject.SetActive(true);
+		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GooShooter : BooleanSwitch
+public class GooShooter : MonoBehaviour
 {
 	public ArrowData gooShotInfo;
 	public Arrow gooShotPrefab;
@@ -16,8 +16,9 @@ public class GooShooter : BooleanSwitch
 	ObjectPool arrowPool;
 	Arrow currentArrow;
 	public Animator animator;
+	bool dead = false;
 
-	protected override void Start()
+	protected void Start()
     {
 		arrowPool = new ObjectPool(arrowCount, 1, gooShotPrefab, transform);
 		shootTimer = shootIntervel;
@@ -25,7 +26,7 @@ public class GooShooter : BooleanSwitch
 
     void Update()
     {
-		if (attackPlayer)
+		if (!dead && attackPlayer)
 		{
 			UpdateRotation();
 			shootTimer -= Time.deltaTime;
@@ -107,6 +108,16 @@ public class GooShooter : BooleanSwitch
 		transform.LookAt(pos);
 	}
 
+	public void Kill()
+	{
+		dead = true;
+	}
+
+	public void Revive()
+	{
+		dead = false;
+	}
+
 	private void OnTriggerEnter(Collider other)
 	{
 		if ((playerLayer & (1 << other.gameObject.layer)) != 0)
@@ -115,20 +126,6 @@ public class GooShooter : BooleanSwitch
 		}
 	}
 
-	public override bool SwitchValue { get => base.SwitchValue; protected set
-		{
-			base.SwitchValue = value;
-			if (!value)
-			{
-				enabled = false;
-				attackPlayer = false;
-			}
-			else
-			{
-				enabled = true;
-			}
-		}
-	}
 	private void OnTriggerExit(Collider other)
 	{
 		if ((playerLayer & (1 << other.gameObject.layer)) != 0)
