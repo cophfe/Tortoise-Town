@@ -24,7 +24,7 @@ public class Activator : MonoBehaviour, IBooleanSaveable
 	public virtual void Switch()
 	{
 		activated = !activated;
-		if (!(activateOnce && activated))
+		if (!(activateOnce && !activated))
 		{
 			if (activated)
 				onActivate.Invoke();

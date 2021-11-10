@@ -181,6 +181,7 @@ public class GameManager : MonoBehaviour
 		GameManager.Instance.Player.InputIsEnabled = false;
 		//and begone save data
 		SaveManager.ClearSaveData();
+		SaveManager.DeleteSceneData();
 	}
 
 	private void OnValidate()
