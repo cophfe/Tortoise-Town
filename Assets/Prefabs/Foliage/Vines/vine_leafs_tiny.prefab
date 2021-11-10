@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3974469871505573477}
   - component: {fileID: -7747963950754048269}
+  - component: {fileID: -8484945848415750370}
   m_Layer: 0
   m_Name: vine_leafs_tiny
   m_TagString: Untagged
@@ -45,6 +46,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8484945848415750370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3974469871505573478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a62ac7850093f43b67dacf12193746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1929509200992104567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,19 +79,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_RootOrder
@@ -86,7 +99,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da4639162f63e7a44bf0a11b0a5d217f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
