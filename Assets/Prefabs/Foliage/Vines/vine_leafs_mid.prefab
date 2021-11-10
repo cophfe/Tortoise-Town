@@ -66,9 +66,9 @@ MonoBehaviour:
     m_SubMeshes:
     - m_Indexes: 000000000100000002000000030000000100000000000000040000000200000001000000030000000500000001000000010000000600000004000000010000000500000007000000070000000600000001000000
       m_Topology: 0
-    m_Mesh: {fileID: -3568145333773574585, guid: 6996c3db2ba172545af4e1131b02a41f, type: 3}
+    m_Mesh: {fileID: 0}
   m_SkinMeshRef: {fileID: 0}
-  m_OriginalMeshObject: {fileID: -3568145333773574585, guid: 6996c3db2ba172545af4e1131b02a41f, type: 3}
+  m_OriginalMeshObject: {fileID: 0}
   m_Mode: 0
 --- !u!1 &3705443360867439346
 GameObject:
@@ -190,7 +190,7 @@ PrefabInstance:
     - target: {fileID: -5754084199372789682, guid: 6996c3db2ba172545af4e1131b02a41f, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: -3568145333773574585, guid: 6996c3db2ba172545af4e1131b02a41f, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6996c3db2ba172545af4e1131b02a41f, type: 3}
       propertyPath: m_Name
       value: vinemid
