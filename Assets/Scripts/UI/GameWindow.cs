@@ -23,8 +23,6 @@ public class GameWindow : MonoBehaviour
 		CLOSING,
 	}
 
-	public TransitionState GetState() { return state; }
-
 	private void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();

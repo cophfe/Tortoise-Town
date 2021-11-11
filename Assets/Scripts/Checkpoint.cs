@@ -5,7 +5,6 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
 	public LayerMask playerMask;
-	public Transform spawnPositionRotation;
 
 	private void Awake()
 	{
@@ -22,17 +21,11 @@ public class Checkpoint : MonoBehaviour
 
 	public Vector3 GetSpawnPosition()
 	{
-		if (spawnPositionRotation)
-			return spawnPositionRotation.position;
-		else 
-			return transform.position;
+		return transform.position;
 	}
 
 	public Quaternion GetSpawnRotation()
 	{
-		if (spawnPositionRotation)
-			return Quaternion.LookRotation(Vector3.ProjectOnPlane(spawnPositionRotation.forward, Vector3.up).normalized, Vector3.up);
-		else 
-			return Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
+		return Quaternion.identity;
 	}
 }

@@ -31,7 +31,6 @@ public class VelocitySetterTrampoline : PlayerCollision
 				source.clip = launchSounds.GetRandom();
 				source.Play();
 			}
-			player.Motor.RefreshDash();
 		}
 		
 		//dont implement collision just cuz
@@ -44,16 +43,13 @@ public class VelocitySetterTrampoline : PlayerCollision
 		float tDot = Vector3.Dot(player.Motor.TotalVelocity, trampolineUp);
 		if (tDot < -minBounceVelocity)
 		{
-			player.Motor.ForcesVelocity = velocityMagnitude * trampolineUp;
-			player.Motor.InputVelocity = Vector3.zero;
 			if (launchSounds.CanBePlayed())
 			{
 				source.clip = launchSounds.GetRandom();
 				source.Play();
 			}
-			player.Motor.RefreshDash();
 		}
 
-		return false;
+		return (tDot >= -minBounceVelocity && tDot <= 0);
 	}
 }

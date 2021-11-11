@@ -50,15 +50,4 @@ public class Timer : BooleanSwitch
 			}
 		} 
 	}
-
-	public override void ResetSwitchTo(bool on)
-	{
-		if (on)
-		{
-			timer = 0;
-			this.on = false;
-			Switch();
-			onSwitchOff.Invoke();
-		}
-	}
 }

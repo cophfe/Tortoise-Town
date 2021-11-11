@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
 	Quaternion initialPlayerRotation;
 	int currentDissolverCount;
 	int totalDissolverCount;
-	List<GooDissolve> gooDissolvers;
 
 	void Awake()
     {
@@ -57,7 +56,6 @@ public class GameManager : MonoBehaviour
 
 			initialPlayerPosition = player.transform.position;
 			initialPlayerRotation = player.transform.rotation;
-			gooDissolvers = new List<GooDissolve>();
 		}
 	}
 
@@ -76,7 +74,7 @@ public class GameManager : MonoBehaviour
 			player.RotateChild.localRotation = initialPlayerRotation;
 		}
 		CalculateTotalDissolvers();
-		CalculateCurrentDissolverCount();
+		currentDissolverCount = totalDissolverCount;
 	}
 
 	public void OnPlayerDeath()
@@ -103,9 +101,16 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
+	public IEnumerator ResetSceneFromMenu()
+	{
+		player.GUI.Fade(true);
+		yield return new WaitForSeconds(player.GUI.fadeTime);
+		
+	}
+
 	public void SetSceneFromSavedData()
 	{
-		SaveManager.ResetScene();
+		SaveManager.SetSceneFromSaveData();
 		var checkpoint = SaveManager.GetCurrentCheckpoint();
 		if (checkpoint != null)
 		{
@@ -122,7 +127,6 @@ public class GameManager : MonoBehaviour
 		player.MainCamera.MoveToTarget();
 		ArrowPool.ResetToDefault();
 		player.GUI.Fade(false);
-		CalculateCurrentDissolverCount();
 	}
 
 	public void ExitToMenu()
@@ -137,15 +141,10 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void RegisterGooDissolver(GooDissolve dissolver)
-	{
-		gooDissolvers.Add(dissolver);
-	}
-
 	public void CalculateTotalDissolvers()
 	{
 		totalDissolverCount = 0;
-		foreach (var dissolver in gooDissolvers)
+		foreach (var dissolver in SaveManager.GetGooDissolverList())
 		{
 			if (dissolver.requiredForWin) totalDissolverCount++;
 		}
@@ -153,7 +152,7 @@ public class GameManager : MonoBehaviour
 	public void CalculateCurrentDissolverCount()
 	{
 		currentDissolverCount = 0;
-		foreach(var dissolver in gooDissolvers)
+		foreach(var dissolver in SaveManager.GetGooDissolverList())
 		{
 			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
 		}
@@ -175,7 +174,7 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(winWaitTime);
 		IsCursorRestricted = false;
 		Time.timeScale = 0;
-		Player.GUI.WindowManager.AddToQueue(player.GUI.winMenu);
+		Player.GUI.WindowManager.SetCurrentWindow("Win");
 		GameManager.Instance.Player.InputIsEnabled = false;
 		//and begone save data
 		SaveManager.ClearSaveData();
