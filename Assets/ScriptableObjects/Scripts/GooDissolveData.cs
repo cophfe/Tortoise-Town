@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class GooDissolveData : ScriptableObject
 {
-	public Shader dissolveShader = null;
-	public Shader vineShader = null;
+	public Shader[] dissolveShader = null;
 	public bool easeIn = true;
 }
