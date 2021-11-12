@@ -142,7 +142,7 @@ public class PlayerCombat : MonoBehaviour
 
 			if (!equippedArrow)
 			{
-				equippedArrow = (Arrow)playerController.GameManager.ArrowPool.GetPooledObject(arrowPosRest);
+				equippedArrow = (Arrow)GameManager.Instance.ArrowPool.GetPooledObject(arrowPosRest);
 				equippedArrow.ignoredInPool = true;
 			}
 
@@ -257,7 +257,7 @@ public class PlayerCombat : MonoBehaviour
 		{
 			if (equippedArrow)
 			{
-				playerController.GameManager.ArrowPool.ReturnPooledObject(equippedArrow);
+				GameManager.Instance.ArrowPool.ReturnPooledObject(equippedArrow);
 				equippedArrow = null;
 			}
 			rangedWeapon.SetActive(false);

@@ -382,7 +382,7 @@ public class SaveManager
 
 	public void OnDestroy()
 	{
-		if (saveDataToFile)
+		if (saveDataToFile && saveData != null)
 		{
 			WriteSaveDataToFile();
 		}

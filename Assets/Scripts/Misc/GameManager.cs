@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
 		{
 			instance = null;
 			Time.timeScale = 1;
-			enableCursorRestriction = false;
+			IsCursorRestricted = false;
 			SaveManager.OnDestroy();
 		}
 	}
