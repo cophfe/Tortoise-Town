@@ -5,136 +5,141 @@ using UnityEngine.UI;
 
 public class GameWindowManager : MonoBehaviour
 {
-	Stack<GameWindow> activeWindows;
-	public GameWindow backgroundPanel;
-
+	[SerializeField] GameWindow[] gameWindows = null;
+	[SerializeField] GameWindow backgroundPanel = null;
 	[SerializeField] float windowOpenTime = 1;
 	float openTimer = 0;
+	int activeWindowIndex = -1;
 	bool transitioning = false;
 
 	void Start()
 	{
-		activeWindows = new Stack<GameWindow>();
+		for (int i = 0; i < gameWindows.Length; i++)
+		{
+			gameWindows[i].gameObject.SetActive(false);
+		}
+		backgroundPanel.gameObject.SetActive(false);
 	}
-
-	public GameWindow GetCurrentWindow() { return activeWindows.Count == 0 ? null : activeWindows.Peek(); }
 
 	private void Update()
 	{
-		//if (transitioning)
-		//{
-		//	openTimer += Time.unscaledDeltaTime;
-		//	float t = Ease.EaseOutQuad(openTimer / windowOpenTime);
-		//	if (openTimer >= windowOpenTime)
-		//	{
-		//		t = 1;
-		//		transitioning = false;
-		//		OnEndTransition();
-		//	}
-		//	for (int i = 0; i < gameWindows.Length; i++)
-		//	{
-		//		gameWindows[i].UpdateOpenState(t);
-		//	}
-		//	backgroundPanel.UpdateOpenState(t);
-		//}
 		if (transitioning)
 		{
 			openTimer += Time.unscaledDeltaTime;
 			float t = Ease.EaseOutQuad(openTimer / windowOpenTime);
 			if (openTimer >= windowOpenTime)
 			{
+				t = 1;
 				transitioning = false;
-				var current = GetCurrentWindow();
-				if (current != null)
-				{
-					current.UpdateOpenState(1);
-					if (current.GetState() == GameWindow.TransitionState.CLOSED)
-					{
-						activeWindows.Pop();
-						if (GetCurrentWindow() == null)
-						{
-							GameManager.Instance.IsCursorRestricted = true;
-							GameManager.Instance.Player.InputIsEnabled = true;
-							Time.timeScale = 1;
-						}
-					}
-				}
-				
-				if (backgroundPanel)
-					backgroundPanel.UpdateOpenState(1);
+				OnEndTransition();
 			}
-			else
+			for (int i = 0; i < gameWindows.Length; i++)
 			{
-				var current = GetCurrentWindow();
-				if (current != null)
-					current.UpdateOpenState(t);
-				if (backgroundPanel)
-					backgroundPanel.UpdateOpenState(t);
+				gameWindows[i].UpdateOpenState(t);
+			}
+			backgroundPanel.UpdateOpenState(t);
+		}
+		
+	}
+
+	public void SetCurrentWindow(string windowName)
+	{
+		if (transitioning) return;
+		bool success = false;
+		for (int i = 0; i < gameWindows.Length; i++)
+		{
+			if (gameWindows[i].gameObject.name == windowName)
+			{
+				if (i == activeWindowIndex || !gameWindows[i].OpenWindow(true)) return;
+				if (activeWindowIndex == -1)
+					backgroundPanel.OpenWindow(true);
+				activeWindowIndex = i;
+				for (int j = 0; j < gameWindows.Length; j++)
+				{
+					if (j == i) continue;
+					gameWindows[j].OpenWindow(false);
+				}
+				success = true;
+				transitioning = true;
+				OnStartTransition();
+				openTimer = 0;
+				return;
 			}
 		}
-	}
 
-	public void AddToQueue(GameWindow window)
-	{
-		if (window == null || activeWindows.Contains(window)) return;
-
-		if (activeWindows.Count == 0)
+		//if could not find window, close
+		if (!success)
 		{
-			GameManager.Instance.IsCursorRestricted = false;
-			GameManager.Instance.Player.InputIsEnabled = false;
-			Time.timeScale = 0;
-			if (backgroundPanel)
-				backgroundPanel.OpenWindow(true);
+			CloseActiveWindows();
 		}
 
-		//if last thing not finished, force it to finish
-		var current = GetCurrentWindow();
-		if (current != null && (current.GetState() == GameWindow.TransitionState.CLOSING || current.GetState() == GameWindow.TransitionState.OPENING))
-		{
-			current.UpdateOpenState(1);
-			if (current.GetState() == GameWindow.TransitionState.CLOSED)
-				activeWindows.Pop();
-		}
-
-		activeWindows.Push(window);
-		window.OpenWindow(true);
-		transitioning = true;
-		openTimer = 0;
+		
 	}
 
-	public void RemoveFromQueue()
+	public GameWindow GetCurrentWindow() { if (activeWindowIndex < 0) return null;
+		else return gameWindows[activeWindowIndex]; }
+
+	public void CloseActiveWindows()
 	{
-		var current = GetCurrentWindow();
-		if (current != null && current.GetState() != GameWindow.TransitionState.CLOSING)
+		backgroundPanel.OpenWindow(false);
+		bool anyWindowsWereOpen = false;
+		for (int j = 0; j < gameWindows.Length; j++)
 		{
-			current.OpenWindow(false);
+			anyWindowsWereOpen |= gameWindows[j].OpenWindow(false);
+		}
+		activeWindowIndex = -1;
+
+		if (anyWindowsWereOpen)
+		{
+			OnStartTransition();
 			transitioning = true;
 			openTimer = 0;
+		}
+	}
 
-			if (backgroundPanel && activeWindows.Count == 1)
-			{
-				backgroundPanel.OpenWindow(false);
-			}
+	public void ToggleWindows()
+	{
+		var current = GetCurrentWindow();
+		if (current == null || current.name == "Options")
+		{
+			GameManager.Instance.IsCursorRestricted = false;
+			Time.timeScale = 0;
+			GameManager.Instance.Player.InputIsEnabled = false;
+			SetCurrentWindow("Pause");
+		}
+		else if (current.name == "Pause")
+		{
+			CloseActiveWindows();
 		}
 	}
 
 	public void InstantCloseAll()
 	{
+		backgroundPanel.OpenWindow(false);
+		bool anyWindowsWereOpen = false;
+		for (int j = 0; j < gameWindows.Length; j++)
+		{
+			anyWindowsWereOpen |= gameWindows[j].OpenWindow(false);
+		}
+		activeWindowIndex = -1;
+
+		OnStartTransition();
+		transitioning = true;
+		openTimer = windowOpenTime;
+	}
+
+	void OnStartTransition()
+	{
+	}
+
+	void OnEndTransition()
+	{
 		var current = GetCurrentWindow();
-		while (current != null)
+		if (current == null)
 		{
-			activeWindows.Peek().OpenWindow(false);
-			activeWindows.Peek().UpdateOpenState(1);
-			activeWindows.Pop();
-			current = GetCurrentWindow();
+			GameManager.Instance.IsCursorRestricted = true;
+			GameManager.Instance.Player.InputIsEnabled = true;
+			Time.timeScale = 1;
 		}
-		if (backgroundPanel)
-		{
-			backgroundPanel.OpenWindow(false);
-			backgroundPanel.UpdateOpenState(1);
-		}
-		GameManager.Instance.IsCursorRestricted = true;
-		GameManager.Instance.Player.InputIsEnabled = true;
-		Time.timeScale = 1;
 	}
 }

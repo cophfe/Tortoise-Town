@@ -626,15 +626,6 @@ public class PlayerMotor : MonoBehaviour
 			
 		}
 	}
-
-	public void RefreshDash()
-	{
-		dashedInThisJump = false;
-		dashing = false;
-		dashTimer = 0;
-		dashCooldownTimer = 0;
-	}
-
 	void EvaluateJump()
 	{
 		//start jump

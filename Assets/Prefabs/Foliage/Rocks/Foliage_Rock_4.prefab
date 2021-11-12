@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4773483345406215426}
   - component: {fileID: 2057160690972785428}
   - component: {fileID: 5293733879404900301}
-  - component: {fileID: 7371793649308359602}
   m_Layer: 0
   m_Name: Foliage_Rock4_Low
   m_TagString: Untagged
@@ -82,20 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7371793649308359602
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 706321088834372726}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -389121558949634208, guid: 6ec152ec8be8d1f4984e379f96ba3301, type: 3}
 --- !u!1 &3460101278823055966
 GameObject:
   m_ObjectHideFlags: 0

@@ -252,9 +252,4 @@ public class MovingPlatform : BooleanSwitch
 	{
 		return Quaternion.Inverse(StartRotation) * (vec - StartPosition);
 	}
-
-	public override void ResetSwitchTo(bool on)
-	{
-		Switch(on);
-	}
 }
