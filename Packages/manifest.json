@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.sbstn_hn.rendererfeatures.urp-ssao": "https://github.com/sebastianhein/urp-ssao.git",
     "com.unity.cinemachine": "2.6.10",
     "com.unity.collab-proxy": "1.3.9",
     "com.unity.formats.fbx": "4.1.1",

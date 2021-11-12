@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: vine_material
-  m_Shader: {fileID: 4800000, guid: 43ca15d3603fb8f488d598dddbde837f, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: fbcfb050b30c3bc4b99c18409bc6f5af, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,6 +20,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_D5480480:
+        m_Texture: {fileID: 2800000, guid: e3867c962df5ed54cb310e9ef71b8378, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: e3867c962df5ed54cb310e9ef71b8378, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -69,6 +73,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_2F40209C: 1
+    - Vector1_2bc464fa1dec49fbb30f7251704f90ef: 1.5
+    - Vector1_4DB35770: 9
+    - Vector1_57862bb8ffed448891b57d4baf23a8fc: 2
+    - Vector1_BC26EF7: 0.05
+    - Vector1_C8C2B3C0: 0.5
+    - Vector1_b04fd903af6f440bbf170d2c915b7b17: 10
+    - Vector1_cc311390b86b4f0bbbdb7d48ce5dcfd6: 0.7
+    - Vector1_e2144895e7ed4cb5913f4c68dd799c51: 1
     - _AlphaClip: 0.5
     - _AlphaCutoff: 0.5
     - _Blend: 0
@@ -101,6 +114,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
+    - Color_C38C1181: {r: 1, g: 1, b: 1, a: 0}
+    - Vector3_DC21BF15: {r: 1, g: 0, b: 1, a: 0}
     - _Albedo: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
