@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 [RequireComponent(typeof(GameWindowManager))]
 public class GameplayUIManager : MonoBehaviour
@@ -13,6 +14,12 @@ public class GameplayUIManager : MonoBehaviour
 	public Image crosshair;
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
+	public GameWindow pauseMenu;
+	public GameWindow winMenu;
+	public GameWindow areYouSure;
+	public TextMeshProUGUI areYouSureText;
+	public Button areYouSureConfirm;
+	public OptionsMenu options;
 
 	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
@@ -27,6 +34,11 @@ public class GameplayUIManager : MonoBehaviour
 	private void Start()
 	{
 		Fade(false);
+		if (options == null)
+		{
+			options = GetComponentInChildren<OptionsMenu>();
+		}
+		options.Initiate();
 	}
 	public void OnEnable()
 	{
@@ -47,20 +59,29 @@ public class GameplayUIManager : MonoBehaviour
 	void OnMenuButton()
 	{
 		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
-			WindowManager.ToggleWindows();
+		{
+			if (WindowManager.GetCurrentWindow() == null)
+			{
+				WindowManager.AddToQueue(pauseMenu);
+			}
+			else
+			{
+				WindowManager.RemoveFromQueue();
+			}
+		}
 	}
 
-	public void OnRestartButtonPressed()
+	public void OnRestartButtonPressed(bool reloadSceneCompletely)
 	{
-		StartCoroutine(RestartGame());
+		StartCoroutine(RestartGame(reloadSceneCompletely));
 	}
 
-	IEnumerator RestartGame()
+	IEnumerator RestartGame(bool reloadSceneCompletely)
 	{
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
-		if (GameManager.Instance.WonGame)
+		if (reloadSceneCompletely)
 		{
 			Time.timeScale = 1;
 			GameManager.Instance.SaveManager.ClearSaveData();
@@ -78,6 +99,33 @@ public class GameplayUIManager : MonoBehaviour
 	public void OnExitButtonPressed()
 	{
 		StartCoroutine(ExitGame());
+	}
+
+	public enum AreYouSureState
+	{
+		QUIT,
+		RESTART,
+	}
+
+	public void SetAreYouSure(int state)
+	{
+		switch ((AreYouSureState)state)
+		{
+			case AreYouSureState.QUIT:
+				areYouSureText.text = "Are you sure you want to quit? Progress up to the last checkpoint will be saved.";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(OnExitButtonPressed);
+				WindowManager.AddToQueue(areYouSure);
+				break;
+			case AreYouSureState.RESTART:
+				areYouSureText.text = "Are you sure you want to restart? This will erase your save data.";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(() => OnRestartButtonPressed(true));
+				WindowManager.AddToQueue(areYouSure);
+				break;
+			default:
+				break;
+		}
 	}
 
 	IEnumerator ExitGame()

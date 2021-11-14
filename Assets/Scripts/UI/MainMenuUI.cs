@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.IO;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,8 +13,64 @@ public class MainMenuUI : MonoBehaviour
 	public string gameplaySceneName = "Main";
 	public Animator panel = null;
 	public float fadeTime = 1;
+	public Button continueButton;
+	public GameWindow areYouSure;
+	public TextMeshProUGUI areYouSureText;
+	public Button areYouSureConfirm;
+	public OptionsMenu optionsMenu; 
 
+	private void Awake()
+	{
+		if (File.Exists(SaveManager.GetPath()))
+		{
+			using (FileStream fs = new FileStream(SaveManager.GetPath(), FileMode.Open))
+			{
+				if (fs.Length > 0)
+				{
+					continueButton.interactable = true;
+				}
+			}
+		}
+	}
+	private void Start()
+	{
+		if (optionsMenu)
+			optionsMenu.Initiate();
+
+	}
 	public void OnPlayButtonPressed()
+	{
+		if (continueButton.interactable)
+		{
+			areYouSureConfirm.onClick.RemoveAllListeners();
+			areYouSureConfirm.onClick.AddListener(() => StartCoroutine(LoadNewGame()));
+			areYouSureText.text = "Are you sure you want to continue? This will erase all of your save data.";
+			GetComponent<GameWindowManager>().AddToQueue(areYouSure);
+		}
+		else
+		{
+			StartCoroutine(LoadNewGame());
+		}
+	}
+
+	IEnumerator LoadNewGame()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+
+		try
+		{
+			if (File.Exists(SaveManager.GetPath()))
+				File.Delete(SaveManager.GetPath());
+			SceneManager.LoadScene(gameplaySceneName);
+		}
+		catch (System.Exception e)
+		{
+			Debug.LogWarning("Error loading scene:\n" + e.Message);
+		}
+	}
+
+	public void OnContinueButtonPressed()
 	{
 		StartCoroutine(LoadGame());
 	}

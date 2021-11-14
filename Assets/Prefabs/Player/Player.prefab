@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 6578186051642721078}
   - component: {fileID: 163373311}
   - component: {fileID: 231350652472986760}
+  - component: {fileID: 181150655}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -254,7 +255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 0}
-  gUI: {fileID: 0}
   rollColliderRadius: 0.35
   additionalRollColliderOffset: {x: 0, y: 0.17, z: 0}
   rollCameraYOffset: 0.5
@@ -546,6 +546,152 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &181150655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3923705860234160775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 16880fc5c9b27b745ba8cc50af90ec33, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnControlsChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMoveInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4f98bde0-296b-438e-b16e-f7b2c9fd94ff
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnJumpPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9921192a-8ebd-4510-9d53-17bafcedceaa
+    m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnSprintInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a9cfa3e6-b0fa-4b4a-8496-103765c267b0
+    m_ActionName: Player/Sprint[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnCrouchInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 68a57f33-84ed-457e-8fe7-d5a6408486d1
+    m_ActionName: Player/Crouch[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnAimPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 67ba8191-ae9d-4c28-a861-4aad2d863c9b
+    m_ActionName: Player/Aim[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2573738744129244639}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnAttackInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 92bc5ed1-a6fe-4e3e-83fa-8db2f1fec50d
+    m_ActionName: Player/Attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 794c2a42-326d-4a37-9ab1-3d857b652bc8
+    m_ActionName: Camera/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6fdacfa-5d0c-40b3-9745-89a2923896c1
+    m_ActionName: UI/Menu[/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: KBM
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &5242418356559308213
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,8 +749,8 @@ MonoBehaviour:
   turnPercent: 0.5
   lookBodyWeight: 0.2
   lookHeadWeight: 1
-  distanceToGround: 0.039
-  extendDistance: 0.1
+  distanceToGround: 0.086
+  extendDistance: 0.158
   footRotationWeight: 1
   footPositionWeight: 1
   footMoveSpeed: 50
@@ -1390,24 +1536,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
---- !u!1 &8574271578093751210 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
-  m_PrefabInstance: {fileID: 8808063695210723067}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9058496140784292112 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
-  m_PrefabInstance: {fileID: 8808063695210723067}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &3122704189936634730 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
-  m_PrefabInstance: {fileID: 8808063695210723067}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4774512200363428133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5152400757606907938, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
+  m_PrefabInstance: {fileID: 8808063695210723067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8574271578093751210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
   m_PrefabInstance: {fileID: 8808063695210723067}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7657350195352539137 stripped
@@ -1418,5 +1554,15 @@ Transform:
 --- !u!137 &7730976352183429255 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7965331398152544644, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
+  m_PrefabInstance: {fileID: 8808063695210723067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9058496140784292112 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
+  m_PrefabInstance: {fileID: 8808063695210723067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3122704189936634730 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e1a7dc65e74931642bbcbbac6ac52589, type: 3}
   m_PrefabInstance: {fileID: 8808063695210723067}
   m_PrefabAsset: {fileID: 0}

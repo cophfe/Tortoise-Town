@@ -140,3 +140,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoredInPool: 0
+  knockbackData: {fileID: 11400000, guid: c91bfb00b2664fc4485e256788315354, type: 2}

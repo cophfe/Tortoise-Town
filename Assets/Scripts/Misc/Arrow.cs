@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Arrow : Poolable
 {
-	ArrowData data;
-	Vector3 velocity = Vector3.zero;
-	float disappearTimer = float.MaxValue;
-	bool shooting = false;
+	protected ArrowData data;
+	protected Vector3 velocity = Vector3.zero;
+	protected float disappearTimer = float.MaxValue;
+	protected bool shooting = false;
 
 	public override bool BeforeReset()
 	{
@@ -60,7 +60,7 @@ public class Arrow : Poolable
 				{
 					health.Damage(data.damage);
 				}
-				OnCollide();
+				OnCollide(hit.collider);
 			}
 			else
 			{
@@ -69,7 +69,7 @@ public class Arrow : Poolable
 		}
     }
 
-	protected virtual void OnCollide()
+	protected virtual void OnCollide(Collider collider)
 	{
 
 	}

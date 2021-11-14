@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
 	[SerializeField] protected float maxHealth = 1;
 	
 
+	public float MaxHealth { get { return maxHealth; } }
 	public float CurrentHealth { get; protected set; }
 	public bool IsDead { get; protected set; }
 
@@ -61,5 +62,19 @@ public class Health : MonoBehaviour
 	protected virtual void OnDeath()
 	{
 		IsDead = true;
+	}
+
+	public virtual void ResetTo(float healthValue)
+	{
+		if (healthValue <= 0)
+		{
+			CurrentHealth = 0;
+			IsDead = true;
+		}
+		else
+		{
+			CurrentHealth = Mathf.Clamp(healthValue, 0, maxHealth);
+			IsDead = false;
+		}
 	}
 }
