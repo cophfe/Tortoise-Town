@@ -229,7 +229,7 @@ public partial class CameraController : MonoBehaviour
 	/// <param name="input">A 2d vector representing a rotational movement on the x and y axis</param>
 	public void InputMove(Vector2 input)
 	{
-		input *= data.sensitivityMultiplier * (inverted ? -sensitivity : sensitivity);
+		input *= inverted ? -sensitivity : sensitivity;
 		rotation += new Vector2(input.y, input.x);
 
 		//clamp x rotation
@@ -365,7 +365,6 @@ public partial class CameraController : MonoBehaviour
 		data.yOffsetMagnitude = newData.yOffsetMagnitude;
 		data.yOffsetStartDistance = newData.yOffsetStartDistance;
 		data.zoomOutSpeed = newData.zoomOutSpeed;
-		data.sensitivityMultiplier = newData.sensitivityMultiplier;
 	}
 
 	public void MoveToTarget()

@@ -16,8 +16,6 @@ public class CameraData : ScriptableObject
 	[Range(-90, 90)] public float maximumUpRotation = 87;
 	[Tooltip("Up rotation cannot be less than this value.")]
 	[Range(-90, 90)] public float minimumUpRotation = -87;
-	[Tooltip("Sensitivity Multiplier.")]
-	[Min(0.1f)] public float sensitivityMultiplier = 1;
 
 	[Header("Movement")]
 	[Space(5)]

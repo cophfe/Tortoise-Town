@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerMotor)), RequireComponent(typeof(PlayerHealth)), DefaultExecutionOrder(2)]
 public class PlayerController : MonoBehaviour
@@ -24,9 +23,9 @@ public class PlayerController : MonoBehaviour
 	bool crouchPressed;
 	bool sprintPressed;
 	bool attackPressed;
+	InputMaster controls = null;
 
 	#region Properties
-	public PlayerInput PlayerInput { get; private set; }
 	public PlayerMotor Motor { get; private set; }
 	public PlayerAnimator Animator { get; private set; }
 	public CharacterController CharacterController { get; private set; }
@@ -34,6 +33,7 @@ public class PlayerController : MonoBehaviour
 	public PlayerHealth Health { get; private set; }
 	public CameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
+	public GameManager GameManager { get; private set; }
 	public GameplayUIManager GUI { get { return gUI; } }
 	public InterpolateChild Interpolator { get { return visualInterpolator; } }
 
@@ -53,10 +53,16 @@ public class PlayerController : MonoBehaviour
 		set
 		{
 			cameraController.EnableInput = value;
-			PlayerInput.enabled = value;
+			if (value)
+			{
+				controls.Enable();
+			}
+			else
+			{
+				controls.Disable();
+			}
 		}
 	}
-
 	public bool InterpolateVisuals {
 		get
 		{
@@ -75,8 +81,6 @@ public class PlayerController : MonoBehaviour
 
 	void Awake()
     {
-		PlayerInput = GetComponent<PlayerInput>();
-		
 		Motor = GetComponent<PlayerMotor>();
 		Animator = GetComponentInChildren<PlayerAnimator>();
 		if (!Animator)
@@ -89,6 +93,7 @@ public class PlayerController : MonoBehaviour
 			gUI = FindObjectOfType<GameplayUIManager>();
 		if (!MainCamera)
 			cameraController = FindObjectOfType<CameraController>();
+		GameManager = GameManager.Instance;
 		FootstepAudio = GetComponent<AudioSource>();
 		PlayerAudio = Interpolator.GetComponent<AudioSource>();
 
@@ -106,8 +111,37 @@ public class PlayerController : MonoBehaviour
 		InitialColliderRadius = CharacterController.radius;
 		InitialColliderOffset = CharacterController.center;
 		rollColliderOffset = CharacterController.center + new Vector3(0, (rollColliderRadius - CharacterController.height)/2, 0);
+
+		//INPUT
+		controls = new InputMaster();
+		//Move
+		controls.Player.Move.performed += val => OnMoveInput(val.ReadValue<Vector2>());
+		controls.Player.Move.canceled += val => OnMoveInput(val.ReadValue<Vector2>());
+		//Jump
+		controls.Player.Jump.performed += _ => OnJumpPressed();
+		controls.Player.Jump.canceled += _ => OnJumpCancelled();
+		//Sprint
+		controls.Player.Sprint.performed += _ => OnSprintInput();
+		//Crouch
+		controls.Player.Crouch.performed += _ => OnCrouchInput();
+		//Attacking
+		controls.Player.Attack.performed += _ => OnAttackInput();
+		//Aiming
+		controls.Player.Aim.performed += _ => OnAimPressed();
+		controls.Player.Aim.canceled += _ => OnAimCancelled();
 	}
-	
+
+	public void OnEnable()
+	{
+		if (controls != null)
+			controls.Enable();
+	}
+	public void OnDisable()
+	{
+		if (controls != null)
+			controls.Disable();
+	}
+
 	public void ResetPlayerToDefault()
 	{
 		if (!Health) return;
@@ -168,43 +202,44 @@ public class PlayerController : MonoBehaviour
 
 	#region Input Functions
 
-	public void OnMoveInput(InputAction.CallbackContext ctx)
+	void OnMoveInput(Vector2 val)
 	{
-		inputVector = ctx.ReadValue<Vector2>();
+		inputVector = val;
 	}
 
-	public void OnJumpPressed(InputAction.CallbackContext ctx)
+	void OnJumpPressed()
 	{
-		if (ctx.canceled)
-			jumpCancelled = true;
-		else
-			jumpPressed = true;
+		jumpPressed = true;
 	}
 
-	public void OnSprintInput(InputAction.CallbackContext ctx)
+	void OnJumpCancelled()
 	{
-		if (ctx.performed)
-			sprintPressed = true;
+		jumpCancelled = true;
 	}
 
-	public void OnCrouchInput(InputAction.CallbackContext ctx)
+	void OnSprintInput()
 	{
-		if (ctx.performed)
-			crouchPressed = true;
+		sprintPressed = true;
 	}
 
-	public void OnAimPressed(InputAction.CallbackContext ctx)
+	void OnCrouchInput()
 	{
-		if (ctx.canceled)
-			Combat.EndChargeUp();
-		else
-			Combat.StartChargeUp();
+		crouchPressed = true;
 	}
 
-	public void OnAttackInput(InputAction.CallbackContext ctx)
+	void OnAimPressed()
 	{
-		if (ctx.performed)
-			attackPressed = true;
+		Combat.StartChargeUp();
+	}
+
+	void OnAimCancelled()
+	{
+		Combat.EndChargeUp();
+	}
+
+	void OnAttackInput()
+	{
+		attackPressed = true;
 	}
 	#endregion
 }

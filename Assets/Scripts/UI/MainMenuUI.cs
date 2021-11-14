@@ -11,9 +11,6 @@ public class MainMenuUI : MonoBehaviour
 	public Animator panel = null;
 	public float fadeTime = 1;
 
-	private void Awake()
-	{
-	}
 	public void OnPlayButtonPressed()
 	{
 		StartCoroutine(LoadGame());
@@ -26,7 +23,6 @@ public class MainMenuUI : MonoBehaviour
 
 		try
 		{
-			Debug.Log("loading game");
 			SceneManager.LoadScene(gameplaySceneName);
 		}
 		catch (System.Exception e)

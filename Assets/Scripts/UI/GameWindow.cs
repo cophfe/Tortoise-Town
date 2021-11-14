@@ -101,14 +101,6 @@ public class GameWindow : MonoBehaviour
 		
 	}
 
-	public void SetInteractive(bool active)
-	{
-		if (alphaGroup && alphaGroup.blocksRaycasts != active)
-		{
-			alphaGroup.blocksRaycasts = active;
-		}
-	}
-
 	void SetAlpha(float alpha)
 	{
 		if (alphaGroup)

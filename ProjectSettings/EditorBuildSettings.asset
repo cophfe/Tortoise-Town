@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Tutorial_Level.unity
     guid: 1b485c67c37c2a240b675b855ddf0281
-  - enabled: 0
-    path: Assets/_Scenes/Personal/Connor.unity
-    guid: 63e1e6a4a49eebf4a9c6f91fb3ba221b
   m_configObjects: {}
