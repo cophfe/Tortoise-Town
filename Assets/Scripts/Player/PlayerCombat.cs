@@ -232,16 +232,16 @@ public class PlayerCombat : MonoBehaviour
 		cameraChanged = true;
 		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
 
-		if (playerController.GUI)
-			playerController.GUI.EnableCrossHair(true);
+		if (GameManager.Instance.GUI)
+			GameManager.Instance.GUI.EnableCrossHair(true);
 	}
 
 	public void EndChargeUp()
 	{
 		charging = false;
 		playerController.PlayerAudio.Stop();
-		if (playerController.GUI)
-			playerController.GUI.EnableCrossHair(false);
+		if (GameManager.Instance.GUI)
+			GameManager.Instance.GUI.EnableCrossHair(false);
 	}
 
 	public void EquipWeapon(bool equip)

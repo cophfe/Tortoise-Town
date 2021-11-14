@@ -51,9 +51,12 @@ public class GameWindowManager : MonoBehaviour
 						current = GetCurrentWindow();
 						if (current == null)
 						{
-							GameManager.Instance.IsCursorRestricted = true;
-							GameManager.Instance.Player.InputIsEnabled = true;
-							Time.timeScale = 1;
+							if (GameManager.Instance)
+							{
+								GameManager.Instance.IsCursorRestricted = true;
+								GameManager.Instance.Player.InputIsEnabled = true;
+								Time.timeScale = 1;
+							}
 						}
 						else
 						{
@@ -85,9 +88,13 @@ public class GameWindowManager : MonoBehaviour
 
 		if (activeWindows.Count == 0)
 		{
-			GameManager.Instance.IsCursorRestricted = false;
-			GameManager.Instance.Player.InputIsEnabled = false;
-			Time.timeScale = 0;
+			if (GameManager.Instance)
+			{
+				GameManager.Instance.IsCursorRestricted = false;
+				GameManager.Instance.Player.InputIsEnabled = false;
+				Time.timeScale = 0;
+			}
+			
 			if (backgroundPanel)
 				backgroundPanel.OpenWindow(true);
 		}
@@ -151,9 +158,12 @@ public class GameWindowManager : MonoBehaviour
 			backgroundPanel.OpenWindow(false);
 			backgroundPanel.UpdateOpenState(1);
 		}
-		GameManager.Instance.IsCursorRestricted = true;
-		GameManager.Instance.Player.InputIsEnabled = true;
-		Time.timeScale = 1;
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.IsCursorRestricted = true;
+			GameManager.Instance.Player.InputIsEnabled = true;
+			Time.timeScale = 1;
+		}
 	}
 
 	class WindowStack

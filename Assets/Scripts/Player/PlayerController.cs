@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] CameraController cameraController = null;
-	[SerializeField] GameplayUIManager gUI = null;
 	[SerializeField] float rollColliderRadius = 0.5f;
 	[SerializeField] Vector3 additionalRollColliderOffset = Vector3.zero;
 	[SerializeField] float rollCameraYOffset = 0;
@@ -34,7 +33,6 @@ public class PlayerController : MonoBehaviour
 	public PlayerHealth Health { get; private set; }
 	public CameraController MainCamera { get { return cameraController; }}
 	public Transform RotateChild { get { return rotatableChild; } }
-	public GameplayUIManager GUI { get { return gUI; } }
 	public InterpolateChild Interpolator { get { return visualInterpolator; } }
 
 	public AudioSource PlayerAudio { get; private set; }
@@ -76,7 +74,6 @@ public class PlayerController : MonoBehaviour
 	void Awake()
     {
 		PlayerInput = GetComponent<PlayerInput>();
-		
 		Motor = GetComponent<PlayerMotor>();
 		Animator = GetComponentInChildren<PlayerAnimator>();
 		if (!Animator)
@@ -85,8 +82,6 @@ public class PlayerController : MonoBehaviour
 		Health = GetComponent<PlayerHealth>();
 		Combat = GetComponent<PlayerCombat>();
 		visualInterpolator = GetComponentInChildren<InterpolateChild>();
-		if (!gUI)
-			gUI = FindObjectOfType<GameplayUIManager>();
 		if (!MainCamera)
 			cameraController = FindObjectOfType<CameraController>();
 		FootstepAudio = GetComponent<AudioSource>();
@@ -205,6 +200,12 @@ public class PlayerController : MonoBehaviour
 	{
 		if (ctx.performed)
 			attackPressed = true;
+	}
+
+	public void OnControlsChanged()
+	{
+		if (cameraController && PlayerInput)
+			cameraController.SetControllerInput(PlayerInput.currentControlScheme == "Controller");
 	}
 	#endregion
 }

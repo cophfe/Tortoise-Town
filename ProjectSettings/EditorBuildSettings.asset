@@ -17,4 +17,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Personal/Connor.unity
     guid: 63e1e6a4a49eebf4a9c6f91fb3ba221b
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: b419ea8834f823947a07379e74c694e8, type: 2}

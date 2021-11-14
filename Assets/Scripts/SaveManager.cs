@@ -398,5 +398,5 @@ public class SaveManager
 		public bool[] saveableStates;
 	}
 
-	static string GetPath() { return Application.persistentDataPath + "\\save.tt"; }
+	public static string GetPath() { return Application.persistentDataPath + "\\save.tt"; }
 }

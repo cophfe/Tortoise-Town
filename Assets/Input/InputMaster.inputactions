@@ -11,7 +11,8 @@
                     "id": "4f98bde0-296b-438e-b16e-f7b2c9fd94ff",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
@@ -19,7 +20,8 @@
                     "id": "9921192a-8ebd-4510-9d53-17bafcedceaa",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Sprint",
@@ -27,7 +29,8 @@
                     "id": "a9cfa3e6-b0fa-4b4a-8496-103765c267b0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Crouch",
@@ -35,7 +38,8 @@
                     "id": "68a57f33-84ed-457e-8fe7-d5a6408486d1",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Aim",
@@ -43,7 +47,8 @@
                     "id": "67ba8191-ae9d-4c28-a861-4aad2d863c9b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Attack",
@@ -51,23 +56,8 @@
                     "id": "92bc5ed1-a6fe-4e3e-83fa-8db2f1fec50d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "f90fef62-b01c-4d4c-92d3-8d1a89110d9d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Bow",
-                    "type": "Button",
-                    "id": "bd08b4de-056e-47d1-a866-bd1cf104f4d8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -173,7 +163,7 @@
                 {
                     "name": "",
                     "id": "0c375751-e9e3-4c27-95eb-9e93c4a98f96",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -195,7 +185,7 @@
                 {
                     "name": "",
                     "id": "e12a412d-77ad-4377-af5f-895ab3ddb4a4",
-                    "path": "<Gamepad>/dpad/right",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -217,7 +207,7 @@
                 {
                     "name": "",
                     "id": "daae620f-1f5c-46ff-a054-62d951e0b32f",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -239,7 +229,7 @@
                 {
                     "name": "",
                     "id": "809224f2-cb76-4d61-bc35-5dca433216c9",
-                    "path": "<Gamepad>/leftStick/left",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
@@ -249,34 +239,12 @@
                 },
                 {
                     "name": "",
-                    "id": "a74f1ea8-289b-40fc-8415-d5b13d70fcd3",
-                    "path": "<Keyboard>/e",
+                    "id": "3dd4e94a-a66a-4a42-89ba-888ac1349e9f",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "470cfed0-32b5-40d1-b839-257e64969027",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Hold",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Bow",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f99147d1-a69a-4810-81ff-54352a552330",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -292,7 +260,8 @@
                     "id": "794c2a42-326d-4a37-9ab1-3d857b652bc8",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -312,7 +281,7 @@
                     "id": "0b848b15-ff7b-42e9-afbf-b09221fe6fed",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=2000,y=2000)",
                     "groups": "Controller",
                     "action": "Look",
                     "isComposite": false,
@@ -330,7 +299,8 @@
                     "id": "c6fdacfa-5d0c-40b3-9745-89a2923896c1",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

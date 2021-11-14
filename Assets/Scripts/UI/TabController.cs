@@ -21,8 +21,15 @@ public class TabController : MonoBehaviour
 	{
 		for (int i = 0; i < tabs.Length; i++)
 		{
-			tabs[i].tab.SetActive(i == index);
+			if (tabs[i].tab)
+				tabs[i].tab.SetActive(i == index);
 		}
+	}
+
+	private void OnDisable()
+	{
+		if (tabs.Length > 0)
+			SetActive(0);
 	}
 
 	[System.Serializable]

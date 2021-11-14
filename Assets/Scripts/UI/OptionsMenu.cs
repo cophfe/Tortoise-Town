@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System.IO;
 using System;
+using System.Globalization;
+using UnityEngine.Audio;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -18,7 +20,6 @@ public class OptionsMenu : MonoBehaviour
 	[Header("General Options")]
 	public Slider fov;
 	public Slider screenShake;
-	public Toggle playTutorial;
 	public Button resetSaveData;
 
 	[Header("Controls Options")]
@@ -36,15 +37,33 @@ public class OptionsMenu : MonoBehaviour
 	public Slider sFXVolume;
 	public Slider musicVolume;
 
-	[Header("Other")]
-	public Button applyButton;
+	[Header("Keybind Stuff")]
 	public GameWindow keybindWindow;
 	public Keybinding keybindingPrefab;
-	public RectTransform keyBindingParent;
+	public RectTransform keybindContent;
+
+	[Header("Audio Mixer Stuff")]
+	public AudioMixer mixer;
+	[Tooltip("The exposed paramater on the mixer that controls master volume.")]
+	public string masterParameterName = "Master Volume";
+	[Tooltip("The exposed paramater on the mixer that controls music volume.")]
+	public string musicParameterName = "Music Volume";
+	[Tooltip("The exposed paramater on the mixer that controls music volume.")]
+	public string sfxParameterName = "SFX Volume";
+
+	[Header("Other")]
+	public Button applyButton;
 	public OptionsData defaultOptions;
+	public MainMenuUI mainMenu;
+	public PlayerInput backupInput;
+	public Camera mainCameraPrefab;
 
 	//Internal
+	List<Vector2Int> resolutions;
+	int resolutionIndex = 0;
 	bool isChanged = false;
+	List<Keybinding> bindings;
+
 	bool IsChanged
 	{
 		get
@@ -60,13 +79,97 @@ public class OptionsMenu : MonoBehaviour
 
 	public void Initiate()
 	{
-		foreach(var action in GameManager.Instance.Player.PlayerInput.actions)
+		//START RESOLUTIONS
+		Resolution currentRes = Screen.currentResolution;
+		resolutionIndex = 0;
+		var allResolutions = Screen.resolutions;
+		resolutions = new List<Vector2Int>();
+
+		resolutions.Add(new Vector2Int(allResolutions[0].width, allResolutions[0].height));
+		for (int i = 1; i < allResolutions.Length; i++)
 		{
-			var keybind = Instantiate(keybindingPrefab.gameObject, keyBindingParent).GetComponent<Keybinding>();
-			keybind.SetText(action.name);
-			keybind.SetBind(InputControlPath.ToHumanReadableString(action.bindings[0].effectivePath, InputControlPath.HumanReadableStringOptions.OmitDevice));
-			keybind.SetAction(action);
+			if (allResolutions[i].width == allResolutions[i - 1].width && allResolutions[i].height == allResolutions[i - 1].height)
+				continue;
+
+			resolutions.Add(new Vector2Int(allResolutions[i].width, allResolutions[i].height));
+
+			if (currentRes.width == allResolutions[i].width && currentRes.height == allResolutions[i].height)
+				resolutionIndex = resolutions.Count - 1;
 		}
+
+		List<string> resolutionStrings = new List<string>(resolutions.Count);
+		for (int i = resolutions.Count - 1; i >= 0; i--)
+		{
+			resolutionStrings.Add($"{resolutions[i].x}x{resolutions[i].y}");
+		}
+		resolution.AddOptions(resolutionStrings);
+		resolution.value = resolutionStrings.Count - 1 - resolutionIndex;
+		//END RESOLUTIONS
+
+		//make sure defaultoptions is correct on some things
+		ValidateDefaults();
+
+		//EVERYTHING ELSE
+		ApplyFromFile();
+		//END EVERYTHING ELSE
+
+		//KEYBINDINGS
+		bindings = new List<Keybinding>();
+		int count = 0;
+		InputActionMap inputActionMap;
+		if (GameManager.Instance)
+		{
+			inputActionMap = GameManager.Instance.Player.PlayerInput.currentActionMap;
+		}
+		else
+		{
+			inputActionMap = backupInput.currentActionMap;
+		}
+
+		foreach (var action in inputActionMap.actions)
+		{
+			if (action.bindings[0].isComposite)
+			{
+				for (int i = 1; i < 5; i++)
+				{
+					var keybind = Instantiate(keybindingPrefab.gameObject, keybindContent).GetComponent<Keybinding>();
+					string controlName = action.bindings[i].name;
+					keybind.Set(controlName[0].ToString().ToUpper() + controlName.Substring(1),
+						action.bindings[i].ToDisplayString(),
+						action,
+						this,
+						i,
+						GameManager.Instance != null);
+					bindings.Add(keybind);
+					count++;
+				}
+			}
+			else
+			{
+				var keybind = Instantiate(keybindingPrefab.gameObject, keybindContent).GetComponent<Keybinding>();
+				keybind.Set(action.name,
+					action.controls[0].displayName,
+					action,
+					this, 
+					0,
+					GameManager.Instance != null);
+				bindings.Add(keybind);
+				count++;
+			}
+		}
+		var rect = keybindContent.sizeDelta;
+		rect.y += count * (keybindingPrefab.GetComponent<RectTransform>().sizeDelta.y + 8);
+		keybindContent.sizeDelta = rect;
+		//END KEYBINDINGS
+
+		IsChanged = false;
+	}
+
+	void ValidateDefaults()
+	{
+		defaultOptions.windowMode = (int)Screen.fullScreenMode;
+		defaultOptions.vSyncMode = QualitySettings.vSyncCount;
+		defaultOptions.graphicsQuality = QualitySettings.GetQualityLevel();
 	}
 
 	public void OpenKeybindingMenu()
@@ -79,12 +182,22 @@ public class OptionsMenu : MonoBehaviour
 		windowManager.RemoveFromQueue();
 	}
 
-	void OnApply()
+	public void OnApply()
 	{
-		isChanged = false;
+		IsChanged = false;
+		ApplyUIToGame();
 		Save();
+	}
 
-		//GetComponent<PlayerInput>().actions.SaveBindingOverridesAsJson();
+	public void OnChangedValue()
+	{
+		IsChanged = true;
+	}
+
+	private void OnEnable()
+	{
+		if (backupInput)
+			backupInput.enabled = false;
 	}
 
 	public void ApplyFromFile()
@@ -111,64 +224,88 @@ public class OptionsMenu : MonoBehaviour
 			Debug.LogWarning("Options data does not exist on device. Setting to default.");
 			ApplyDataToUI(defaultOptions);
 		}
+
+
+		if (File.Exists(GetKeybindsPath()))
+		{
+			try
+			{
+				string keybindSaved = File.ReadAllText(GetKeybindsPath());
+				if (GameManager.Instance)
+					GameManager.Instance.Player.PlayerInput.actions.LoadBindingOverridesFromJson(keybindSaved);
+				else
+					backupInput.actions.LoadBindingOverridesFromJson(keybindSaved);
+			}
+			catch
+			{
+				Debug.LogWarning("There were no keybinds to load.");
+			}
+		}
+
+		ApplyUIToGame();
 	}
 
 	void ApplyDataToUI(OptionsData options)
 	{
-		//OptionsData options = new OptionsData
-		//{
-		//	fov = fov.value,
-		//	screenShake = screenShake.value,
-		//	playTutorial = playTutorial.isOn,
-
-		//	sensitivity = cameraSensitivity.value,
-		//	invertX = invertedCameraX.isOn,
-		//	invertY = invertedCameraY.isOn,
-		//	rebinds = overrides,
-
-		//	windowMode = windowMode.value,
-		//	vSyncMode = vSyncMode.value,
-		//	graphicsQuality = graphicsQuality.value,
-
-		//	masterVolume = masterVolume.value,
-		//	sfxVolume = sFXVolume.value,
-		//	musicVolume = musicVolume.value
-		//};
-
 		//first apply the changes to the UI
 		fov.value = options.fov;
 		screenShake.value = options.screenShake;
-		playTutorial.isOn = options.playTutorial;
 		
 		cameraSensitivity.value = options.sensitivity;
 		invertedCameraX.isOn = options.invertX;
 		invertedCameraY.isOn = options.invertY;
-		//rebinds
 
 		windowMode.value = options.windowMode;
 		vSyncMode.value = options.vSyncMode;
 		graphicsQuality.value = options.graphicsQuality;
+
+		masterVolume.value = options.masterVolume;
+		sFXVolume.value = options.sfxVolume;
+		musicVolume.value = options.musicVolume;
 	}
 
 	void ApplyUIToGame()
 	{
+		GameManager gameManager = GameManager.Instance;
+		if (gameManager)
+		{
+			var player = gameManager.Player;
+			if (player)
+			{
+				CameraController cameraController = player.MainCamera;
+				cameraController.GetComponent<Camera>().fieldOfView = fov.value;
+				cameraController.screenShakeModifier = screenShake.value;
+				cameraController.sensitivityModifier = cameraSensitivity.value;
+				cameraController.invertX = invertedCameraX.isOn;
+				cameraController.invertY = invertedCameraY.isOn;
+			}
+		}
 
+		QualitySettings.vSyncCount = vSyncMode.value;
+		QualitySettings.SetQualityLevel(graphicsQuality.value);
+
+		int resIndex = resolutions.Count - 1 - resolution.value;
+		if (!(resIndex >= 0 && resIndex < resolutions.Count))
+			resIndex = resolutions.Count - 1;
+		Vector2Int res = resolutions[resIndex];
+
+		Screen.SetResolution(res.x, res.y, (FullScreenMode)windowMode.value);
+
+		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolume.value));
+		mixer.SetFloat(musicParameterName, LinearToDecibels(musicVolume.value));
+		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
 	}
 
 	public void Save()
 	{
-		string overrides = GameManager.Instance.Player.PlayerInput.actions.SaveBindingOverridesAsJson();
-
 		OptionsData options = new OptionsData
 		{
 			fov = fov.value,
 			screenShake = screenShake.value,
-			playTutorial = playTutorial.isOn,
 
 			sensitivity = cameraSensitivity.value,
 			invertX = invertedCameraX.isOn,
 			invertY = invertedCameraY.isOn,
-			rebinds = overrides,
 
 			windowMode = windowMode.value,
 			vSyncMode = vSyncMode.value,
@@ -191,16 +328,34 @@ public class OptionsMenu : MonoBehaviour
 		}
 	}
 
+	public void SaveKeybinds()
+	{
+		PlayerInput input;
+		if (GameManager.Instance)
+			input = GameManager.Instance.Player.PlayerInput;
+		else
+			input = backupInput;
+
+		string overrides = input.actions.SaveBindingOverridesAsJson();
+		File.WriteAllText(GetKeybindsPath(), overrides);
+	}
+
 	string GetOptionsPath()
 	{
 		return Application.persistentDataPath + "/options.json";
+	}
+
+	string GetKeybindsPath()
+	{
+		return Application.persistentDataPath + "/keybinds.json";
 	}
 
 	public enum AreYouSureState
 	{
 		DEFAULT,
 		BACK,
-		RESETSAVEDATA
+		RESETSAVEDATA,
+		DEFAULTKEYBINDS
 	}
 
 	public void SetAreYouSure(int state)
@@ -208,20 +363,18 @@ public class OptionsMenu : MonoBehaviour
 		switch ((AreYouSureState)state)
 		{
 			case AreYouSureState.DEFAULT:
-				if (isChanged)
-				{
-					areYouSureText.text = "Are you sure you want to reset your settings to default? This will only affect the current tab.";
-					areYouSureConfirm.onClick.RemoveAllListeners();
-					//areYouSureConfirm.onClick.AddListener();
-					windowManager.AddToQueue(areYouSure);
-				}
+					
+				areYouSureText.text = "Are you sure you want to reset your settings to default?";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(ApplyDefault);
+				windowManager.AddToQueue(areYouSure);
 				break;
 			case AreYouSureState.BACK:
-				if (isChanged)
+				if (IsChanged)
 				{
-					areYouSureText.text = "Are you sure you want to leave? There are unsaved changes.";
+					areYouSureText.text = "Are you sure you want to exit? There are unsaved changes.";
 					areYouSureConfirm.onClick.RemoveAllListeners();
-					//areYouSureConfirm.onClick.AddListener();
+					areYouSureConfirm.onClick.AddListener(() => { windowManager.RemoveFromQueue(); windowManager.RemoveFromQueue(); });
 					windowManager.AddToQueue(areYouSure);
 				}
 				else
@@ -232,10 +385,64 @@ public class OptionsMenu : MonoBehaviour
 			case AreYouSureState.RESETSAVEDATA:
 				areYouSureText.text = "Resetting save data cannot be undone. Do you want to continue?";
 				areYouSureConfirm.onClick.RemoveAllListeners();
-				//areYouSureConfirm.onClick.AddListener();
+				areYouSureConfirm.onClick.AddListener(DeleteSave);
+				windowManager.AddToQueue(areYouSure);
+				break;
+			case AreYouSureState.DEFAULTKEYBINDS:
+				areYouSureText.text = "Are you sure you want to reset the keybinds?";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(ResetKeybindings);
 				windowManager.AddToQueue(areYouSure);
 				break;
 		}
+	}
+
+	public void ApplyDefault()
+	{
+		ApplyDataToUI(defaultOptions);
+		windowManager.RemoveFromQueue();
+	}
+	public void DeleteSave()
+	{
+		if (File.Exists(SaveManager.GetPath()))
+		{
+			File.WriteAllText(SaveManager.GetPath(), "");
+		}
+		windowManager.RemoveFromQueue();
+		if (mainMenu)
+		{
+			mainMenu.continueButton.interactable = false;
+		}
+	}
+
+	public void PopWindow()
+	{
+		windowManager.RemoveFromQueue();
+	}
+
+	public void ResetKeybindings()
+	{
+		if (GameManager.Instance)
+			GameManager.Instance.Player.PlayerInput.actions.RemoveAllBindingOverrides();
+		else
+			backupInput.actions.RemoveAllBindingOverrides();
+		
+		SaveKeybinds();
+		windowManager.RemoveFromQueue();
+		foreach (var keybind in bindings)
+		{
+			keybind.SetBind();
+		}
+	}
+
+	public static float DecibelsToLinear(float db)
+	{
+		return Mathf.Pow(10.0f, db / 20.0f);
+	}
+
+	public static float LinearToDecibels(float linear)
+	{
+		return 20.0f * Mathf.Log10(linear);
 	}
 
 	[System.Serializable]
@@ -247,12 +454,10 @@ public class OptionsMenu : MonoBehaviour
 		//general
 		public float fov;
 		public float screenShake;
-		public bool playTutorial;
 
 		//controls
 		public float sensitivity;
 		public bool invertX, invertY;
-		public string rebinds; //json inception
 
 		//video
 		public int windowMode;
