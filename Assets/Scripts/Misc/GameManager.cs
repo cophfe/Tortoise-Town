@@ -9,11 +9,12 @@ public class GameManager : MonoBehaviour
 {
 	static GameManager instance;
 	public static GameManager Instance { get { return instance; } set { instance = value; } }
-
+	
 	[Header("General Stuff")]
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] bool saveDataToFile = true;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] int arrowPoolNotifyDistance = 4;
 	public ObjectPool ArrowPool { get; private set; }
 	public PlayerController Player { get { return player; } }
-	public SaveManager SaveManager { get; private set; } = new SaveManager();
+	public SaveManager SaveManager { get; private set; }
 	public bool WonGame { get; private set; } = false;
 
 	Vector3 initialPlayerPosition;
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
+			SaveManager = new SaveManager(saveDataToFile);
 			instance = this;
 			IsCursorRestricted = true;
 			ArrowPool = new ObjectPool(arrowPoolAmount, arrowPoolNotifyDistance, arrowPrefab, transform);
@@ -178,6 +180,7 @@ public class GameManager : MonoBehaviour
 		GameManager.Instance.Player.InputIsEnabled = false;
 		//and begone save data
 		SaveManager.ClearSaveData();
+		SaveManager.DeleteSceneData();
 	}
 
 	private void OnValidate()
@@ -212,10 +215,9 @@ public class GameManager : MonoBehaviour
 		if (instance == this)
 		{
 			instance = null;
-			if (Application.isEditor)
-				SaveManager.ClearSaveData();
 			Time.timeScale = 1;
-			enableCursorRestriction = false;
+			IsCursorRestricted = false;
+			SaveManager.OnDestroy();
 		}
 	}
 }
