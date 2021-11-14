@@ -9,14 +9,16 @@ public class GameManager : MonoBehaviour
 {
 	static GameManager instance;
 	public static GameManager Instance { get { return instance; } set { instance = value; } }
-
+	
 	[Header("General Stuff")]
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] bool saveDataToFile = true;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
+	[SerializeField] GameplayUIManager gUI = null;
 
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
@@ -31,13 +33,16 @@ public class GameManager : MonoBehaviour
 	[SerializeField] int arrowPoolNotifyDistance = 4;
 	public ObjectPool ArrowPool { get; private set; }
 	public PlayerController Player { get { return player; } }
-	public SaveManager SaveManager { get; private set; } = new SaveManager();
+	public SaveManager SaveManager { get; private set; }
+	public GameplayUIManager GUI { get { return gUI; } }
+
 	public bool WonGame { get; private set; } = false;
 
 	Vector3 initialPlayerPosition;
 	Quaternion initialPlayerRotation;
 	int currentDissolverCount;
 	int totalDissolverCount;
+	List<GooDissolve> gooDissolvers;
 
 	void Awake()
     {
@@ -48,6 +53,9 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
+			if (!gUI)
+				gUI = FindObjectOfType<GameplayUIManager>();
+			SaveManager = new SaveManager(saveDataToFile);
 			instance = this;
 			IsCursorRestricted = true;
 			ArrowPool = new ObjectPool(arrowPoolAmount, arrowPoolNotifyDistance, arrowPrefab, transform);
@@ -56,6 +64,7 @@ public class GameManager : MonoBehaviour
 
 			initialPlayerPosition = player.transform.position;
 			initialPlayerRotation = player.transform.rotation;
+			gooDissolvers = new List<GooDissolve>();
 		}
 	}
 
@@ -74,7 +83,7 @@ public class GameManager : MonoBehaviour
 			player.RotateChild.localRotation = initialPlayerRotation;
 		}
 		CalculateTotalDissolvers();
-		currentDissolverCount = totalDissolverCount;
+		CalculateCurrentDissolverCount();
 	}
 
 	public void OnPlayerDeath()
@@ -91,8 +100,8 @@ public class GameManager : MonoBehaviour
 	IEnumerator ResetScene()
 	{
 		yield return new WaitForSeconds(deathTime);
-		player.GUI.Fade(true);
-		yield return new WaitForSeconds(player.GUI.fadeTime);
+		GUI.Fade(true);
+		yield return new WaitForSeconds(GUI.fadeTime);
 		SetSceneFromSavedData();
 	}
 
@@ -101,16 +110,9 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
-	public IEnumerator ResetSceneFromMenu()
-	{
-		player.GUI.Fade(true);
-		yield return new WaitForSeconds(player.GUI.fadeTime);
-		
-	}
-
 	public void SetSceneFromSavedData()
 	{
-		SaveManager.SetSceneFromSaveData();
+		SaveManager.ResetScene();
 		var checkpoint = SaveManager.GetCurrentCheckpoint();
 		if (checkpoint != null)
 		{
@@ -126,7 +128,8 @@ public class GameManager : MonoBehaviour
 		player.MainCamera.ResetCameraData();
 		player.MainCamera.MoveToTarget();
 		ArrowPool.ResetToDefault();
-		player.GUI.Fade(false);
+		GUI.Fade(false);
+		CalculateCurrentDissolverCount();
 	}
 
 	public void ExitToMenu()
@@ -141,10 +144,15 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void RegisterGooDissolver(GooDissolve dissolver)
+	{
+		gooDissolvers.Add(dissolver);
+	}
+
 	public void CalculateTotalDissolvers()
 	{
 		totalDissolverCount = 0;
-		foreach (var dissolver in SaveManager.GetGooDissolverList())
+		foreach (var dissolver in gooDissolvers)
 		{
 			if (dissolver.requiredForWin) totalDissolverCount++;
 		}
@@ -152,7 +160,7 @@ public class GameManager : MonoBehaviour
 	public void CalculateCurrentDissolverCount()
 	{
 		currentDissolverCount = 0;
-		foreach(var dissolver in SaveManager.GetGooDissolverList())
+		foreach(var dissolver in gooDissolvers)
 		{
 			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
 		}
@@ -174,10 +182,11 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(winWaitTime);
 		IsCursorRestricted = false;
 		Time.timeScale = 0;
-		Player.GUI.WindowManager.SetCurrentWindow("Win");
+		GUI.WindowManager.AddToQueue(GUI.winMenu);
 		GameManager.Instance.Player.InputIsEnabled = false;
 		//and begone save data
 		SaveManager.ClearSaveData();
+		SaveManager.DeleteSceneData();
 	}
 
 	private void OnValidate()
@@ -212,10 +221,9 @@ public class GameManager : MonoBehaviour
 		if (instance == this)
 		{
 			instance = null;
-			if (Application.isEditor)
-				SaveManager.ClearSaveData();
 			Time.timeScale = 1;
-			enableCursorRestriction = false;
+			IsCursorRestricted = false;
+			SaveManager.OnDestroy();
 		}
 	}
 }

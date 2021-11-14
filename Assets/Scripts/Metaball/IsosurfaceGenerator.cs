@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using UnityEngine.Jobs;
 
 //used marching cubes lookup table and way to access them from
 //http://paulbourke.net/geometry/polygonise/
@@ -20,24 +23,52 @@ public class IsosurfaceGenerator : MonoBehaviour
 	IsoShape[] metaShapes;
 	public float threshold = 1;
 	public float UVtiling = 1;
-	public bool generateMesh = true;
-
+	public bool useParallel = false;
 	float[,,] isoValues;
 	Vector3 startPoint;
 	float inverseResolution;
 
+	TransformCapturedState transformState;
+
 	public void Generate()
 	{
+		//var watch = new System.Diagnostics.Stopwatch();
+		
+		//watch.Start();
+		InitializeForParallel();
 		GenerateBounds();
 		GenerateMeta();
-		GenerateMesh();
+		//watch.Stop();
+		//long eS = watch.ElapsedMilliseconds;
+		//Debug.Log("Time for generating isovalues: " + eS + " ms.");
+		//watch.Restart();
+		if (useParallel)
+			GenerateMeshParallel();
+		else
+			GenerateMesh();
+		//watch.Stop();
+		//Debug.Log("Time for generating mesh: " + (watch.ElapsedMilliseconds) + " ms.");
+		//Debug.Log("Total time with useParallel set to " + useParallel + ": " + (watch.ElapsedMilliseconds  + eS) + " ms.");
 		isoValues = null;
+	}
+
+	public void InitializeForParallel()
+	{
+		transformState = new TransformCapturedState(transform);
+		for (int i = 0; i < metaShapes.Length; i++)
+		{
+			metaShapes[i].InitializeForParallel();
+		}
 	}
 
 	public void GenerateBounds()
 	{
 		metaShapes = GetComponentsInChildren<IsoShape>(false);
-		if (!autoGenerateBounds) return;
+		
+		if (!autoGenerateBounds)
+		{
+			return;
+		}
 
 		if (metaShapes.Length == 0)
 		{
@@ -70,8 +101,6 @@ public class IsosurfaceGenerator : MonoBehaviour
 	}
 	void GenerateMeta()
 	{
-		if (metaShapes.Length == 0) return;
-
 		Vector3Int extent = new Vector3Int(Mathf.CeilToInt(meshBounds.size.x * resolution), Mathf.CeilToInt(meshBounds.size.y * resolution), Mathf.CeilToInt(meshBounds.size.z * resolution));
 		if (extent.x == 0 || extent.y == 0 || extent.z == 0 )
 		{
@@ -82,44 +111,49 @@ public class IsosurfaceGenerator : MonoBehaviour
 		startPoint = meshBounds.center - meshBounds.size/2;
 		inverseResolution = 1 / resolution;
 
-		for (int i = 0; i < isoValues.GetLength(0); i++)
+		if (useParallel)
 		{
-			for (int j = 0; j < isoValues.GetLength(1); j++)
+			Parallel.For(0, extent.x, x =>
 			{
-				for (int k = 0; k < isoValues.GetLength(2); k++)
+				for (int y = 0; y < extent.y; y++)
 				{
-					isoValues[i, j, k] = GetIsoValue(CalculatePositionAtIndex(i, j, k));
+					for (int z = 0; z < extent.z; z++)
+					{
+
+						if (x == 0 || x == extent.x - 1
+							|| y == 0 || y == extent.y - 1
+							|| z == 0 || z == extent.z - 1)
+						{
+							isoValues[x, y, z] = Mathf.Min(threshold - 0.1f, GetIsoValueParallel(CalculatePositionAtIndex(x, y, z)));
+						}
+						else
+						{
+							isoValues[x, y, z] = GetIsoValueParallel(CalculatePositionAtIndex(x, y, z));
+						}
+					}
 				}
-			}
+			});
 		}
-
-		if (addWallsAtBounds
-			&& !(isoValues.GetLength(0) == 0 || isoValues.GetLength(1) == 0 || isoValues.GetLength(2) == 0))
+		else
 		{
-			for (int i = 0; i < isoValues.GetLength(0); i++)
+			for (int x = 0; x < extent.x; x++)
 			{
-				for (int j = 0; j < isoValues.GetLength(1); j++)
+				for (int y = 0; y < extent.y; y++)
 				{
-					isoValues[i, j, 0] = Mathf.Min(threshold, isoValues[i,j,0]);
-					isoValues[i, j, isoValues.GetLength(2) - 1] = Mathf.Min(threshold, isoValues[i, j, isoValues.GetLength(2) - 1]);
-				}
-			}
+					for (int z = 0; z < extent.z; z++)
+					{
 
-			for (int i = 0; i < isoValues.GetLength(0); i++)
-			{
-				for (int k = 0; k < isoValues.GetLength(2); k++)
-				{
-					isoValues[i,0, k] = Mathf.Min(threshold, isoValues[i, 0, k]);
-					isoValues[i,isoValues.GetLength(1) - 1, k] = Mathf.Min(threshold, isoValues[i, isoValues.GetLength(1) - 1, k]);
-				}
-			}
-
-			for (int j = 0; j < isoValues.GetLength(1); j++)
-			{
-				for (int k = 0; k < isoValues.GetLength(2); k++)
-				{
-					isoValues[0, j, k] = Mathf.Min(threshold, isoValues[0, j, k]);
-					isoValues[isoValues.GetLength(0) - 1, j, k] = Mathf.Min(threshold, isoValues[isoValues.GetLength(0) - 1, j, k]);
+						if (x == 0 || x == extent.x - 1
+							|| y == 0 || y == extent.y - 1
+							|| z == 0 || z == extent.z - 1)
+						{
+							isoValues[x, y, z] = Mathf.Min(threshold - 0.1f, GetIsoValue(CalculatePositionAtIndex(x, y, z)));
+						}
+						else
+						{
+							isoValues[x, y, z] = GetIsoValue(CalculatePositionAtIndex(x, y, z));
+						}
+					}
 				}
 			}
 		}
@@ -133,6 +167,14 @@ public class IsosurfaceGenerator : MonoBehaviour
 		return metaValue;
 	}
 
+	float GetIsoValueParallel(Vector3 point)
+	{
+		float metaValue = 0;
+		foreach (var shape in metaShapes)
+			metaValue += shape.GetIsoValueParallel(point, ref transformState);
+		return metaValue;
+	}
+
 	void GenerateMesh()
 	{
 		if (metaShapes.Length == 0)
@@ -142,8 +184,8 @@ public class IsosurfaceGenerator : MonoBehaviour
 		}
 		List<Vector3> vertices = new List<Vector3>();
 		LinkedList<int> triangles = new LinkedList<int>();
-
 		MarchingCubesData data = new MarchingCubesData();
+
 		Vector3[] vertexList = new Vector3[12];
 		Vector3Int[] corners = new Vector3Int[8];
 		//using cube xyz, not point xyz
@@ -185,7 +227,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 					if ((data.edgeTable[index] & 2048) != 0)
 						vertexList[11] = GetPointBetweenPoints(corners[3], corners[7]);
 
-					//the lookup table is super smart and uses this to access the vertices. all the valid vertices are lined up first then the rest of the values are negitive
+					//the lookup table is super smart and uses this to access the vertices
 					for (int i = 0; data.triTable[index].Length > i; i++)
 					{
 						Vector3 vertex = vertexList[data.triTable[index][i]];
@@ -209,9 +251,6 @@ public class IsosurfaceGenerator : MonoBehaviour
 		newMesh.name = "generated mesh";
 
 		newMesh.vertices = vertices.ToArray();
-		//int[] triArray = new int[triangles.Count];
-		//triangles.CopyTo(triArray, 0);
-		//newMesh.triangles = triArray;
 		int[] triArray = new int[triangles.Count];
 		triangles.CopyTo(triArray, 0);
 		newMesh.triangles = triArray;
@@ -228,6 +267,118 @@ public class IsosurfaceGenerator : MonoBehaviour
 		newMesh.RecalculateBounds();
 		newMesh.RecalculateTangents();
 			
+
+		var filter = GetComponent<MeshFilter>();
+		filter.sharedMesh = null;
+		filter.mesh = newMesh;
+	}
+
+	void GenerateMeshParallel()
+	{
+		if (metaShapes.Length == 0)
+		{
+			GetComponent<MeshFilter>().mesh = null;
+			return;
+		}
+
+		MarchingCubesData data = new MarchingCubesData();
+		
+		var vertices = new List<Vector3>();
+		var triangles = new List<int>();
+
+		var result = Parallel.For(0, isoValues.GetLength(0) - 1,  x =>
+		{
+			Vector3[] vertexList = new Vector3[12];
+			Vector3Int[] corners = new Vector3Int[8];
+			//using cube xyz, not point xyz
+			List<Vector3> planeVertices = new List<Vector3>();
+			List<int> verticeIndexes = new List<int>();
+
+			for (int y = 0; y < isoValues.GetLength(1) - 1; y++)
+			{
+				for (int z = 0; z < isoValues.GetLength(2) - 1; z++)
+				{
+					byte index = GetCubeIndex(x, y, z);
+
+					//no triangles to be generated in this case
+					if (data.edgeTable[index] == 0) continue;
+
+					SetCorners(x, y, z, corners);
+
+					if ((data.edgeTable[index] & 1) != 0)
+						vertexList[0] = GetPointBetweenPoints(corners[0], corners[1]);
+					if ((data.edgeTable[index] & 2) != 0)
+						vertexList[1] = GetPointBetweenPoints(corners[1], corners[2]);
+					if ((data.edgeTable[index] & 4) != 0)
+						vertexList[2] = GetPointBetweenPoints(corners[2], corners[3]);
+					if ((data.edgeTable[index] & 8) != 0)
+						vertexList[3] = GetPointBetweenPoints(corners[3], corners[0]);
+					if ((data.edgeTable[index] & 16) != 0)
+						vertexList[4] = GetPointBetweenPoints(corners[4], corners[5]);
+					if ((data.edgeTable[index] & 32) != 0)
+						vertexList[5] = GetPointBetweenPoints(corners[5], corners[6]);
+					if ((data.edgeTable[index] & 64) != 0)
+						vertexList[6] = GetPointBetweenPoints(corners[6], corners[7]);
+					if ((data.edgeTable[index] & 128) != 0)
+						vertexList[7] = GetPointBetweenPoints(corners[7], corners[4]);
+					if ((data.edgeTable[index] & 256) != 0)
+						vertexList[8] = GetPointBetweenPoints(corners[0], corners[4]);
+					if ((data.edgeTable[index] & 512) != 0)
+						vertexList[9] = GetPointBetweenPoints(corners[1], corners[5]);
+					if ((data.edgeTable[index] & 1024) != 0)
+						vertexList[10] = GetPointBetweenPoints(corners[2], corners[6]);
+					if ((data.edgeTable[index] & 2048) != 0)
+						vertexList[11] = GetPointBetweenPoints(corners[3], corners[7]);
+
+					for (int i = 0; data.triTable[index].Length > i; i++)
+					{
+						Vector3 vertex = vertexList[data.triTable[index][i]];
+
+						int vertexIndex = planeVertices.LastIndexOf(vertex);
+						if (vertexIndex == -1)
+						{
+							verticeIndexes.Add(planeVertices.Count);
+							planeVertices.Add(vertex);
+						}
+						else
+						{
+							verticeIndexes.Add(vertexIndex);
+						}
+					}
+				}
+			}
+			lock(vertices) lock (triangles)
+			{
+				int verticesCount = vertices.Count;
+				vertices.AddRange(planeVertices);
+				triangles.Capacity += verticeIndexes.Count;
+				for (int i = 0; i < verticeIndexes.Count; i++)
+				{
+					triangles.Add(verticeIndexes[i] + verticesCount);
+				}
+			}
+		});
+
+		Mesh newMesh = new Mesh();
+		newMesh.name = "generated mesh";
+
+		var vertexArray = vertices.ToArray();
+		newMesh.vertices = vertexArray;
+		var triangleArray = triangles.ToArray();
+		newMesh.triangles = triangleArray;
+
+		//calculate UVs
+		Vector2[] uvList = new Vector2[vertexArray.Length];
+		for (int i = 0; i < vertexArray.Length; i++)
+		{
+			uvList[i] = new Vector2(vertexArray[i].x * UVtiling, vertexArray[i].z * UVtiling);
+		}
+		newMesh.uv = uvList;
+
+		newMesh.RecalculateNormals();
+		newMesh.RecalculateBounds();
+		newMesh.RecalculateTangents();
+
 
 		var filter = GetComponent<MeshFilter>();
 		filter.sharedMesh = null;
