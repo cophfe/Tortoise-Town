@@ -23,6 +23,8 @@ public class GameWindow : MonoBehaviour
 		CLOSING,
 	}
 
+	public TransitionState GetState() { return state; }
+
 	private void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();
@@ -99,6 +101,14 @@ public class GameWindow : MonoBehaviour
 				break;
 		}
 		
+	}
+
+	public void SetInteractive(bool active)
+	{
+		if (alphaGroup && alphaGroup.blocksRaycasts != active)
+		{
+			alphaGroup.blocksRaycasts = active;
+		}
 	}
 
 	void SetAlpha(float alpha)

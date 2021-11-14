@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class GooArrow : Arrow
 {
-	protected override void OnCollide()
+	public DamagerData knockbackData = null;
+
+	protected override void OnCollide(Collider collider)
 	{
 		gameObject.SetActive(false);
-		ignoredInPool = false; 
+		ignoredInPool = false;
+
+		var controller = collider.GetComponent<PlayerController>();
+		if (controller)
+		{
+			controller.Motor.AddKnockback(knockbackData.knockbackAmount, knockbackData.knockbackDuration, velocity.normalized, knockbackData.knockbackCurve);
+			controller.MainCamera.AddCameraShake(velocity.normalized * knockbackData.cameraShakeAmount);
+		}
 	}
 }

@@ -23,8 +23,8 @@ public class BowShot : MonoBehaviour
     {
         controls = new InputMaster();
         controls.Player.Enable();
-        controls.Player.Bow.performed += ctx => Begincharge = 1;
-        controls.Player.Bow.canceled += ctx => Begincharge = 0;
+        //controls.Player.Bow.performed += ctx => Begincharge = 1;
+        //controls.Player.Bow.canceled += ctx => Begincharge = 0;
         arrowphysio = ArrowLocation.GetComponent<ArrowPhysics>();
     }
 
