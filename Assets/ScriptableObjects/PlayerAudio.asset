@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpSounds:
     clips:
-    - {fileID: 8300000, guid: 50e47dcd32b429e4e8903003c5206e6f, type: 3}
+    - {fileID: 8300000, guid: e779134cd22c6a949b97e1f41136a50e, type: 3}
   dash:
     clips:
     - {fileID: 8300000, guid: 2bccaefdcd270224bb104258fd8ec1d0, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3c9ba2ac98d85494680e489eea2d9b25, type: 3}
   rollTuck:
     clips:
-    - {fileID: 8300000, guid: 69ab79dac8669264188ddfe60a98b6e0, type: 3}
+    - {fileID: 8300000, guid: b78c5938333e7a748b26c9ade8b744ff, type: 3}
   rollPop:
     clips:
     - {fileID: 8300000, guid: 33ce97f2df87fed46b1d700338dd3f83, type: 3}
@@ -46,7 +46,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 879a188b65f72de44b30ff5c40e03dad, type: 3}
   arrowShoot:
     clips:
-    - {fileID: 8300000, guid: d767f314a3961f147995f3c6f0b5d99f, type: 3}
+    - {fileID: 8300000, guid: af6b2751fcba9f347a940f574cc22a45, type: 3}
   death:
     clips:
     - {fileID: 8300000, guid: c122a4cc971d18242bccc6b5cef8049c, type: 3}
