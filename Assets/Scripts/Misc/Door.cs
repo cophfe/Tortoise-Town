@@ -13,6 +13,11 @@ public class Door : BooleanSwitch
 		base.Start();
 	}
 
+	public override void ResetSwitchTo(bool on)
+	{
+		Switch(on);
+	}
+
 	public override bool SwitchValue 
 	{
 		get { return on; } 
