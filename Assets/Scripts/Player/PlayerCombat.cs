@@ -142,7 +142,7 @@ public class PlayerCombat : MonoBehaviour
 
 			if (!equippedArrow)
 			{
-				equippedArrow = (Arrow)playerController.GameManager.ArrowPool.GetPooledObject(arrowPosRest);
+				equippedArrow = (Arrow)GameManager.Instance.ArrowPool.GetPooledObject(arrowPosRest);
 				equippedArrow.ignoredInPool = true;
 			}
 
@@ -232,16 +232,16 @@ public class PlayerCombat : MonoBehaviour
 		cameraChanged = true;
 		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
 
-		if (playerController.GUI)
-			playerController.GUI.EnableCrossHair(true);
+		if (GameManager.Instance.GUI)
+			GameManager.Instance.GUI.EnableCrossHair(true);
 	}
 
 	public void EndChargeUp()
 	{
 		charging = false;
 		playerController.PlayerAudio.Stop();
-		if (playerController.GUI)
-			playerController.GUI.EnableCrossHair(false);
+		if (GameManager.Instance.GUI)
+			GameManager.Instance.GUI.EnableCrossHair(false);
 	}
 
 	public void EquipWeapon(bool equip)
@@ -257,7 +257,7 @@ public class PlayerCombat : MonoBehaviour
 		{
 			if (equippedArrow)
 			{
-				playerController.GameManager.ArrowPool.ReturnPooledObject(equippedArrow);
+				GameManager.Instance.ArrowPool.ReturnPooledObject(equippedArrow);
 				equippedArrow = null;
 			}
 			rangedWeapon.SetActive(false);
@@ -286,6 +286,7 @@ public class PlayerCombat : MonoBehaviour
 		data.yOffsetMagnitude =	Mathf.Lerp(aData.yOffsetMagnitude, aimingCameraData.yOffsetMagnitude, t);
 		data.yOffsetStartDistance = Mathf.Lerp(aData.yOffsetStartDistance, aimingCameraData.yOffsetStartDistance, t);
 		data.zoomOutSpeed =	Mathf.Lerp(aData.zoomOutSpeed, aimingCameraData.zoomOutSpeed, t);
+		data.sensitivityMultiplier = Mathf.Lerp(aData.sensitivityMultiplier, aimingCameraData.sensitivityMultiplier, t);
 		if (playerController.Motor.IsRolling)
 		{
 			data.targetOffset =	Vector3.Lerp(new Vector3(aData.targetOffset.x, playerController.RollCameraOffset, aData.targetOffset.z), aimingCameraData.targetOffset, t);
