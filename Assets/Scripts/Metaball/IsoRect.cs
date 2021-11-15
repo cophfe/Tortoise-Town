@@ -30,8 +30,18 @@ public class IsoRect : IsoShape
 
 	public override void DrawMetaGizmos()
 	{
+		if (!enabled) return;
+		Gizmos.color = negative ? Color.red : Color.green;
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireCube(Vector3.zero, size);
 	}
 
-	
+	public override void DrawMetaGizmosSelected()
+	{
+		if (!enabled) return;
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, Camera.current.transform.rotation, transform.lossyScale);
+		Vector3 scale = size * 1.5f;
+		scale.z = 0;
+		Gizmos.DrawWireCube(Vector3.zero, scale);
+	}
 }

@@ -164,12 +164,13 @@ public class GameManager : MonoBehaviour
 		{
 			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
 		}
+		//Debug.Log($"current: {currentDissolverCount}. total: {totalDissolverCount}");
+
 		if (currentDissolverCount <= 0) OnWin();
 	}
 	public void OnGooDissolve()
 	{
-		currentDissolverCount--;
-		if (currentDissolverCount <= 0) OnWin();
+		CalculateCurrentDissolverCount();
 	}
 	public void OnWin()
 	{

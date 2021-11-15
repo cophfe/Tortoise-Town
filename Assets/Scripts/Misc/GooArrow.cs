@@ -12,7 +12,7 @@ public class GooArrow : Arrow
 		ignoredInPool = false;
 
 		var controller = collider.GetComponent<PlayerController>();
-		if (controller)
+		if (controller && knockbackData)
 		{
 			controller.Motor.AddKnockback(knockbackData.knockbackAmount, knockbackData.knockbackDuration, velocity.normalized, knockbackData.knockbackCurve);
 			controller.MainCamera.AddCameraShake(velocity.normalized * knockbackData.cameraShakeAmount);
