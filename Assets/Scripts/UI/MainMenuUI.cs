@@ -17,7 +17,10 @@ public class MainMenuUI : MonoBehaviour
 	public GameWindow areYouSure;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
-	public OptionsMenu optionsMenu; 
+	public OptionsMenu optionsMenu;
+	public GameWindow optionsWindow;
+	InputMaster input;
+	GameWindowManager windowManager;
 
 	private void Awake()
 	{
@@ -31,6 +34,9 @@ public class MainMenuUI : MonoBehaviour
 				}
 			}
 		}
+		input = new InputMaster();
+		input.UI.Menu.performed += _ => OnMenuButton();
+		windowManager = GetComponent<GameWindowManager>();
 	}
 	private void Start()
 	{
@@ -38,6 +44,29 @@ public class MainMenuUI : MonoBehaviour
 			optionsMenu.Initiate();
 
 	}
+
+	public void OnEnable()
+	{
+		if (input != null)
+			input.Enable();
+	}
+	public void OnDisable()
+	{
+		if (input != null)
+			input.Disable();
+	}
+
+
+	public void OnMenuButton()
+	{
+		if (windowManager.GetCurrentWindow() == optionsWindow)
+		{
+			optionsMenu.SetAreYouSure(1);
+		}
+		else
+			windowManager.RemoveFromQueue();
+	}
+
 	public void OnPlayButtonPressed()
 	{
 		if (continueButton.interactable)

@@ -806,7 +806,7 @@ public class PlayerMotor : MonoBehaviour
 		dashTimer = currentDashDuration;
 		if (playerController.inputVector == Vector2.zero)
 		{
-			inputForward = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up).normalized;
+			inputForward = Vector3.ProjectOnPlane(playerController.MainCamera.transform.forward, Vector3.up).normalized;
 			if (groundNormal.y != 0)
 			{
 				inputForward += Vector3.up * -(groundNormal.x * inputForward.x + groundNormal.z * inputForward.z) / groundNormal.y;

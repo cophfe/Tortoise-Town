@@ -111,6 +111,22 @@ public class OptionsMenu : MonoBehaviour
 
 		//EVERYTHING ELSE
 		ApplyFromFile();
+		if (File.Exists(GetKeybindsPath()))
+		{
+			try
+			{
+				string keybindSaved = File.ReadAllText(GetKeybindsPath());
+				if (GameManager.Instance)
+					GameManager.Instance.Player.PlayerInput.actions.LoadBindingOverridesFromJson(keybindSaved);
+				else
+					backupInput.actions.LoadBindingOverridesFromJson(keybindSaved);
+			}
+			catch
+			{
+				Debug.LogWarning("There were no keybinds to load.");
+			}
+		}
+		ApplyUIToGame();
 		//END EVERYTHING ELSE
 
 		//KEYBINDINGS
@@ -224,25 +240,6 @@ public class OptionsMenu : MonoBehaviour
 			Debug.LogWarning("Options data does not exist on device. Setting to default.");
 			ApplyDataToUI(defaultOptions);
 		}
-
-
-		if (File.Exists(GetKeybindsPath()))
-		{
-			try
-			{
-				string keybindSaved = File.ReadAllText(GetKeybindsPath());
-				if (GameManager.Instance)
-					GameManager.Instance.Player.PlayerInput.actions.LoadBindingOverridesFromJson(keybindSaved);
-				else
-					backupInput.actions.LoadBindingOverridesFromJson(keybindSaved);
-			}
-			catch
-			{
-				Debug.LogWarning("There were no keybinds to load.");
-			}
-		}
-
-		ApplyUIToGame();
 	}
 
 	void ApplyDataToUI(OptionsData options)
@@ -374,12 +371,14 @@ public class OptionsMenu : MonoBehaviour
 				{
 					areYouSureText.text = "Are you sure you want to exit? There are unsaved changes.";
 					areYouSureConfirm.onClick.RemoveAllListeners();
-					areYouSureConfirm.onClick.AddListener(() => { windowManager.RemoveFromQueue(); windowManager.RemoveFromQueue(); });
+					areYouSureConfirm.onClick.AddListener(LeaveMenu);
 					windowManager.AddToQueue(areYouSure);
 				}
 				else
 				{
 					windowManager.RemoveFromQueue();
+					ApplyFromFile();
+					IsChanged = false;
 				}
 				break;
 			case AreYouSureState.RESETSAVEDATA:
@@ -397,6 +396,13 @@ public class OptionsMenu : MonoBehaviour
 		}
 	}
 
+	public void LeaveMenu()
+	{
+		windowManager.RemoveFromQueue(); 
+		windowManager.RemoveFromQueue(true);
+		ApplyFromFile();
+		IsChanged = false;
+	}
 	public void ApplyDefault()
 	{
 		ApplyDataToUI(defaultOptions);

@@ -45,7 +45,8 @@ public class InterpolateChild : MonoBehaviour
 		if (disable) return;
 		//yes using time.time for precise values surely will not cause any problems whatsoever yes
 		float currentTime = Time.unscaledTime;
-		transform.position = Vector3.Lerp(start, end, (currentTime - fixedUpdateTime) / Time.fixedUnscaledDeltaTime);
+		float t = (currentTime - fixedUpdateTime) / Mathf.Max(Time.fixedUnscaledDeltaTime, 0.000000001f);
+		transform.position = Vector3.Lerp(start, end, t);
 	}
 
 	public void ResetPosition()

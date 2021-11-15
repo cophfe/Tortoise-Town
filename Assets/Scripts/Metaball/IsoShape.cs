@@ -32,14 +32,15 @@ public abstract class IsoShape : MonoBehaviour
 		return generator;
 	}
 
-	protected abstract void DrawMetaGizmos();
+	public abstract void DrawMetaGizmos();
 
-	private void OnDrawGizmos()
+	private void OnDrawGizmosSelected()
 	{
 		if (!enabled) return;
 		Gizmos.color = negative ? Color.red : Color.green;
 		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		DrawMetaGizmos();
+
 	}
 
 	
