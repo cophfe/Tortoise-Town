@@ -19,27 +19,7 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -55,10 +35,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _OcclusionTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -67,51 +43,22 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AlphaClip: 0
     - _AlphaCutoff: 0.5
-    - _Blend: 0
-    - _BumpScale: 1
-    - _Cull: 2
-    - _Cutoff: 0.5
-    - _CutoffHeight: 28.8
-    - _CuttoffHieght: 28.8
-    - _DstBlend: 0
+    - _CutoffHeight: 1000
     - _EdgeWidth: 0.05
-    - _EnvironmentReflections: 1
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
-    - _Metallic: 0
     - _MetallicAmount: 0
-    - _NoiseScale: 50
+    - _NoiseScale: 25
     - _NoiseStrength: 1
-    - _NormalAmount: 0
+    - _NormalAmount: 1
     - _OcclusionAmount: 1
-    - _OcclusionStrength: 1
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
     - _RoughnessAmount: 0
-    - _Smoothness: 0.5
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
     m_Colors:
-    - _Albedo: {r: 0.2705882, g: 0.2078431, b: 0.16078427, a: 0}
-    - _BaseColor: {r: 0.272, g: 0.20672178, b: 0.16048002, a: 1}
-    - _Color: {r: 0.272, g: 0.20672178, b: 0.16048002, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColour: {r: 64, g: 12.54902, b: 0, a: 1}
-    - _MossAlbedo: {r: 0.31132075, g: 0.31132075, b: 0.31132075, a: 1}
+    - _Albedo: {r: 0.27058825, g: 0.20784314, b: 0.16078432, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColour: {r: 4, g: 0.83137256, b: 0, a: 0}
+    - _MossAlbedo: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tilling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &955389125774140284
