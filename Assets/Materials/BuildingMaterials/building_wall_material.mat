@@ -122,7 +122,7 @@ Material:
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColour: {r: 64, g: 12.54902, b: 0, a: 1}
-    - _MossAlbedo: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _MossAlbedo: {r: 0.31132075, g: 0.31132075, b: 0.31132075, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tilling: {r: 1, g: 1, b: 0, a: 0}

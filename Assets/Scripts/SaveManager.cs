@@ -3,19 +3,27 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveManager
 {
+	bool saveDataToFile;
 	int checkpointIndex = -1;
 	List<Checkpoint> checkpoints = new List<Checkpoint>();
 	List<Health> savedHealths = new List<Health>();
 	List<IBooleanSaveable> saveables = new List<IBooleanSaveable>();
 
-	SaveData saveData = null;
-	public SaveData CurrentSaveData { get { return saveData; } }
+	SceneSaveData saveData = null;
+	public SceneSaveData CurrentSaveData { get { return saveData; } }
 	public delegate void ResetEvent();
 
 	public event ResetEvent onResetScene;
+
+
+	public SaveManager(bool saveDataToFile)
+	{
+		this.saveDataToFile = saveDataToFile;
+	}
 
 	public void RegisterSaveable(IBooleanSaveable saveable)
 	{
@@ -54,14 +62,13 @@ public class SaveManager
 		savedHealths.Sort(func);
 		checkpoints.Sort(func);
 		saveables.Sort((a,b) => { return func(a.GetMonoBehaviour(), b.GetMonoBehaviour()); });
-		if (Application.isEditor)
-			ClearSaveData();
-		else
-		{
-			LoadSaveData();
-		}
 
-		ResetScene(false);
+		if (saveDataToFile)
+			LoadSaveDataFromFile();
+		else
+			ClearSaveData();
+
+		ResetScene();
 	}
 
 	public bool SetCurrentCheckpoint(Checkpoint checkpoint)
@@ -106,42 +113,143 @@ public class SaveManager
 		{
 			saveData.saveableStates[i] = saveables[i].GetCurrentState();
 		}
-		WriteSaveData();
 	}
 
-	void WriteSaveData()
+	void WriteSaveDataToFile()
 	{
 		//idk how to do serialization so we'll do it the old fashioned way
-		//on the bright side it is probably way faster
-		using (FileStream fs = new FileStream(Application.persistentDataPath + "\\save.tt", FileMode.Create))
+		//on the bright side this is way faster
+		using (FileStream fs = new FileStream(GetPath(), FileMode.OpenOrCreate, FileAccess.ReadWrite))
 		{
-			var writer = new BinaryWriter(fs);
-			//write checkpoint info
-			writer.Write(saveData.checkpointIndex);
-			//write health info
-			writer.Write(saveData.savedHealths.Length);
-			for (int i = 0; i < saveData.savedHealths.Length; i++)
+			if (fs.Length > 0)
 			{
-				writer.Write(saveData.savedHealths[i]);
+				//remove this scene data that is already there (if it is already there)
+				if (!ClearStoredSceneData(fs))
+				{
+					fs.SetLength(0);
+					fs.WriteByte(0);
+				}
 			}
-			//write boolean switch info
-			writer.Write(saveData.saveableStates.Length);
-			for (int i = 0; i < saveData.saveableStates.Length; i++)
+			else
 			{
-				writer.Write(saveData.saveableStates[i]);
+				//if the file is empty, write if the tutorial has been completed or not
+				fs.WriteByte(0);
+			}
+
+			using (var writer = new BinaryWriter(fs))
+			{
+				fs.Seek(0, SeekOrigin.End);
+				//write build index
+				writer.Write(SceneManager.GetActiveScene().buildIndex);
+				//write size of scene data
+				writer.Write(sizeof(int) * 5 + sizeof(float) * saveData.savedHealths.Length + sizeof(bool) * saveData.saveableStates.Length);
+				//write checkpoint info
+				writer.Write(saveData.checkpointIndex);
+				//write health info
+				writer.Write(saveData.savedHealths.Length);
+				for (int i = 0; i < saveData.savedHealths.Length; i++)
+				{
+					writer.Write(saveData.savedHealths[i]);
+				}
+				//write boolean switch info
+				writer.Write(saveData.saveableStates.Length);
+				for (int i = 0; i < saveData.saveableStates.Length; i++)
+				{
+					writer.Write(saveData.saveableStates[i]);
+				}
 			}
 		}
 	}
 
-	void LoadSaveData()
+	bool ClearStoredSceneData(FileStream fs)
+	{
+		BinaryReader reader = new BinaryReader(fs);
+		
+		//read through to find the correct build index.
+		//if it cannot be found, assume the scene has not been saved previously.
+		//if it can be found, overwrite the data with a new file not including the save data for this scene.
+
+		//if file is empty return success
+		if (fs.Length == 0) return true;
+
+		try
+		{
+			//skip over bool that says whether tutorial has been finished yet
+			fs.Seek(sizeof(bool), SeekOrigin.Current);
+
+			//read the build index
+			int buildIndex = reader.ReadInt32();
+			//check if build index is the current build index
+			while (buildIndex != SceneManager.GetActiveScene().buildIndex)
+			{
+				//this is not the correct scene data, so skip over it (next int should contain the size of the scene data in bytes)
+				fs.Seek(reader.ReadInt32() - sizeof(int) * 2, SeekOrigin.Current);
+
+				//if reached the end of file, it did not find the scene and there is nothing to clear.
+				if (fs.Position >= fs.Length)
+				{
+					return true;
+				}
+				//else there should be another scene saved
+				buildIndex = reader.ReadInt32();
+			}
+			// if reached this point, it has found the correct build index. set the start and end cut points and read everything else into a byte array!
+			int startCutPoint = (int)fs.Position - sizeof(int);
+			int endCutPoint = startCutPoint + reader.ReadInt32();
+			byte[] data = new byte[fs.Length - (endCutPoint - startCutPoint)];
+			fs.Seek(0, SeekOrigin.Begin);
+			fs.Read(data, 0, startCutPoint);
+			if (fs.Length >= endCutPoint + 1)
+			{
+				fs.Seek(endCutPoint, SeekOrigin.Begin);
+				fs.Read(data, startCutPoint, (int)fs.Length - endCutPoint);
+			}
+
+			fs.SetLength(data.Length);
+			fs.Seek(0, SeekOrigin.Begin);
+			fs.Write(data, 0, data.Length);
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.LogWarning("Could not clear scene data:\n" +
+				e.Message
+				+ "\nClearing entire file instead.");
+			return false;
+		}
+	}
+
+	void LoadSaveDataFromFile()
 	{
 		try
 		{
 			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))
 			{
-				SaveData newSaveData = new SaveData();
+				SceneSaveData newSaveData = new SceneSaveData();
 				var reader = new BinaryReader(fs);
 
+				//skip istutorialcompleted check
+				fs.Seek(sizeof(bool), SeekOrigin.Begin);
+				//read build index
+				int buildIndex = reader.ReadInt32();
+				//check if it is correct
+				while (buildIndex != SceneManager.GetActiveScene().buildIndex)
+				{
+					//this is not the correct scene data, so skip over it (next int should contain the size of the scene data in bytes)
+					fs.Seek(reader.ReadInt32() - sizeof(int) * 2, SeekOrigin.Current);
+
+					//if reached the end of file, it did not find the scene and there is nothing to clear.
+					if (fs.Position >= fs.Length)
+					{
+						ClearSaveData();
+						return;
+					}
+					//else there should be another scene saved
+					buildIndex = reader.ReadInt32();
+				}
+				// if reached this point, it has found the correct scene data
+				
+				fs.Seek(sizeof(int), SeekOrigin.Current);
 				newSaveData.checkpointIndex = reader.ReadInt32();
 
 				//read saved health info
@@ -174,11 +282,16 @@ public class SaveManager
 				+ e.Message 
 				+"\nResetting save data...");
 			ClearSaveData();
+			DeleteSceneData();
+			//delete save data instead
 		}
 	}
 
-	public void ResetScene(bool callDelegate = true)
+	public void ResetScene()
 	{
+		if (saveData == null)
+			LoadSaveDataFromFile();
+
 		for (int i = 0; i < savedHealths.Count; i++)
 		{
 			savedHealths[i].ResetTo(saveData.savedHealths[i]);
@@ -190,14 +303,41 @@ public class SaveManager
 		GameManager.Instance.CalculateCurrentDissolverCount();
 		checkpointIndex = saveData.checkpointIndex;
 		
-		if (onResetScene != null && callDelegate)
+		if (onResetScene != null)
 			onResetScene.Invoke(); 
+	}
+	
+	public bool CheckIfTutorialCompleted()
+	{
+		try
+		{
+			if (File.Exists(GetPath()))
+			{
+				using (var fs = new FileStream(GetPath(), FileMode.Open, FileAccess.Read))
+				{
+					if (fs.Length == 0)
+						return false;
+					else if (fs.ReadByte() == 0)
+						return false;
+					else return true;
+				}
+			}
+			else
+				return false;
+		}
+		catch (Exception e)
+		{
+			Debug.LogWarning("Something went wrong when reading the save file:\n" + 
+				e.Message);
+			return false;
+		}
 	}
 
 	public void ClearSaveData()
 	{
-		saveData = new SaveData();
+		saveData = new SceneSaveData();
 		saveData.checkpointIndex = -1;
+		saveData.buildIndex = SceneManager.GetActiveScene().buildIndex;
 		saveData.savedHealths = new float[savedHealths.Count];
 		saveData.saveableStates = new bool[saveables.Count];
 		for (int i = 0; i < saveData.savedHealths.Length; i++)
@@ -208,16 +348,55 @@ public class SaveManager
 		{
 			saveData.saveableStates[i] = saveables[i].InitialSaveState;
 		}
-		if (File.Exists(Application.persistentDataPath + "/save.tt"))
-			File.Delete(Application.persistentDataPath + "/save.tt");
 	}
 
-	public SaveData GetSaveData() { return saveData; }
-
-	public class SaveData
+	public void DeleteSceneData()
 	{
+		if (File.Exists(GetPath()))
+		{
+			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))
+			{
+				//if deleting scene data fails, the data must be messed up, so delete all data
+				if (!ClearStoredSceneData(fs))
+				{
+					fs.SetLength(0);
+				}
+			}
+		}
+		else
+		{
+			File.Create(GetPath());
+		}
+	}
+
+	public void DeleteAllData()
+	{
+		if (File.Exists(Application.persistentDataPath + "/save.tt"))
+		{
+			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))
+			{
+				fs.SetLength(0);
+			}
+		}
+	}
+
+	public void OnDestroy()
+	{
+		if (saveDataToFile && saveData != null)
+		{
+			WriteSaveDataToFile();
+		}
+	}
+
+	public SceneSaveData GetSaveData() { return saveData; }
+
+	public class SceneSaveData
+	{
+		public int buildIndex;
 		public int checkpointIndex;
 		public float[] savedHealths;
 		public bool[] saveableStates;
 	}
+
+	public static string GetPath() { return Application.persistentDataPath + "\\save.tt"; }
 }
