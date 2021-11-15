@@ -127,13 +127,7 @@ public class SaveManager
 				if (!ClearStoredSceneData(fs))
 				{
 					fs.SetLength(0);
-					fs.WriteByte(0);
 				}
-			}
-			else
-			{
-				//if the file is empty, write if the tutorial has been completed or not
-				fs.WriteByte(0);
 			}
 
 			using (var writer = new BinaryWriter(fs))
@@ -174,9 +168,6 @@ public class SaveManager
 
 		try
 		{
-			//skip over bool that says whether tutorial has been finished yet
-			fs.Seek(sizeof(bool), SeekOrigin.Current);
-
 			//read the build index
 			int buildIndex = reader.ReadInt32();
 			//check if build index is the current build index
@@ -228,8 +219,6 @@ public class SaveManager
 				SceneSaveData newSaveData = new SceneSaveData();
 				var reader = new BinaryReader(fs);
 
-				//skip istutorialcompleted check
-				fs.Seek(sizeof(bool), SeekOrigin.Begin);
 				//read build index
 				int buildIndex = reader.ReadInt32();
 				//check if it is correct
