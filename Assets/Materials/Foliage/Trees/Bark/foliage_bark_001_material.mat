@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: fbcfb050b30c3bc4b99c18409bc6f5af, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -65,8 +65,8 @@ Material:
     - Vector1_4DB35770: 1
     - Vector1_57862bb8ffed448891b57d4baf23a8fc: 10
     - Vector1_7be2bafec6314bc2b73a9c607322efdc: 0.5
-    - Vector1_BC26EF7: 0.05
-    - Vector1_C8C2B3C0: 0.1
+    - Vector1_BC26EF7: 0
+    - Vector1_C8C2B3C0: 0
     - Vector1_b04fd903af6f440bbf170d2c915b7b17: 10
     - Vector1_cc311390b86b4f0bbbdb7d48ce5dcfd6: 0.5
     - Vector1_e2144895e7ed4cb5913f4c68dd799c51: 1
@@ -94,6 +94,7 @@ Material:
     m_Colors:
     - Color_0736ef410e5f4a859405f46c9da78060: {r: 0.4245283, g: 0.29102883, b: 0.19424173, a: 0}
     - Color_C38C1181: {r: 0.34905657, g: 0.21071798, b: 0.15641683, a: 1}
+    - Vector2_0c568e8c38ab4fc593e5fd80f1960cd3: {r: 1, g: 0, b: 0, a: 0}
     - Vector3_DC21BF15: {r: 1, g: 0, b: 1, a: 0}
     - Vector3_bf04f7293b2e4326a9971bd285119310: {r: 1, g: 0, b: 1, a: 0}
     - _BaseColor: {r: 0.46226418, g: 0.2927434, b: 0.20278569, a: 1}
