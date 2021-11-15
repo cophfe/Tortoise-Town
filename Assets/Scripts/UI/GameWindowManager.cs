@@ -26,20 +26,20 @@ public class GameWindowManager : MonoBehaviour
 			//transition timer
 			openTimer += Time.unscaledDeltaTime;
 			float t = Ease.EaseOutQuad(openTimer / windowOpenTime);
-			
+			var current = GetCurrentWindow();
+
 			//if halfway through 
-			if (openTimer >= windowOpenTime * 0.5f)
+			if (openTimer >= windowOpenTime * 0.5f && current && current.GetState() == GameWindow.TransitionState.OPENING)
 			{
 				//move the background panel to behind the new gamewindow
-				var current = GetCurrentWindow();
 				if (current && current.GetState() == GameWindow.TransitionState.OPENING)
 					backgroundPanel.transform.SetSiblingIndex(current.transform.GetSiblingIndex() - 1);
 			}
+
 			//if finished transitioning
 			if (openTimer >= windowOpenTime)
 			{
 				transitioning = false;
-				var current = GetCurrentWindow();
 				if (current != null)
 				{
 					current.UpdateOpenState(1);
@@ -71,7 +71,6 @@ public class GameWindowManager : MonoBehaviour
 			else
 			{
 				//transition window
-				var current = GetCurrentWindow();
 				if (current != null)
 					current.UpdateOpenState(t);
 
@@ -121,25 +120,61 @@ public class GameWindowManager : MonoBehaviour
 		openTimer = 0;
 	}
 
-	public void RemoveFromQueue()
+	public void RemoveFromQueue(bool overrideClose = false)
 	{
 		var current = GetCurrentWindow();
-		if (current != null && current.GetState() != GameWindow.TransitionState.CLOSING)
+		if (current != null)
 		{
-			current.OpenWindow(false);
-			transitioning = true;
-			openTimer = 0;
-
-			if (backgroundPanel && activeWindows.Count == 1)
+			if (overrideClose && current.GetState() == GameWindow.TransitionState.CLOSING)
 			{
-				backgroundPanel.OpenWindow(false);
-			}
-			else if (activeWindows.Count > 1)
-			{
-				var secondLastWindow = activeWindows.BreakStackLogicInOrderToGetUnderlyingList()[activeWindows.Count - 2];
-				backgroundPanel.transform.SetSiblingIndex(secondLastWindow.transform.GetSiblingIndex() - 1);
-			}
+				current.UpdateOpenState(1);
 
+				activeWindows.Pop();
+				current = GetCurrentWindow();
+				if (current == null)
+				{
+					if (GameManager.Instance)
+					{
+						GameManager.Instance.IsCursorRestricted = true;
+						GameManager.Instance.Player.InputIsEnabled = true;
+						Time.timeScale = 1;
+					}
+				}
+				else
+				{
+					current.SetInteractive(true);
+				}
+
+				current.OpenWindow(false);
+				transitioning = true;
+				openTimer = 0;
+
+				if (backgroundPanel && activeWindows.Count == 1)
+				{
+					backgroundPanel.OpenWindow(false);
+				}
+				else if (activeWindows.Count > 1)
+				{
+					var secondLastWindow = activeWindows.BreakStackLogicInOrderToGetUnderlyingList()[activeWindows.Count - 2];
+					backgroundPanel.transform.SetSiblingIndex(secondLastWindow.transform.GetSiblingIndex() - 1);
+				}
+			}
+			else if (current.GetState() != GameWindow.TransitionState.CLOSING)
+			{
+				current.OpenWindow(false);
+				transitioning = true;
+				openTimer = 0;
+
+				if (backgroundPanel && activeWindows.Count == 1)
+				{
+					backgroundPanel.OpenWindow(false);
+				}
+				else if (activeWindows.Count > 1)
+				{
+					var secondLastWindow = activeWindows.BreakStackLogicInOrderToGetUnderlyingList()[activeWindows.Count - 2];
+					backgroundPanel.transform.SetSiblingIndex(secondLastWindow.transform.GetSiblingIndex() - 1);
+				}
+			}
 		}
 	}
 

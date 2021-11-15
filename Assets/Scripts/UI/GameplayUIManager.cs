@@ -17,6 +17,7 @@ public class GameplayUIManager : MonoBehaviour
 	public GameWindow pauseMenu;
 	public GameWindow winMenu;
 	public GameWindow areYouSure;
+	public GameWindow optionsWindow;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
 	public OptionsMenu options;
@@ -56,7 +57,7 @@ public class GameplayUIManager : MonoBehaviour
 		crosshair.enabled = enable;
 	}
 
-	void OnMenuButton()
+	public void OnMenuButton()
 	{
 		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
 		{
@@ -66,7 +67,12 @@ public class GameplayUIManager : MonoBehaviour
 			}
 			else
 			{
-				WindowManager.RemoveFromQueue();
+				if (optionsWindow == WindowManager.GetCurrentWindow())
+				{
+					options.SetAreYouSure(1);
+				}
+				else
+					WindowManager.RemoveFromQueue();
 			}
 		}
 	}
