@@ -31,7 +31,7 @@ public class IsoSphere : IsoShape
 		return new Bounds(generator.InverseTransformPoint(transform.position), transform.TransformVector(new Vector3(r, r, r)));
 	}
 
-	protected override void DrawMetaGizmos()
+	public override void DrawMetaGizmos()
 	{
 		Gizmos.DrawWireSphere(Vector3.zero, radius);
 	}

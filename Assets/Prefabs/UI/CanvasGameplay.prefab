@@ -123,7 +123,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1541178873}
         m_TargetAssemblyTypeName: GameWindowManager, Assembly-CSharp
         m_MethodName: RemoveFromQueue
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1145,6 +1145,7 @@ GameObject:
   - component: {fileID: 879960909}
   - component: {fileID: 879960908}
   - component: {fileID: 581070417}
+  - component: {fileID: 5631979737451875089}
   m_Layer: 5
   m_Name: Darkened Panel
   m_TagString: Untagged
@@ -1222,6 +1223,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionScale: 0
+--- !u!114 &5631979737451875089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879960906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97afbed1f61417042945c0b3089d7f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7794664902230116391}
+        m_TargetAssemblyTypeName: GameplayUIManager, Assembly-CSharp
+        m_MethodName: OnMenuButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1119116379
 GameObject:
   m_ObjectHideFlags: 0
@@ -2618,6 +2646,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 397901448}
   winMenu: {fileID: 508904387}
   areYouSure: {fileID: 7947885259505799454}
+  optionsWindow: {fileID: 2578507471694632609}
   areYouSureText: {fileID: 1494852670662191301}
   areYouSureConfirm: {fileID: 8877267801291456790}
   options: {fileID: 2771355214699725911}
@@ -3816,7 +3845,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1541178873}
         m_TargetAssemblyTypeName: GameWindowManager, Assembly-CSharp
         m_MethodName: RemoveFromQueue
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6423,6 +6452,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd459674b03bafc499f0956461fa36b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8123919644708221035 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4716973987471635699, guid: 73cc6ebf914366f4ea043735d6ec49a9, type: 3}
+  m_PrefabInstance: {fileID: 3588237532470936728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2578507471694632609 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1297962361376412217, guid: 73cc6ebf914366f4ea043735d6ec49a9, type: 3}
@@ -6434,11 +6468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e177383ffc9d54abe09aac22de4a26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8123919644708221035 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4716973987471635699, guid: 73cc6ebf914366f4ea043735d6ec49a9, type: 3}
-  m_PrefabInstance: {fileID: 3588237532470936728}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5051017487917251303
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -28,7 +28,7 @@ public class IsoRect : IsoShape
 		return new Bounds(generator.InverseTransformPoint(transform.position), transform.TransformVector(size));
 	}
 
-	protected override void DrawMetaGizmos()
+	public override void DrawMetaGizmos()
 	{
 		Gizmos.DrawWireCube(Vector3.zero, size);
 	}

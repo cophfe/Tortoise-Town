@@ -407,7 +407,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 		
 	}
 
-	private void OnDrawGizmos()
+	private void OnDrawGizmosSelected()
 	{
 		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
