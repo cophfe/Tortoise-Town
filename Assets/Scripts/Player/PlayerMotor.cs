@@ -227,7 +227,6 @@ public class PlayerMotor : MonoBehaviour
 		EvaluateDash();
 		UpdateMovementVector();
 		UpdateForcesVector();
-		UpdateFootstepsAudio();
 
 		//set ground magnet enabled/disabled
 		enableGroundMagnet = state == MovementState.GROUNDED || collisionGroundDetected;
@@ -619,15 +618,6 @@ public class PlayerMotor : MonoBehaviour
 		}
 	}
 
-	private void UpdateFootstepsAudio()
-	{
-		Vector3 playerSpeed = Vector3.ProjectOnPlane(TotalVelocity, groundNormal);
-		if (state == MovementState.GROUNDED && playerSpeed.sqrMagnitude > 0.5f)
-		{
-			
-		}
-	}
-
 	public void RefreshDash()
 	{
 		dashedInThisJump = false;
@@ -1010,10 +1000,8 @@ public class PlayerMotor : MonoBehaviour
 			//play collide audio
 			if (isRolling)
 			{
-				if (inputHitAmount < -10 && dotAmount > 0.9f)
+				if (inputHitAmount < -3 && dotAmount > 0.5f)
 					playerController.PlayAudioOnce(playerController.AudioData.hitWallRolling);
-				else if (inputHitAmount < -3 && dotAmount > 0.5f)
-					playerController.PlayAudioOnce(playerController.AudioData.land);
 			}
 			else if (inputHitAmount < -6 && dotAmount > 0.8f)
 			{

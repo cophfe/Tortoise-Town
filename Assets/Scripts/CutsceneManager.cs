@@ -75,8 +75,11 @@ public class CutsceneManager : BooleanSwitch
 		if (!ended)
 		{
 			ended = true;
-			GameManager.Instance.GUI.onCutsceneSkipped -= SwitchFalse;
-			StartCoroutine(GameManager.Instance.GUI.EndCutscene(this));
+			if (GameManager.Instance && gameObject.activeInHierarchy)
+			{
+				GameManager.Instance.GUI.onCutsceneSkipped -= SwitchFalse;
+				StartCoroutine(GameManager.Instance.GUI.EndCutscene(this));
+			}
 		}
 	}
 

@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
-	[SerializeField] CutsceneManager finalCutscene;
+	[SerializeField] CutsceneManager finalCutscene = null;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
