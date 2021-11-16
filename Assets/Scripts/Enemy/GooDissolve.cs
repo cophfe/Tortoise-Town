@@ -151,6 +151,7 @@ public class GooDissolve : MonoBehaviour
 			{
 				currentCutOffHeight -= Time.deltaTime * dissolveSpeed;
 			}
+
 			if (currentCutOffHeight <= minimumCutOffHeight)
 			{
 				currentCutOffHeight = minimumCutOffHeight;

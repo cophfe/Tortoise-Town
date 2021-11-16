@@ -14,9 +14,12 @@ public class GameManager : MonoBehaviour
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] bool saveDataToFile = true;
+	[SerializeField] bool isTutorial = false;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
+	[SerializeField] GameplayUIManager gUI = null;
 
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
@@ -31,7 +34,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField] int arrowPoolNotifyDistance = 4;
 	public ObjectPool ArrowPool { get; private set; }
 	public PlayerController Player { get { return player; } }
-	public SaveManager SaveManager { get; private set; } = new SaveManager();
+	public SaveManager SaveManager { get; private set; }
+	public GameplayUIManager GUI { get { return gUI; } }
+	public bool IsTutorial {get {return isTutorial; } }
 	public bool WonGame { get; private set; } = false;
 
 	Vector3 initialPlayerPosition;
@@ -39,6 +44,7 @@ public class GameManager : MonoBehaviour
 	int currentDissolverCount;
 	int totalDissolverCount;
 	List<GooDissolve> gooDissolvers;
+	List<BooleanSwitch> winSwitches = null;
 
 	void Awake()
     {
@@ -49,6 +55,9 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
+			if (!gUI)
+				gUI = FindObjectOfType<GameplayUIManager>();
+			SaveManager = new SaveManager(saveDataToFile);
 			instance = this;
 			IsCursorRestricted = true;
 			ArrowPool = new ObjectPool(arrowPoolAmount, arrowPoolNotifyDistance, arrowPrefab, transform);
@@ -93,8 +102,8 @@ public class GameManager : MonoBehaviour
 	IEnumerator ResetScene()
 	{
 		yield return new WaitForSeconds(deathTime);
-		player.GUI.Fade(true);
-		yield return new WaitForSeconds(player.GUI.fadeTime);
+		GUI.Fade(true);
+		yield return new WaitForSeconds(GUI.fadeTime);
 		SetSceneFromSavedData();
 	}
 
@@ -121,7 +130,7 @@ public class GameManager : MonoBehaviour
 		player.MainCamera.ResetCameraData();
 		player.MainCamera.MoveToTarget();
 		ArrowPool.ResetToDefault();
-		player.GUI.Fade(false);
+		GUI.Fade(false);
 		CalculateCurrentDissolverCount();
 	}
 
@@ -142,6 +151,13 @@ public class GameManager : MonoBehaviour
 		gooDissolvers.Add(dissolver);
 	}
 
+	public void RegisterWinSwitch(BooleanSwitch winSwitch)
+	{
+		if (winSwitches == null) winSwitches = new List<BooleanSwitch>();
+
+		winSwitches.Add(winSwitch);
+	}
+
 	public void CalculateTotalDissolvers()
 	{
 		totalDissolverCount = 0;
@@ -157,12 +173,13 @@ public class GameManager : MonoBehaviour
 		{
 			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
 		}
+		//Debug.Log($"current: {currentDissolverCount}. total: {totalDissolverCount}");
+
 		if (currentDissolverCount <= 0) OnWin();
 	}
 	public void OnGooDissolve()
 	{
-		currentDissolverCount--;
-		if (currentDissolverCount <= 0) OnWin();
+		CalculateCurrentDissolverCount();
 	}
 	public void OnWin()
 	{
@@ -173,12 +190,22 @@ public class GameManager : MonoBehaviour
 	IEnumerator WinGame()
 	{
 		yield return new WaitForSecondsRealtime(winWaitTime);
-		IsCursorRestricted = false;
-		Time.timeScale = 0;
-		Player.GUI.WindowManager.AddToQueue(player.GUI.winMenu);
-		GameManager.Instance.Player.InputIsEnabled = false;
-		//and begone save data
-		SaveManager.ClearSaveData();
+		
+
+		if (winSwitches != null)
+			foreach (var wSwitch in winSwitches)
+			{
+				wSwitch.Switch(true);
+			}
+
+		//GameManager.Instance.Player.InputIsEnabled = false;
+		//IsCursorRestricted = false;
+		//Time.timeScale = 0;
+	}
+
+	public void OnTutorialContinue()
+	{
+
 	}
 
 	private void OnValidate()
@@ -213,10 +240,9 @@ public class GameManager : MonoBehaviour
 		if (instance == this)
 		{
 			instance = null;
-			if (Application.isEditor)
-				SaveManager.ClearSaveData();
 			Time.timeScale = 1;
-			enableCursorRestriction = false;
+			IsCursorRestricted = false;
+			SaveManager.OnDestroy();
 		}
 	}
 }

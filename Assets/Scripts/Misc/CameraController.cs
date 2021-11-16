@@ -21,7 +21,9 @@ public partial class CameraController : MonoBehaviour
 	[Space(5)]
 	
 	[Tooltip("If input is inverted or not.")]
-	public bool inverted = false;
+	public bool invertX = false;
+	[Tooltip("If input is inverted or not.")]
+	public bool invertY = false;
 	[Tooltip("The camera sensitivity multiplier.")]
 	[Range(0, 1)] public float sensitivity = 0.1f;
 	
@@ -40,7 +42,13 @@ public partial class CameraController : MonoBehaviour
 	public bool smoothCameraRotation = false;
 	[Tooltip("The layers that can obstruct the camera.")]
 	public LayerMask obstructionLayers;
+
+	[System.NonSerialized] public float screenShakeModifier = 1;
+	[System.NonSerialized] public float sensitivityModifier = 1;
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	bool isControllerInput = false;
+	Vector2 controllerVector = Vector2.zero;
 
 	public bool EnableInput
 	{
@@ -100,7 +108,8 @@ public partial class CameraController : MonoBehaviour
 	private void Awake()
 	{
 		controls = new InputMaster();
-		controls.Camera.Look.performed += val => InputMove(val.ReadValue<Vector2>());
+		controls.Camera.Look.performed += OnLook;
+		controls.Camera.Look.canceled += val => OnLookCancelled();
 	}
 	private void OnEnable()
 	{
@@ -147,7 +156,7 @@ public partial class CameraController : MonoBehaviour
 			Vector3 shakeVector = cameraShake + cameraShake.magnitude * Random.insideUnitSphere * shakeNoiseMag;
 			if (!Physics.BoxCast(transform.position, cameraBoxHalfExtents, shakeVector.normalized, transform.rotation, shakeVector.magnitude, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 			{
-				transform.position += shakeVector;
+				transform.position += screenShakeModifier * shakeVector;
 			}
 		}
 
@@ -189,11 +198,15 @@ public partial class CameraController : MonoBehaviour
 			Vector3 pos = data.targetOffset.y * Vector3.up + target.position;
 			float distance = Vector3.Distance(currentPivotPosition, pos);
 			currentPivotPosition = Vector3.MoveTowards(currentPivotPosition, pos, Time.deltaTime * data.followSpeed * distance);
+			SetOrbitDistance();
 		}
 	}
 
 	private void Update()
 	{
+		if (isControllerInput && controllerVector != Vector2.zero)
+			InputMove(controllerVector * Time.deltaTime);
+
 		//smoothed camera movement
 		if (smoothCameraRotation)
 		{
@@ -216,11 +229,26 @@ public partial class CameraController : MonoBehaviour
 	/// Updates input based on a 2d input vector
 	/// </summary>
 	/// <param name="value">Information describing the input event</param>
-	public void OnLook(InputValue value)
+	public void OnLook(InputAction.CallbackContext ctx)
 	{
-		Vector2 input = value.Get<Vector2>();
-		//get input from look axis
-		InputMove(input);
+		Vector2 input = ctx.ReadValue<Vector2>();
+		if (isControllerInput)
+		{
+			controllerVector = input;
+		}
+		else
+		{
+			//get input from look axis
+			InputMove(input);
+		}
+	}
+
+	public void OnLookCancelled()
+	{
+		if (isControllerInput)
+		{
+			controllerVector = Vector2.zero;
+		}
 	}
 
 	/// <summary>
@@ -229,7 +257,12 @@ public partial class CameraController : MonoBehaviour
 	/// <param name="input">A 2d vector representing a rotational movement on the x and y axis</param>
 	public void InputMove(Vector2 input)
 	{
-		input *= inverted ? -sensitivity : sensitivity;
+		input *= sensitivityModifier * data.sensitivityMultiplier * sensitivity;
+		if (invertX)
+			input.y *= -1;
+		if (invertY)
+			input.x *= -1;
+
 		rotation += new Vector2(input.y, input.x);
 
 		//clamp x rotation
@@ -284,7 +317,7 @@ public partial class CameraController : MonoBehaviour
 				//this should fix most cases of that happening
 				//will not fix if raycast origin is inside of obstruction collider
 				Ray ray = new Ray(currentPivotPosition, orbitVector);
-				if (Physics.Raycast(ray, out RaycastHit rayHit, data.maxFollowDistance, obstructionLayers.value))
+				if (Physics.Raycast(ray, out RaycastHit rayHit, data.maxFollowDistance, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 				{
 					targetDistance = rayHit.distance;
 				}
@@ -322,6 +355,12 @@ public partial class CameraController : MonoBehaviour
 		}
 
 		yOffset = Mathf.MoveTowards(yOffset, targetYOffset, Time.deltaTime * data.yOffsetChangeSpeed * Mathf.Abs(targetYOffset - yOffset));
+	}
+
+
+	public void SetControllerInput(bool val)
+	{
+		isControllerInput = val;
 	}
 
 	public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -365,6 +404,7 @@ public partial class CameraController : MonoBehaviour
 		data.yOffsetMagnitude = newData.yOffsetMagnitude;
 		data.yOffsetStartDistance = newData.yOffsetStartDistance;
 		data.zoomOutSpeed = newData.zoomOutSpeed;
+		data.sensitivityMultiplier = newData.sensitivityMultiplier;
 	}
 
 	public void MoveToTarget()

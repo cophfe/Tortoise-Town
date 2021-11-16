@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameWindow : MonoBehaviour
 {
 	public bool transitionScale = true;
+	public bool canBeExited = true;
 	RectTransform rectTransform;
 	CanvasGroup alphaGroup;
 	Image image;
@@ -101,6 +102,14 @@ public class GameWindow : MonoBehaviour
 				break;
 		}
 		
+	}
+
+	public void SetInteractive(bool active)
+	{
+		if (alphaGroup && alphaGroup.blocksRaycasts != active)
+		{
+			alphaGroup.blocksRaycasts = active;
+		}
 	}
 
 	void SetAlpha(float alpha)
