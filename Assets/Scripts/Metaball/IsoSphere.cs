@@ -33,6 +33,21 @@ public class IsoSphere : IsoShape
 
 	public override void DrawMetaGizmos()
 	{
+		if (!enabled) return;
+		Gizmos.color = negative ? Color.red : Color.green;
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireSphere(Vector3.zero, radius);
+	}
+
+	public override void DrawMetaGizmosSelected ()
+	{
+		if (!enabled) return;
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, Camera.current.transform.rotation, transform.lossyScale);
+		Gizmos.color = Color.blue;
+
+		Vector3 scale = Vector3.one * (radius * 3);
+		scale.z = 0;
+		Gizmos.DrawWireCube(Vector3.zero, scale);
+
 	}
 }
