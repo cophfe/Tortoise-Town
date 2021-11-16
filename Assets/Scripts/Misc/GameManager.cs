@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
+	[SerializeField] CutsceneManager finalCutscene;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
@@ -52,9 +53,6 @@ public class GameManager : MonoBehaviour
 	public bool InCutscene { get => inCutscene; set
 		{
 			inCutscene = value;
-			player.MainCamera.GetComponent<AudioListener>().enabled = !value;
-			player.MainCamera.GetComponent<Camera>().enabled = !value;
-			player.gameObject.SetActive(!value);
 		}
 	}
 	void Awake()
@@ -97,8 +95,16 @@ public class GameManager : MonoBehaviour
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
+		if (finalCutscene)
+			finalCutscene.onEndCutscene.AddListener(OnExitToMenu);
 	}
 
+	public void OnExitToMenu()
+	{
+		GUI.OnExitButtonPressed();
+		SaveManager.saveDataToFile = false;
+		SaveManager.DeleteAllData();
+	}
 	public void OnPlayerDeath()
 	{
 		player.InputIsEnabled = false;
@@ -143,6 +149,11 @@ public class GameManager : MonoBehaviour
 		ArrowPool.ResetToDefault();
 		GUI.Fade(false);
 		CalculateCurrentDissolverCount();
+	}
+
+	public void DisableSaving()
+	{
+		SaveManager.saveDataToFile = false;
 	}
 
 	public void ExitToMenu()
@@ -244,6 +255,13 @@ public class GameManager : MonoBehaviour
 				Cursor.visible = true;
 			}
 		}
+	}
+
+	public void InitiateFinalCutscene()
+	{
+		GUI.InputIsEnabled = false;
+		StartCoroutine(GUI.StartCutscene(finalCutscene));
+		
 	}
 
 	private void OnDestroy()

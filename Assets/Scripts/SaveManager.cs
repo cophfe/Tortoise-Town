@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager
 {
-	bool saveDataToFile;
+	public bool saveDataToFile;
 	int checkpointIndex = -1;
 	List<Checkpoint> checkpoints = new List<Checkpoint>();
 	List<Health> savedHealths = new List<Health>();

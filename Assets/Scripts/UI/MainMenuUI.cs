@@ -105,6 +105,18 @@ public class MainMenuUI : MonoBehaviour
 		}
 	}
 
+	public void LoadTutorialStart()
+	{
+		StartCoroutine(LoadTutorial());
+	}
+
+	IEnumerator LoadTutorial()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(tutorialSceneName);
+	}
+
 	public void OnContinueButtonPressed()
 	{
 		StartCoroutine(LoadGame());

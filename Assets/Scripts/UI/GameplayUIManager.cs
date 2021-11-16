@@ -137,6 +137,7 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void OnTutorialContinueButtonPressed()
 	{
+		PlayerPrefs.SetInt("TutorialCompleted", 1);
 		StartCoroutine(ContinueToMain());
 
 	}
@@ -145,6 +146,7 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		QUIT,
 		RESTART,
+		SKIPTUTORIAL
 	}
 
 	public void SetAreYouSure(int state)
@@ -161,6 +163,12 @@ public class GameplayUIManager : MonoBehaviour
 				areYouSureText.text = "Are you sure you want to restart? This will erase your save data.";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(() => OnRestartButtonPressed(true));
+				WindowManager.AddToQueue(areYouSure);
+				break;
+			case AreYouSureState.SKIPTUTORIAL:
+				areYouSureText.text = "Do you want to skip the tutorial?";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(OnTutorialContinueButtonPressed);
 				WindowManager.AddToQueue(areYouSure);
 				break;
 			default:
@@ -184,6 +192,16 @@ public class GameplayUIManager : MonoBehaviour
 		GameManager.Instance.OnTutorialContinue();
 	}
 
+	public IEnumerator StartCutscene(CutsceneManager cutscene)
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		InputIsEnabled = true;
+		Fade(false);
+		cutscene.Switch(true);
+	}
+
 	public IEnumerator EndCutscene(CutsceneManager cutscene)
 	{
 		Fade(true);
@@ -192,6 +210,14 @@ public class GameplayUIManager : MonoBehaviour
 		GameManager.Instance.InCutscene = false;
 		cutscene?.OnCompleteStop();
 		Fade(false);
+	}
+
+	public IEnumerator OpenWinMenu()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		WindowManager.AddToQueue(winMenu);
 	}
 	public void Fade(bool fadeIn)
 	{

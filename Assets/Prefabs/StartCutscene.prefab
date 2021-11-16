@@ -556,6 +556,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   cutsceneCamera: {fileID: 52688760596297165}
+  goBackOnStop: 1
+  onEndCutscene:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &52688761906833209
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Path: {fileID: 52688760616038564}
-  m_PathPosition: 1103
+  m_PathPosition: 0
   m_PositionUnits: 1
   m_PathOffset: {x: 0, y: 0, z: 0}
   m_XDamping: 0
