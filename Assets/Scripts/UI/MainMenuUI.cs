@@ -92,7 +92,7 @@ public class MainMenuUI : MonoBehaviour
 			if (File.Exists(SaveManager.GetPath()))
 				File.Delete(SaveManager.GetPath());
 		
-			if (PlayerPrefs.GetInt("TutCompleted", 0) == 0)
+			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
 			{
 				SceneManager.LoadScene(tutorialSceneName);
 			}

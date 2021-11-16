@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameWindow : MonoBehaviour
 {
 	public bool transitionScale = true;
+	public bool canBeExited = true;
 	RectTransform rectTransform;
 	CanvasGroup alphaGroup;
 	Image image;

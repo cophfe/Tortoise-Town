@@ -59,7 +59,7 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void OnMenuButton()
 	{
-		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
+		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead)
 		{
 			if (WindowManager.GetCurrentWindow() == null)
 			{
@@ -107,6 +107,15 @@ public class GameplayUIManager : MonoBehaviour
 		StartCoroutine(ExitGame());
 	}
 
+	public void OnTutorialContinueButtonPressed()
+	{
+
+	}
+
+	public void OnTutorialRestartButtonPressed()
+	{
+
+	}
 	public enum AreYouSureState
 	{
 		QUIT,

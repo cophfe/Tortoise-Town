@@ -317,7 +317,7 @@ public partial class CameraController : MonoBehaviour
 				//this should fix most cases of that happening
 				//will not fix if raycast origin is inside of obstruction collider
 				Ray ray = new Ray(currentPivotPosition, orbitVector);
-				if (Physics.Raycast(ray, out RaycastHit rayHit, data.maxFollowDistance, obstructionLayers.value))
+				if (Physics.Raycast(ray, out RaycastHit rayHit, data.maxFollowDistance, obstructionLayers.value, QueryTriggerInteraction.Ignore))
 				{
 					targetDistance = rayHit.distance;
 				}
