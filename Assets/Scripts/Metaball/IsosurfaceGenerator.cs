@@ -35,6 +35,8 @@ public class IsosurfaceGenerator : MonoBehaviour
 		//var watch = new System.Diagnostics.Stopwatch();
 		
 		//watch.Start();
+		metaShapes = GetComponentsInChildren<IsoShape>(false);
+
 		InitializeForParallel();
 		GenerateBounds();
 		GenerateMeta();
@@ -407,7 +409,20 @@ public class IsosurfaceGenerator : MonoBehaviour
 		
 	}
 
-	private void OnDrawGizmos()
+	public void DrawEveryGizmo()
+	{
+		//slow but necessary since I have no way to confirm the amount of metashapes when the user can change the hirarchy at any time
+		metaShapes = GetComponentsInChildren<IsoShape>(false);
+
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
+		for (int i = 0; i < metaShapes.Length; i++)
+		{
+			metaShapes[i].DrawMetaGizmos();
+		}
+	}
+
+	private void OnDrawGizmosSelected()
 	{
 		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
