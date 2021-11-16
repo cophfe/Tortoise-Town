@@ -105,8 +105,11 @@ public class IsosurfaceGeneratorEditor : Editor
 		GUILayout.EndHorizontal();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		EditorGUILayout.PropertyField(saveAsAsset);
 =======
+=======
+>>>>>>> main
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Save Mesh To File"))
 		{
@@ -114,6 +117,9 @@ public class IsosurfaceGeneratorEditor : Editor
 		}
 		EditorGUILayout.PropertyField(saveAsAsset, new GUIContent("Save Mesh On Generate"));
 		GUILayout.EndHorizontal();
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
 
 		var before = GUI.backgroundColor;
