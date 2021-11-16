@@ -10,7 +10,7 @@ public class GameplayUIManager : MonoBehaviour
 {
 	[SerializeField]
 	bool disableMenuInput = false;
-
+	
 	public Image crosshair;
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
@@ -21,9 +21,26 @@ public class GameplayUIManager : MonoBehaviour
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
 	public OptionsMenu options;
+	public TextMeshProUGUI cutsceneNotifyText;
+	public Animator cutsceneNotify;
+
+	public delegate void VoidEvent();
+	public event VoidEvent onCutsceneSkipped;
 
 	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
+
+	public bool InputIsEnabled { 
+		set 
+		{
+			if (input == null) return;
+
+			if (value)
+				input.Enable();
+			else
+				input.Disable();
+		}
+	}
 
 	private void Awake()
 	{
@@ -56,10 +73,21 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		crosshair.enabled = enable;
 	}
-
+	
 	public void OnMenuButton()
 	{
-		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead)
+		if (GameManager.Instance.InCutscene)
+		{
+			if (cutsceneNotifyText.alpha > 0)
+			{
+				onCutsceneSkipped?.Invoke();
+			}
+			else
+				cutsceneNotify.SetTrigger("Start");
+
+
+		}
+		else if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead)
 		{
 			if (WindowManager.GetCurrentWindow() == null)
 			{
@@ -109,13 +137,10 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void OnTutorialContinueButtonPressed()
 	{
+		StartCoroutine(ContinueToMain());
 
 	}
 
-	public void OnTutorialRestartButtonPressed()
-	{
-
-	}
 	public enum AreYouSureState
 	{
 		QUIT,
@@ -148,9 +173,25 @@ public class GameplayUIManager : MonoBehaviour
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
-		if (GameManager.Instance.WonGame)
-			GameManager.Instance.SaveManager.ClearSaveData();
 		GameManager.Instance.ExitToMenu();
+	}
+
+	IEnumerator ContinueToMain()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		GameManager.Instance.OnTutorialContinue();
+	}
+
+	public IEnumerator EndCutscene(CutsceneManager cutscene)
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		GameManager.Instance.InCutscene = false;
+		cutscene?.OnCompleteStop();
+		Fade(false);
 	}
 	public void Fade(bool fadeIn)
 	{

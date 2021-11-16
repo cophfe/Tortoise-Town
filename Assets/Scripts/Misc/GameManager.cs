@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
 
@@ -45,7 +46,17 @@ public class GameManager : MonoBehaviour
 	int totalDissolverCount;
 	List<GooDissolve> gooDissolvers;
 	List<BooleanSwitch> winSwitches = null;
+	bool inCutscene = false;
 
+
+	public bool InCutscene { get => inCutscene; set
+		{
+			inCutscene = value;
+			player.MainCamera.GetComponent<AudioListener>().enabled = !value;
+			player.MainCamera.GetComponent<Camera>().enabled = !value;
+			player.gameObject.SetActive(!value);
+		}
+	}
 	void Awake()
     {
 		if (instance)
@@ -205,7 +216,7 @@ public class GameManager : MonoBehaviour
 
 	public void OnTutorialContinue()
 	{
-
+		SceneManager.LoadScene(mainSceneName);
 	}
 
 	private void OnValidate()

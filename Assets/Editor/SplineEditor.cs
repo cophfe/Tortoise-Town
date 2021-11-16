@@ -289,7 +289,7 @@ public class SplineEditor : Editor
 		Vector3 valueOfLastControl = controlPoints.GetArrayElementAtIndex(size - 1).vector3Value;
 		Vector3 relativeValueOfLastIntermediate = controlPoints.GetArrayElementAtIndex(size - 2).vector3Value - valueOfLastControl;
 		Vector3 newValueOfIntermediate1 = valueOfLastControl - relativeValueOfLastIntermediate;
-		Vector3 newValueOfControl = valueOfLastControl - relativeValueOfLastIntermediate.normalized;
+		Vector3 newValueOfControl = valueOfLastControl - relativeValueOfLastIntermediate.normalized * 5;
 		controlPoints.GetArrayElementAtIndex(size).vector3Value = newValueOfIntermediate1;
 		controlPoints.GetArrayElementAtIndex(size + 1).vector3Value = newValueOfControl + relativeValueOfLastIntermediate;
 		controlPoints.GetArrayElementAtIndex(size + 2).vector3Value = newValueOfControl;

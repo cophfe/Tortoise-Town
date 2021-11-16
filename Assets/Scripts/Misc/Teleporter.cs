@@ -8,7 +8,7 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 	public bool onlyVisual = false;
 	public Teleporter otherEnd = null;
 	Vector3 initialScale;
-	float openSpeed = 6;
+	float openSpeed = 14;
 	public bool enableOnWin = false;
 
 	bool transitioning = false;

@@ -44,9 +44,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathTime: 3
-  winWaitTime: 1
+  winWaitTime: 0
   menuSceneName: Main_Menu
+  mainSceneName: Main
+  saveDataToFile: 1
+  isTutorial: 0
   player: {fileID: 0}
+  gUI: {fileID: 0}
   enableCursorRestriction: 1
   targetFrameRate: -1
   arrowPrefab: {fileID: 5496907085034195303, guid: f4033c1e1448ef143b0ff24c4fc51d5c, type: 3}
