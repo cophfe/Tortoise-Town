@@ -11,13 +11,17 @@ using UnityEditor;
 public class MainMenuUI : MonoBehaviour
 {
 	public string gameplaySceneName = "Main";
+	public string tutorialSceneName = "Tutorial_Level";
 	public Animator panel = null;
 	public float fadeTime = 1;
 	public Button continueButton;
 	public GameWindow areYouSure;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
-	public OptionsMenu optionsMenu; 
+	public OptionsMenu optionsMenu;
+	public GameWindow optionsWindow;
+	InputMaster input;
+	GameWindowManager windowManager;
 
 	private void Awake()
 	{
@@ -29,14 +33,39 @@ public class MainMenuUI : MonoBehaviour
 				{
 					continueButton.interactable = true;
 				}
-			}
+			} 
 		}
+		input = new InputMaster();
+		input.UI.Menu.performed += _ => OnMenuButton();
+		windowManager = GetComponent<GameWindowManager>();
 	}
 	private void Start()
 	{
 		if (optionsMenu)
 			optionsMenu.Initiate();
 
+	}
+
+	public void OnEnable()
+	{
+		if (input != null)
+			input.Enable();
+	}
+	public void OnDisable()
+	{
+		if (input != null)
+			input.Disable();
+	}
+
+
+	public void OnMenuButton()
+	{
+		if (windowManager.GetCurrentWindow() == optionsWindow)
+		{
+			optionsMenu.SetAreYouSure(1);
+		}
+		else
+			windowManager.RemoveFromQueue();
 	}
 	public void OnPlayButtonPressed()
 	{
@@ -62,12 +91,30 @@ public class MainMenuUI : MonoBehaviour
 		{
 			if (File.Exists(SaveManager.GetPath()))
 				File.Delete(SaveManager.GetPath());
-			SceneManager.LoadScene(gameplaySceneName);
+		
+			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
+			{
+				SceneManager.LoadScene(tutorialSceneName);
+			}
+			else
+				SceneManager.LoadScene(gameplaySceneName);
 		}
 		catch (System.Exception e)
 		{
 			Debug.LogWarning("Error loading scene:\n" + e.Message);
 		}
+	}
+
+	public void LoadTutorialStart()
+	{
+		StartCoroutine(LoadTutorial());
+	}
+
+	IEnumerator LoadTutorial()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(tutorialSceneName);
 	}
 
 	public void OnContinueButtonPressed()

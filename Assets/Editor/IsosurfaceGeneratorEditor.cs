@@ -14,16 +14,13 @@ public class IsosurfaceGeneratorEditor : Editor
 	SerializedProperty autoGenerateBounds;
 	SerializedProperty addWallsAtBounds;
 	SerializedProperty UVtiling;
+	SerializedProperty saveAsAsset;
 
 	bool areYouSure = false;
-	public override void OnInspectorGUI()
+
+	private void OnEnable()
 	{
 		generator = (IsosurfaceGenerator)target;
-		GUI.enabled = false;
-		//draw the script reference
-		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(generator), typeof(IsosurfaceGenerator), false);
-		GUI.enabled = true;
-
 		threshold = serializedObject.FindProperty("threshold");
 		resolution = serializedObject.FindProperty("resolution");
 		smooth = serializedObject.FindProperty("smooth");
@@ -31,6 +28,17 @@ public class IsosurfaceGeneratorEditor : Editor
 		autoGenerateBounds = serializedObject.FindProperty("autoGenerateBounds");
 		addWallsAtBounds = serializedObject.FindProperty("addWallsAtBounds");
 		UVtiling = serializedObject.FindProperty("UVtiling");
+		saveAsAsset = serializedObject.FindProperty("saveAsAsset");
+	}
+
+	public override void OnInspectorGUI()
+	{
+		GUI.enabled = false;
+		//draw the script reference
+		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(generator), typeof(IsosurfaceGenerator), false);
+		GUI.enabled = true;
+
+		
 		serializedObject.Update();
 
 		EditorGUI.BeginChangeCheck();
@@ -75,12 +83,17 @@ public class IsosurfaceGeneratorEditor : Editor
 			}
 		GUILayout.EndHorizontal();
 
+		
 		GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Generate Mesh"))
 			{
 				Undo.RecordObject(generator.GetComponent<MeshFilter>(), "Undo Generate Mesh");
 				generator.Generate();
 				Undo.FlushUndoRecordObjects();
+				if (saveAsAsset.boolValue)
+				{
+					GenerateAsset();
+				}
 			}
 			if (GUILayout.Button("Clear Mesh"))
 			{
@@ -91,14 +104,16 @@ public class IsosurfaceGeneratorEditor : Editor
 
 		GUILayout.EndHorizontal();
 
+		EditorGUILayout.PropertyField(saveAsAsset);
+
 		var before = GUI.backgroundColor;
-		GUI.backgroundColor = new Color(0.8f,0.2f,0.2f);
+		GUI.backgroundColor = new Color(0.9f,0.7f,0.7f);
 		GUIStyle style = new GUIStyle(GUI.skin.button);
 		style.richText = true;
 
 		if (areYouSure)
 		{
-			if (GUILayout.Button(new GUIContent("<color=yellow><b>Are You Sure?</b></color>"), style))
+			if (GUILayout.Button(new GUIContent("<color=red><b>Are You Sure?</b></color>"), style))
 			{
 				Undo.IncrementCurrentGroup();
 				Undo.SetCurrentGroupName("Undo Remove Generator");
@@ -117,7 +132,7 @@ public class IsosurfaceGeneratorEditor : Editor
 		}
 		else
 		{
-			if (GUILayout.Button(new GUIContent("<color=yellow><b>Remove Generator</b></color>"), style))
+			if (GUILayout.Button(new GUIContent("<color=red><b>Remove Generator</b></color>"), style))
 			{
 				areYouSure = true;
 			}
@@ -130,5 +145,22 @@ public class IsosurfaceGeneratorEditor : Editor
 		GUI.backgroundColor = before;
 
 		serializedObject.ApplyModifiedProperties();
+	}
+
+	void GenerateAsset()
+	{
+		var mesh = generator.GetComponent<MeshFilter>().sharedMesh;
+		if (!AssetDatabase.IsValidFolder("Assets/IsosurfaceMeshes"))
+			AssetDatabase.CreateFolder("Assets", "IsosurfaceMeshes");
+
+		if (AssetDatabase.Contains(mesh.GetInstanceID()))
+		{
+			AssetDatabase.SaveAssets();
+		}
+		else
+		{
+			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + mesh.name);
+			AssetDatabase.SaveAssets();
+		}
 	}
 }

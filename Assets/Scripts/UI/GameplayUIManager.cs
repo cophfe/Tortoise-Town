@@ -10,19 +10,37 @@ public class GameplayUIManager : MonoBehaviour
 {
 	[SerializeField]
 	bool disableMenuInput = false;
-
+	
 	public Image crosshair;
 	public Animator fadeAnimator;
 	public float fadeTime = 1;
 	public GameWindow pauseMenu;
 	public GameWindow winMenu;
 	public GameWindow areYouSure;
+	public GameWindow optionsWindow;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
 	public OptionsMenu options;
+	public TextMeshProUGUI cutsceneNotifyText;
+	public Animator cutsceneNotify;
+
+	public delegate void VoidEvent();
+	public event VoidEvent onCutsceneSkipped;
 
 	public GameWindowManager WindowManager { get; private set; }
 	InputMaster input;
+
+	public bool InputIsEnabled { 
+		set 
+		{
+			if (input == null) return;
+
+			if (value)
+				input.Enable();
+			else
+				input.Disable();
+		}
+	}
 
 	private void Awake()
 	{
@@ -55,10 +73,21 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		crosshair.enabled = enable;
 	}
-
-	void OnMenuButton()
+	
+	public void OnMenuButton()
 	{
-		if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead && !GameManager.Instance.WonGame)
+		if (GameManager.Instance.InCutscene)
+		{
+			if (cutsceneNotifyText.alpha > 0)
+			{
+				onCutsceneSkipped?.Invoke();
+			}
+			else
+				cutsceneNotify.SetTrigger("Start");
+
+
+		}
+		else if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead)
 		{
 			if (WindowManager.GetCurrentWindow() == null)
 			{
@@ -66,7 +95,12 @@ public class GameplayUIManager : MonoBehaviour
 			}
 			else
 			{
-				WindowManager.RemoveFromQueue();
+				if (optionsWindow == WindowManager.GetCurrentWindow())
+				{
+					options.SetAreYouSure(1);
+				}
+				else
+					WindowManager.RemoveFromQueue();
 			}
 		}
 	}
@@ -101,10 +135,18 @@ public class GameplayUIManager : MonoBehaviour
 		StartCoroutine(ExitGame());
 	}
 
+	public void OnTutorialContinueButtonPressed()
+	{
+		PlayerPrefs.SetInt("TutorialCompleted", 1);
+		StartCoroutine(ContinueToMain());
+
+	}
+
 	public enum AreYouSureState
 	{
 		QUIT,
 		RESTART,
+		SKIPTUTORIAL
 	}
 
 	public void SetAreYouSure(int state)
@@ -123,6 +165,12 @@ public class GameplayUIManager : MonoBehaviour
 				areYouSureConfirm.onClick.AddListener(() => OnRestartButtonPressed(true));
 				WindowManager.AddToQueue(areYouSure);
 				break;
+			case AreYouSureState.SKIPTUTORIAL:
+				areYouSureText.text = "Do you want to skip the tutorial?";
+				areYouSureConfirm.onClick.RemoveAllListeners();
+				areYouSureConfirm.onClick.AddListener(OnTutorialContinueButtonPressed);
+				WindowManager.AddToQueue(areYouSure);
+				break;
 			default:
 				break;
 		}
@@ -133,9 +181,43 @@ public class GameplayUIManager : MonoBehaviour
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
-		if (GameManager.Instance.WonGame)
-			GameManager.Instance.SaveManager.ClearSaveData();
 		GameManager.Instance.ExitToMenu();
+	}
+
+	IEnumerator ContinueToMain()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		GameManager.Instance.OnTutorialContinue();
+	}
+
+	public IEnumerator StartCutscene(CutsceneManager cutscene)
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		InputIsEnabled = true;
+		Fade(false);
+		cutscene.Switch(true);
+	}
+
+	public IEnumerator EndCutscene(CutsceneManager cutscene)
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		GameManager.Instance.InCutscene = false;
+		cutscene?.OnCompleteStop();
+		Fade(false);
+	}
+
+	public IEnumerator OpenWinMenu()
+	{
+		Fade(true);
+		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+		yield return new WaitForSecondsRealtime(fadeTime);
+		WindowManager.AddToQueue(winMenu);
 	}
 	public void Fade(bool fadeIn)
 	{

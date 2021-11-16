@@ -11,7 +11,8 @@ public class SplineEditor : Editor
 	SerializedProperty controlPoints;
 	SerializedProperty loop;
 	SerializedProperty restrainType;
-	int selectedHandle = 0; 
+	int selectedHandle = 0;
+	bool dragMode = false;
 
 	private void OnEnable()
 	{
@@ -101,6 +102,18 @@ public class SplineEditor : Editor
 			EditorGUILayout.LabelField("Select a point for additional information");
 		}
 
+		bool newDragMode = EditorGUILayout.Toggle("Enable Dragging:", dragMode);
+		if (newDragMode != dragMode)
+		{
+			dragMode = newDragMode;
+
+			if (newDragMode)
+			{
+				SceneView.RepaintAll();
+				selectedHandle = 0;
+			}
+		}
+
 		EditorGUILayout.BeginHorizontal();
 		//Draw button for adding a new curve
 		if (GUILayout.Button(new GUIContent("Add Curve", "Adds three control points")))
@@ -122,10 +135,7 @@ public class SplineEditor : Editor
 			controlPoints.GetArrayElementAtIndex(1).vector3Value = Vector3.forward * 0.25f;
 			controlPoints.GetArrayElementAtIndex(2).vector3Value = Vector3.forward * 0.75f;
 			controlPoints.GetArrayElementAtIndex(3).vector3Value = Vector3.forward * 1;
-			if (selectedHandle > 4)
-			{
-				selectedHandle = 4;
-			}
+			selectedHandle = 0;
 		}
 		EditorGUILayout.EndHorizontal();
 
@@ -147,7 +157,7 @@ public class SplineEditor : Editor
 			Handles.DrawBezier(start, end, startTangent, endTangent, Color.white, null, 3);
 		}
 		//draw lines from through point to intermediate point
-		Handles.color = Color.grey;
+		Handles.color = Color.green;
 		for (int i = 1; i < controlPoints.arraySize - 1; i += 3)
 		{
 			var throughPoint = controlPoints.GetArrayElementAtIndex(i - 1);
@@ -183,8 +193,8 @@ public class SplineEditor : Editor
 					{
 						Vector3 changeInValue = newValue - controlPointValue;
 						controlPoints.GetArrayElementAtIndex(i - 1).vector3Value = controlPoints.GetArrayElementAtIndex(i - 1).vector3Value + changeInValue;
-						
-						
+
+
 						//if it is the last one there is only one attached point
 						if (i != controlPoints.arraySize - 1)
 						{
@@ -206,7 +216,37 @@ public class SplineEditor : Editor
 				else
 					Handles.color = Color.white;
 
-				if (Handles.Button(globalPointValue, Quaternion.identity, handleSizeModifier * 0.05f, handleSizeModifier * 0.1f, Handles.DotHandleCap))
+				
+				if (dragMode)
+				{
+					EditorGUI.BeginChangeCheck();
+					Vector3 point = Handles.FreeMoveHandle(globalPointValue, Quaternion.identity, handleSizeModifier * 0.05f, Vector3.one * 0.25f, Handles.DotHandleCap);
+					if (EditorGUI.EndChangeCheck())
+					{
+						Vector3 newValue = spline.transform.InverseTransformPoint(point);
+						controlPoint.vector3Value = newValue;
+						//if it is a through point move the intermediate points 'attached' to it
+						if (!IsIntermediate(i))
+						{
+							Vector3 changeInValue = newValue - controlPointValue;
+							controlPoints.GetArrayElementAtIndex(i - 1).vector3Value = controlPoints.GetArrayElementAtIndex(i - 1).vector3Value + changeInValue;
+
+
+							//if it is the last one there is only one attached point
+							if (i != controlPoints.arraySize - 1)
+							{
+								controlPoints.GetArrayElementAtIndex(i + 1).vector3Value = controlPoints.GetArrayElementAtIndex(i + 1).vector3Value + changeInValue;
+							}
+						}
+						//if it is an intermediate restrain the second point
+						else
+						{
+							RestrainOtherIntermediate(i);
+						}
+						Repaint();
+					}
+				}
+				else if (Handles.Button(globalPointValue, Quaternion.identity, handleSizeModifier * 0.05f, handleSizeModifier * 0.1f, Handles.DotHandleCap))
 				{
 					selectedHandle = i;
 					Repaint();
@@ -249,7 +289,7 @@ public class SplineEditor : Editor
 		Vector3 valueOfLastControl = controlPoints.GetArrayElementAtIndex(size - 1).vector3Value;
 		Vector3 relativeValueOfLastIntermediate = controlPoints.GetArrayElementAtIndex(size - 2).vector3Value - valueOfLastControl;
 		Vector3 newValueOfIntermediate1 = valueOfLastControl - relativeValueOfLastIntermediate;
-		Vector3 newValueOfControl = valueOfLastControl - relativeValueOfLastIntermediate.normalized;
+		Vector3 newValueOfControl = valueOfLastControl - relativeValueOfLastIntermediate.normalized * 5;
 		controlPoints.GetArrayElementAtIndex(size).vector3Value = newValueOfIntermediate1;
 		controlPoints.GetArrayElementAtIndex(size + 1).vector3Value = newValueOfControl + relativeValueOfLastIntermediate;
 		controlPoints.GetArrayElementAtIndex(size + 2).vector3Value = newValueOfControl;
