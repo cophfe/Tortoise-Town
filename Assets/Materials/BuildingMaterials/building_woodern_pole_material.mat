@@ -50,7 +50,7 @@ Material:
     - _MetallicAmount: 0
     - _NoiseScale: 25
     - _NoiseStrength: 1
-    - _NormalAmount: 1
+    - _NormalAmount: 0
     - _OcclusionAmount: 1
     - _RoughnessAmount: 0
     m_Colors:

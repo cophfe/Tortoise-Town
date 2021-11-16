@@ -239,7 +239,6 @@ public class PlayerCombat : MonoBehaviour
 	public void EndChargeUp()
 	{
 		charging = false;
-		playerController.PlayerAudio.Stop();
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(false);
 	}

@@ -92,7 +92,7 @@ public class MainMenuUI : MonoBehaviour
 			if (File.Exists(SaveManager.GetPath()))
 				File.Delete(SaveManager.GetPath());
 		
-			if (PlayerPrefs.GetInt("TutCompleted", 0) == 0)
+			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
 			{
 				SceneManager.LoadScene(tutorialSceneName);
 			}
@@ -103,6 +103,18 @@ public class MainMenuUI : MonoBehaviour
 		{
 			Debug.LogWarning("Error loading scene:\n" + e.Message);
 		}
+	}
+
+	public void LoadTutorialStart()
+	{
+		StartCoroutine(LoadTutorial());
+	}
+
+	IEnumerator LoadTutorial()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(tutorialSceneName);
 	}
 
 	public void OnContinueButtonPressed()

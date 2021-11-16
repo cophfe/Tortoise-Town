@@ -21,7 +21,7 @@ public class GooDissolve : MonoBehaviour
 	public bool Dissolved { get; private set; }
 	int aliveTargetCount;
 
-	private void Awake()
+	protected virtual void Awake()
 	{
 		GameManager.Instance.RegisterGooDissolver(this);
 		cutOffHeightId = Shader.PropertyToID("_CutoffHeight");
@@ -69,7 +69,7 @@ public class GooDissolve : MonoBehaviour
 		}
 	}
 
-	void StartDissolving()
+	protected virtual void StartDissolving()
 	{
 		currentCutOffHeight = maximumCutOffHeight;
 		dissolving = true;
