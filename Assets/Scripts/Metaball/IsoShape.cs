@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Jobs;
 
@@ -32,15 +35,34 @@ public abstract class IsoShape : MonoBehaviour
 		return generator;
 	}
 
-	protected abstract void DrawMetaGizmos();
+	public abstract void DrawMetaGizmos();
+	public abstract void DrawMetaGizmosSelected();
 
-	private void OnDrawGizmos()
+#if UNITY_EDITOR
+	private void OnDrawGizmosSelected()
 	{
-		if (!enabled) return;
-		Gizmos.color = negative ? Color.red : Color.green;
-		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
-		DrawMetaGizmos();
+		var selected = Selection.activeTransform;
+		var generatorObject = GetGenerator().transform;
+		bool generatorIsSelected;
+
+		do
+		{
+			generatorIsSelected = generatorObject == selected;
+			generatorObject = generatorObject.parent;
+		}
+		while (generatorObject != null && !generatorIsSelected);
+		
+		if (generatorIsSelected)
+		{
+			DrawMetaGizmos();
+		}
+		else
+		{
+			GetGenerator().DrawEveryGizmo();
+			DrawMetaGizmosSelected();
+		}
 	}
+#endif
 
 	
 }

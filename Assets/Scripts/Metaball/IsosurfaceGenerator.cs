@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using UnityEngine.Jobs;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 //used marching cubes lookup table and way to access them from
 //http://paulbourke.net/geometry/polygonise/
@@ -18,6 +21,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 	[Range(0.5f,15)] public float resolution =5;
 	public bool smooth = true;
 	public bool addWallsAtBounds = true;
+	public bool saveAsAsset = false;
 	public bool autoGenerateBounds = false;
 	public Bounds meshBounds;
 	IsoShape[] metaShapes;
@@ -35,6 +39,8 @@ public class IsosurfaceGenerator : MonoBehaviour
 		//var watch = new System.Diagnostics.Stopwatch();
 		
 		//watch.Start();
+		metaShapes = GetComponentsInChildren<IsoShape>(false);
+
 		InitializeForParallel();
 		GenerateBounds();
 		GenerateMeta();
@@ -248,7 +254,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 		}
 
 		Mesh newMesh = new Mesh();
-		newMesh.name = "generated mesh";
+		newMesh.name = "IsoSurfaceMesh" + GetInstanceID();
 
 		newMesh.vertices = vertices.ToArray();
 		int[] triArray = new int[triangles.Count];
@@ -360,7 +366,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 		});
 
 		Mesh newMesh = new Mesh();
-		newMesh.name = "generated mesh";
+		newMesh.name = "IsoSurfaceMesh" + GetInstanceID();
 
 		var vertexArray = vertices.ToArray();
 		newMesh.vertices = vertexArray;
@@ -407,7 +413,20 @@ public class IsosurfaceGenerator : MonoBehaviour
 		
 	}
 
-	private void OnDrawGizmos()
+	public void DrawEveryGizmo()
+	{
+		//slow but necessary since I have no way to confirm the amount of metashapes when the user can change the hirarchy at any time
+		metaShapes = GetComponentsInChildren<IsoShape>(false);
+
+		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
+		for (int i = 0; i < metaShapes.Length; i++)
+		{
+			metaShapes[i].DrawMetaGizmos();
+		}
+	}
+
+	private void OnDrawGizmosSelected()
 	{
 		Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
 		Gizmos.DrawWireCube(meshBounds.center, meshBounds.size);
