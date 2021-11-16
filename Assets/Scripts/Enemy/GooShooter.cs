@@ -17,11 +17,13 @@ public class GooShooter : MonoBehaviour
 	Arrow currentArrow;
 	public Animator animator;
 	bool dead = false;
+	AudioSource attachedAudio;
 
 	protected void Start()
     {
 		arrowPool = new ObjectPool(arrowCount, 1, gooShotPrefab, transform);
 		shootTimer = shootIntervel;
+		attachedAudio = GetComponent<AudioSource>();
 	}
 
     void Update()
@@ -49,6 +51,8 @@ public class GooShooter : MonoBehaviour
 	public void ShootGoo()
 	{
 		if (currentArrow == null) return;
+		if (attachedAudio != null)
+			attachedAudio.Play();
 		float initialSpeed = gooShotInfo.maxInitialSpeed;
 		Vector3 velocity = Vector3.zero;
 		Vector3 arrowAimPoint = GameManager.Instance.Player.Interpolator.transform.position;

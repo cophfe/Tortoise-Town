@@ -11,6 +11,7 @@ using UnityEditor;
 public class MainMenuUI : MonoBehaviour
 {
 	public string gameplaySceneName = "Main";
+	public string tutorialSceneName = "Tutorial_Level";
 	public Animator panel = null;
 	public float fadeTime = 1;
 	public Button continueButton;
@@ -32,7 +33,7 @@ public class MainMenuUI : MonoBehaviour
 				{
 					continueButton.interactable = true;
 				}
-			}
+			} 
 		}
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
@@ -66,7 +67,6 @@ public class MainMenuUI : MonoBehaviour
 		else
 			windowManager.RemoveFromQueue();
 	}
-
 	public void OnPlayButtonPressed()
 	{
 		if (continueButton.interactable)
@@ -91,12 +91,30 @@ public class MainMenuUI : MonoBehaviour
 		{
 			if (File.Exists(SaveManager.GetPath()))
 				File.Delete(SaveManager.GetPath());
-			SceneManager.LoadScene(gameplaySceneName);
+		
+			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
+			{
+				SceneManager.LoadScene(tutorialSceneName);
+			}
+			else
+				SceneManager.LoadScene(gameplaySceneName);
 		}
 		catch (System.Exception e)
 		{
 			Debug.LogWarning("Error loading scene:\n" + e.Message);
 		}
+	}
+
+	public void LoadTutorialStart()
+	{
+		StartCoroutine(LoadTutorial());
+	}
+
+	IEnumerator LoadTutorial()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(tutorialSceneName);
 	}
 
 	public void OnContinueButtonPressed()
