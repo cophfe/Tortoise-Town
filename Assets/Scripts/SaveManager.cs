@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager
 {
-	bool saveDataToFile;
+	public bool saveDataToFile;
 	int checkpointIndex = -1;
 	List<Checkpoint> checkpoints = new List<Checkpoint>();
 	List<Health> savedHealths = new List<Health>();
@@ -117,6 +117,9 @@ public class SaveManager
 
 	void WriteSaveDataToFile()
 	{
+		if (!saveDataToFile)
+			return;
+
 		//idk how to do serialization so we'll do it the old fashioned way
 		//on the bright side this is way faster
 		using (FileStream fs = new FileStream(GetPath(), FileMode.OpenOrCreate, FileAccess.ReadWrite))
@@ -212,6 +215,13 @@ public class SaveManager
 
 	void LoadSaveDataFromFile()
 	{
+		if (!saveDataToFile)
+		{
+			DeleteSceneData();
+			ClearSaveData();
+			return;
+		}
+
 		try
 		{
 			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))

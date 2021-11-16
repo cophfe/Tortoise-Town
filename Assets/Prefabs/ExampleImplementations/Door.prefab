@@ -345,13 +345,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSwitch: 0
+  SwitchOnAwake: 0
   onSwitchOn:
     m_PersistentCalls:
       m_Calls: []
   onSwitchOff:
     m_PersistentCalls:
       m_Calls: []
-  doorAnimator: {fileID: 0}
+  doorAnimator: {fileID: 1110989208236422509}
 --- !u!95 &1110989208236422509
 Animator:
   serializedVersion: 3

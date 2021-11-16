@@ -8,7 +8,7 @@ public class PlayerAnimator : MonoBehaviour
 	#region Inspector Fields
 	public Animator animator = null;
 	public MeshRenderer ball;
-	public SkinnedMeshRenderer player;
+	public GameObject playerVisual;
 	public float speedChangeMultiplier = 1;
 	public float verticalSpeedChangeMultiplier = 1;
 	public float verticalMaxMultiplier = 2.5f;
@@ -117,7 +117,7 @@ public class PlayerAnimator : MonoBehaviour
 						playerController.MainCamera.GetCameraData().targetOffset.y = playerController.RollCameraOffset;
 						switchingColliderSize = false;
 						ball.enabled = true;
-						player.enabled = false;
+						playerVisual.SetActive(false);
 					}
 					else
 					{
@@ -274,7 +274,7 @@ public class PlayerAnimator : MonoBehaviour
 		{
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;
 			ball.enabled = false;
-			player.enabled = true;
+			playerVisual.SetActive(true);
 		}
 	}
  

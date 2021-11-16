@@ -9,12 +9,15 @@ public class GameManager : MonoBehaviour
 {
 	static GameManager instance;
 	public static GameManager Instance { get { return instance; } set { instance = value; } }
-	
+
 	[Header("General Stuff")]
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
+	[SerializeField] bool isTutorial = false;
+	[SerializeField] CutsceneManager finalCutscene = null;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
@@ -35,7 +38,7 @@ public class GameManager : MonoBehaviour
 	public PlayerController Player { get { return player; } }
 	public SaveManager SaveManager { get; private set; }
 	public GameplayUIManager GUI { get { return gUI; } }
-
+	public bool IsTutorial {get {return isTutorial; } }
 	public bool WonGame { get; private set; } = false;
 
 	Vector3 initialPlayerPosition;
@@ -43,7 +46,15 @@ public class GameManager : MonoBehaviour
 	int currentDissolverCount;
 	int totalDissolverCount;
 	List<GooDissolve> gooDissolvers;
+	List<BooleanSwitch> winSwitches = null;
+	bool inCutscene = false;
 
+
+	public bool InCutscene { get => inCutscene; set
+		{
+			inCutscene = value;
+		}
+	}
 	void Awake()
     {
 		if (instance)
@@ -84,8 +95,16 @@ public class GameManager : MonoBehaviour
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
+		if (finalCutscene)
+			finalCutscene.onEndCutscene.AddListener(OnExitToMenu);
 	}
 
+	public void OnExitToMenu()
+	{
+		GUI.OnExitButtonPressed();
+		SaveManager.saveDataToFile = false;
+		SaveManager.DeleteAllData();
+	}
 	public void OnPlayerDeath()
 	{
 		player.InputIsEnabled = false;
@@ -132,6 +151,11 @@ public class GameManager : MonoBehaviour
 		CalculateCurrentDissolverCount();
 	}
 
+	public void DisableSaving()
+	{
+		SaveManager.saveDataToFile = false;
+	}
+
 	public void ExitToMenu()
 	{
 		try
@@ -147,6 +171,13 @@ public class GameManager : MonoBehaviour
 	public void RegisterGooDissolver(GooDissolve dissolver)
 	{
 		gooDissolvers.Add(dissolver);
+	}
+
+	public void RegisterWinSwitch(BooleanSwitch winSwitch)
+	{
+		if (winSwitches == null) winSwitches = new List<BooleanSwitch>();
+
+		winSwitches.Add(winSwitch);
 	}
 
 	public void CalculateTotalDissolvers()
@@ -181,13 +212,22 @@ public class GameManager : MonoBehaviour
 	IEnumerator WinGame()
 	{
 		yield return new WaitForSecondsRealtime(winWaitTime);
-		IsCursorRestricted = false;
-		Time.timeScale = 0;
-		GUI.WindowManager.AddToQueue(GUI.winMenu);
-		GameManager.Instance.Player.InputIsEnabled = false;
-		//and begone save data
-		SaveManager.ClearSaveData();
-		SaveManager.DeleteSceneData();
+		
+
+		if (winSwitches != null)
+			foreach (var wSwitch in winSwitches)
+			{
+				wSwitch.Switch(true);
+			}
+
+		//GameManager.Instance.Player.InputIsEnabled = false;
+		//IsCursorRestricted = false;
+		//Time.timeScale = 0;
+	}
+
+	public void OnTutorialContinue()
+	{
+		SceneManager.LoadScene(mainSceneName);
 	}
 
 	private void OnValidate()
@@ -215,6 +255,13 @@ public class GameManager : MonoBehaviour
 				Cursor.visible = true;
 			}
 		}
+	}
+
+	public void InitiateFinalCutscene()
+	{
+		GUI.InputIsEnabled = false;
+		StartCoroutine(GUI.StartCutscene(finalCutscene));
+		
 	}
 
 	private void OnDestroy()

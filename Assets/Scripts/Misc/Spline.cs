@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spline : MonoBehaviour
 {
 	[SerializeField] Vector3[] controlPoints;
-	[SerializeField] bool loop;
+	[SerializeField] bool loop = false;
 	[SerializeField] RestrainType restrainType = RestrainType.MIRRORED;
 	public RestrainType Restrain {  get { return restrainType; } 
 	}

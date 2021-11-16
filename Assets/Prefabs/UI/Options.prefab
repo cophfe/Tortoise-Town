@@ -311,6 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionScale: 1
+  canBeExited: 1
 --- !u!114 &7858865280202379146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,13 +411,16 @@ MonoBehaviour:
     sensitivity: 1
     invertX: 0
     invertY: 0
-    rebinds: 
     windowMode: 2
     vSyncMode: -1
     graphicsQuality: -1
     masterVolume: 1
     sfxVolume: 1
     musicVolume: 1
+  mainMenu: {fileID: 0}
+  backupInput: {fileID: 0}
+  mainCameraPrefab: {fileID: 0}
+  tutorialSceneName: Tutorial_Level
 --- !u!1 &875971559995360631
 GameObject:
   m_ObjectHideFlags: 0

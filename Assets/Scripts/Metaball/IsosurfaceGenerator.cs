@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using UnityEngine.Jobs;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 //used marching cubes lookup table and way to access them from
 //http://paulbourke.net/geometry/polygonise/
@@ -18,6 +21,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 	[Range(0.5f,15)] public float resolution =5;
 	public bool smooth = true;
 	public bool addWallsAtBounds = true;
+	public bool saveAsAsset = false;
 	public bool autoGenerateBounds = false;
 	public Bounds meshBounds;
 	IsoShape[] metaShapes;
@@ -250,7 +254,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 		}
 
 		Mesh newMesh = new Mesh();
-		newMesh.name = "generated mesh";
+		newMesh.name = "IsoSurfaceMesh" + GetInstanceID();
 
 		newMesh.vertices = vertices.ToArray();
 		int[] triArray = new int[triangles.Count];
@@ -362,7 +366,7 @@ public class IsosurfaceGenerator : MonoBehaviour
 		});
 
 		Mesh newMesh = new Mesh();
-		newMesh.name = "generated mesh";
+		newMesh.name = "IsoSurfaceMesh" + GetInstanceID();
 
 		var vertexArray = vertices.ToArray();
 		newMesh.vertices = vertexArray;

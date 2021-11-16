@@ -41,7 +41,18 @@ public abstract class IsoShape : MonoBehaviour
 #if UNITY_EDITOR
 	private void OnDrawGizmosSelected()
 	{
-		if (Selection.Contains(GetGenerator().gameObject))
+		var selected = Selection.activeTransform;
+		var generatorObject = GetGenerator().transform;
+		bool generatorIsSelected;
+
+		do
+		{
+			generatorIsSelected = generatorObject == selected;
+			generatorObject = generatorObject.parent;
+		}
+		while (generatorObject != null && !generatorIsSelected);
+		
+		if (generatorIsSelected)
 		{
 			DrawMetaGizmos();
 		}
