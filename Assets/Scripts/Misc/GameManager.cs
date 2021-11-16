@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
 	[SerializeField] string menuSceneName = "Main_Menu";
+	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
+	[SerializeField] CutsceneManager finalCutscene = null;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
@@ -45,7 +47,14 @@ public class GameManager : MonoBehaviour
 	int totalDissolverCount;
 	List<GooDissolve> gooDissolvers;
 	List<BooleanSwitch> winSwitches = null;
+	bool inCutscene = false;
 
+
+	public bool InCutscene { get => inCutscene; set
+		{
+			inCutscene = value;
+		}
+	}
 	void Awake()
     {
 		if (instance)
@@ -86,8 +95,16 @@ public class GameManager : MonoBehaviour
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
+		if (finalCutscene)
+			finalCutscene.onEndCutscene.AddListener(OnExitToMenu);
 	}
 
+	public void OnExitToMenu()
+	{
+		GUI.OnExitButtonPressed();
+		SaveManager.saveDataToFile = false;
+		SaveManager.DeleteAllData();
+	}
 	public void OnPlayerDeath()
 	{
 		player.InputIsEnabled = false;
@@ -132,6 +149,11 @@ public class GameManager : MonoBehaviour
 		ArrowPool.ResetToDefault();
 		GUI.Fade(false);
 		CalculateCurrentDissolverCount();
+	}
+
+	public void DisableSaving()
+	{
+		SaveManager.saveDataToFile = false;
 	}
 
 	public void ExitToMenu()
@@ -205,7 +227,7 @@ public class GameManager : MonoBehaviour
 
 	public void OnTutorialContinue()
 	{
-
+		SceneManager.LoadScene(mainSceneName);
 	}
 
 	private void OnValidate()
@@ -233,6 +255,13 @@ public class GameManager : MonoBehaviour
 				Cursor.visible = true;
 			}
 		}
+	}
+
+	public void InitiateFinalCutscene()
+	{
+		GUI.InputIsEnabled = false;
+		StartCoroutine(GUI.StartCutscene(finalCutscene));
+		
 	}
 
 	private void OnDestroy()

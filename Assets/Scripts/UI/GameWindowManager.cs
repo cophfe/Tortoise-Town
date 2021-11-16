@@ -125,6 +125,8 @@ public class GameWindowManager : MonoBehaviour
 		var current = GetCurrentWindow();
 		if (current != null)
 		{
+			if (!current.canBeExited) return;
+
 			if (overrideClose && current.GetState() == GameWindow.TransitionState.CLOSING)
 			{
 				current.UpdateOpenState(1);
