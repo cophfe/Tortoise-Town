@@ -171,7 +171,7 @@ public class IsosurfaceGeneratorEditor : Editor
 			string name = mesh.name;
 			if (generateNewName)
 				name += mesh.GetInstanceID();
-			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + mesh.name);
+			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + name);
 			AssetDatabase.SaveAssets();
 		}
 	}
