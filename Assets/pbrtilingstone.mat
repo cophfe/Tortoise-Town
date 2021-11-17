@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: pbrtilingstone
+  m_Shader: {fileID: -6465566751694194690, guid: b4f4309fbde165847bb011cd1be03672, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_161EC8C6:
+        m_Texture: {fileID: 2800000, guid: 388aaf3739090b44790a31ff5d330ba6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_BEBDCD8E:
+        m_Texture: {fileID: 2800000, guid: eda6488dd34def044bc1a2f6cdb44e79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C20705:
+        m_Texture: {fileID: 2800000, guid: 6bfd887ec919ee040b8b5e2085098b0f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_171FF0B6_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 6bfd887ec919ee040b8b5e2085098b0f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_1FAA6DE3_Texture_1:
+        m_Texture: {fileID: 2800000, guid: eda6488dd34def044bc1a2f6cdb44e79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_5D254B6_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 388aaf3739090b44790a31ff5d330ba6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_BFD061FA: 0.3
+    - Vector1_CFDD1D9D: 14
+    m_Colors: []
+  m_BuildTextureStacks: []

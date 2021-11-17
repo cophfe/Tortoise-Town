@@ -125,7 +125,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -429,6 +429,7 @@ MonoBehaviour:
   rollRadiusModifier: 2
   rollTargetSpeedModifier: 2
   rollAccelerationModifier: 0.5
+  rollAirAccelerationModifier: 0.27
   rollTurnSpeed: 2
   ballAlignSpeed: 180
   rollCooldownTime: 0
