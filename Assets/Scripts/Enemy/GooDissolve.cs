@@ -82,6 +82,7 @@ public class GooDissolve : MonoBehaviour
 			activators[i].Dissolve();
 		}
 		Dissolved = true;
+		GameManager.Instance.OnGooDissolve();
 	}
 
 	public void OnResetScene()
@@ -119,6 +120,7 @@ public class GooDissolve : MonoBehaviour
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = false;
 		dissolving = false;
+
 	}
 
 	public void ResetDissolve()
@@ -136,6 +138,7 @@ public class GooDissolve : MonoBehaviour
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = true;
 		dissolving = false;
+
 	}
 
 	private void Update()
@@ -157,7 +160,6 @@ public class GooDissolve : MonoBehaviour
 				currentCutOffHeight = minimumCutOffHeight;
 				SetCutoffHeight(currentCutOffHeight);
 				enabled = false;
-				GameManager.Instance.OnGooDissolve();
 			}
 			else SetCutoffHeight(currentCutOffHeight);
 		}

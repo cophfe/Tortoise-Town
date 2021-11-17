@@ -9,12 +9,12 @@ TerrainLayer:
   m_Name: Cobblestone
   m_DiffuseTexture: {fileID: 2800000, guid: d5f5c616ca7f01c4eabb7b927a2594c0, type: 3}
   m_NormalMapTexture: {fileID: 2800000, guid: 6ed3bff5650dc7b40bb302344199c8d0, type: 3}
-  m_MaskMapTexture: {fileID: 0}
+  m_MaskMapTexture: {fileID: 2800000, guid: c80f1ed901ddbec4997f4e229e53d21f, type: 3}
   m_TileSize: {x: 4, y: 4}
   m_TileOffset: {x: 0, y: 0}
-  m_Specular: {r: 0, g: 0, b: 0, a: 0}
+  m_Specular: {r: 0.5, g: 0.5, b: 0.5, a: 0}
   m_Metallic: 0
-  m_Smoothness: 0
+  m_Smoothness: 1
   m_NormalScale: 1
   m_DiffuseRemapMin: {x: 0, y: 0, z: 0, w: 0}
   m_DiffuseRemapMax: {x: 1, y: 1, z: 1, w: 1}

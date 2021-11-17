@@ -144,6 +144,7 @@ MonoBehaviour:
   resolution: 5
   smooth: 1
   addWallsAtBounds: 1
+  saveAsAsset: 0
   autoGenerateBounds: 1
   meshBounds:
     m_Center: {x: 0, y: 0, z: 0}

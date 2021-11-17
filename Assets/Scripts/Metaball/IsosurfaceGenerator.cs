@@ -18,7 +18,7 @@ using UnityEditor;
 [RequireComponent(typeof(MeshFilter))]
 public class IsosurfaceGenerator : MonoBehaviour
 {
-	[Range(0.5f,15)] public float resolution =5;
+	[Range(0.5f,4)] public float resolution = 2;
 	public bool smooth = true;
 	public bool addWallsAtBounds = true;
 	public bool saveAsAsset = false;
