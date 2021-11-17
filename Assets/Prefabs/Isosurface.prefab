@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 83a97188b2d63e64aa967ecc49cd8db4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,10 +97,11 @@ MonoBehaviour:
   resolution: 5
   smooth: 1
   addWallsAtBounds: 1
+  saveAsAsset: 0
   autoGenerateBounds: 1
   meshBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   threshold: 1
   UVtiling: 1
-  generateMesh: 1
+  useParallel: 0
