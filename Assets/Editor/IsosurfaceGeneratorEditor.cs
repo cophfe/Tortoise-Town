@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -103,6 +103,9 @@ public class IsosurfaceGeneratorEditor : Editor
 			}
 
 		GUILayout.EndHorizontal();
+
+
+		EditorGUILayout.PropertyField(saveAsAsset);
 
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Save Mesh To File"))

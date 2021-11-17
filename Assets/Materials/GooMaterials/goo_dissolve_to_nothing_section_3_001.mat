@@ -21,17 +21,29 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: goo_dissolve_to_nothing_section_3_001
-  m_Shader: {fileID: 4800000, guid: f000fc8f3688289439d4e8102f72b0a3, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5d5f680ad6b70264381fffebb158fc43, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Texture0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaClip: 0.5
     - _AlphaCutoff: 0.5
@@ -39,7 +51,7 @@ Material:
     - _CutoffHeight: 1000
     - _EdgeWidth: 0.05
     - _Metallic: 0
-    - _MoveStength: 10
+    - _MoveStength: 50
     - _NoiseScale: 25
     - _NoiseStrength: 1
     - _ScrollSpeed: 0.05
@@ -48,8 +60,8 @@ Material:
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColour: {r: 3.9999995, g: 0.774869, b: 0, a: 0}
-    - _GooSlimeColor: {r: 1, g: 0, b: 0.26826477, a: 0}
+    - _GooSlimeColor: {r: 26.811813, g: 0, b: 52.18621, a: 0}
     - _MainColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SlimeShapness: {r: 0.41, g: 1.34, b: 0, a: 0}
+    - _SlimeShapness: {r: 0, g: 12.47, b: 0, a: 0}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
