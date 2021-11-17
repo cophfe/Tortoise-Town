@@ -105,13 +105,13 @@ public class IsosurfaceGeneratorEditor : Editor
 		GUILayout.EndHorizontal();
 
 
-		EditorGUILayout.PropertyField(saveAsAsset);
 
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Save Mesh To File"))
 		{
 			GenerateAsset(true);
 		}
+		GUILayout.Space(15);
 		EditorGUILayout.PropertyField(saveAsAsset, new GUIContent("Save Mesh On Generate"));
 		GUILayout.EndHorizontal();
 
