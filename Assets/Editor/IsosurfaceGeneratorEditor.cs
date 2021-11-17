@@ -110,7 +110,7 @@ public class IsosurfaceGeneratorEditor : Editor
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Save Mesh To File"))
 		{
-			GenerateAsset();
+			GenerateAsset(true);
 		}
 		EditorGUILayout.PropertyField(saveAsAsset, new GUIContent("Save Mesh On Generate"));
 		GUILayout.EndHorizontal();
@@ -156,7 +156,7 @@ public class IsosurfaceGeneratorEditor : Editor
 		serializedObject.ApplyModifiedProperties();
 	}
 
-	void GenerateAsset()
+	void GenerateAsset(bool generateNewName = false)
 	{
 		var mesh = generator.GetComponent<MeshFilter>().sharedMesh;
 		if (!AssetDatabase.IsValidFolder("Assets/IsosurfaceMeshes"))
@@ -168,6 +168,9 @@ public class IsosurfaceGeneratorEditor : Editor
 		}
 		else
 		{
+			string name = mesh.name;
+			if (generateNewName)
+				name += mesh.GetInstanceID();
 			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + mesh.name);
 			AssetDatabase.SaveAssets();
 		}
