@@ -18,7 +18,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &76836009
 Transform:
@@ -331,7 +331,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &81610078
 Transform:
@@ -644,7 +644,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &95867149
 Transform:
@@ -957,7 +957,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &96923074
 Transform:
@@ -1270,7 +1270,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &123379094
 Transform:
@@ -1583,7 +1583,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &165673857
 Transform:
@@ -1896,7 +1896,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &206860971
 Transform:
@@ -2329,7 +2329,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &232220902
 Transform:
@@ -2642,7 +2642,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &253522453
 Transform:
@@ -2951,7 +2951,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &275716708
 Transform:
@@ -3071,7 +3071,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &283965898
 Transform:
@@ -3384,7 +3384,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &348043730
 Transform:
@@ -3697,7 +3697,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &384868533
 Transform:
@@ -4130,7 +4130,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &391543644
 Transform:
@@ -4443,7 +4443,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &410734817
 Transform:
@@ -4756,7 +4756,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &426284539
 Transform:
@@ -8013,7 +8013,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &438132728
 Transform:
@@ -8446,7 +8446,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &445609817
 Transform:
@@ -8759,7 +8759,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &491370364
 Transform:
@@ -9072,7 +9072,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &547507416
 Transform:
@@ -9385,7 +9385,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &596213585
 Transform:
@@ -9698,7 +9698,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &649747460
 Transform:
@@ -10011,7 +10011,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &665060778
 Transform:
@@ -10324,7 +10324,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &675636555
 Transform:
@@ -10637,7 +10637,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &682048227
 Transform:
@@ -10950,7 +10950,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &718347998
 Transform:
@@ -11383,7 +11383,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &719013968
 Transform:
@@ -11696,7 +11696,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &723277479
 Transform:
@@ -12009,7 +12009,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &757483610
 Transform:
@@ -12322,7 +12322,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &766739544
 Transform:
@@ -12635,7 +12635,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &805090787
 Transform:
@@ -12948,7 +12948,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &813358542
 Transform:
@@ -13261,7 +13261,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &831143299
 Transform:
@@ -13574,7 +13574,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &837254039
 Transform:
@@ -13887,7 +13887,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &853993491
 Transform:
@@ -14200,7 +14200,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &875094335
 Transform:
@@ -14513,7 +14513,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &903157215
 Transform:
@@ -14826,7 +14826,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &908563101
 Transform:
@@ -15139,7 +15139,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1035139913
 Transform:
@@ -15452,7 +15452,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1038987711
 Transform:
@@ -15765,7 +15765,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1043416059
 Transform:
@@ -16198,7 +16198,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1076500914
 Transform:
@@ -16511,7 +16511,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1085369063
 Transform:
@@ -16944,7 +16944,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1155092250
 Transform:
@@ -17257,7 +17257,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1157805933
 Transform:
@@ -17570,7 +17570,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1205321782
 Transform:
@@ -18483,7 +18483,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1216758975
 Transform:
@@ -18796,7 +18796,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1244714231
 Transform:
@@ -19109,7 +19109,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1250803330
 Transform:
@@ -19422,7 +19422,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1251597645
 Transform:
@@ -19735,7 +19735,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1286108689
 Transform:
@@ -20168,7 +20168,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1291041875
 Transform:
@@ -20481,7 +20481,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1336303521
 Transform:
@@ -20794,7 +20794,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1345272522
 Transform:
@@ -21107,7 +21107,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1352876201
 Transform:
@@ -21420,7 +21420,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1364724578
 Transform:
@@ -21733,7 +21733,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1364980280
 Transform:
@@ -22166,7 +22166,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1413879683
 Transform:
@@ -22599,7 +22599,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1419003978
 Transform:
@@ -22912,7 +22912,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1423388237
 Transform:
@@ -23225,7 +23225,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1425102007
 Transform:
@@ -23538,7 +23538,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1488200953
 Transform:
@@ -23971,7 +23971,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1504141516
 Transform:
@@ -24404,7 +24404,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1540000387
 Transform:
@@ -24717,7 +24717,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1543281592
 Transform:
@@ -25030,7 +25030,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1562764385
 Transform:
@@ -25343,7 +25343,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1597186704
 Transform:
@@ -25776,7 +25776,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1598256887
 Transform:
@@ -26089,7 +26089,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1657172287
 Transform:
@@ -26402,7 +26402,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1691779998
 Transform:
@@ -26715,7 +26715,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1696533320
 Transform:
@@ -27028,7 +27028,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1711155672
 Transform:
@@ -27341,7 +27341,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1730883732
 Transform:
@@ -27654,7 +27654,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1769968707
 Transform:
@@ -27967,7 +27967,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1877463478
 Transform:
@@ -28280,7 +28280,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1904628247
 Transform:
@@ -28593,7 +28593,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1904993851
 Transform:
@@ -28906,7 +28906,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1926002998
 Transform:
@@ -29219,7 +29219,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1943109116
 Transform:
@@ -29532,7 +29532,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1954261279
 Transform:
@@ -29845,7 +29845,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2004762784
 Transform:
@@ -30158,7 +30158,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2052862566
 Transform:
@@ -30471,7 +30471,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2088336930
 Transform:
@@ -30784,7 +30784,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2090241534
 Transform:
@@ -31097,7 +31097,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2109498711
 Transform:
@@ -31410,7 +31410,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2114870384
 Transform:
@@ -31723,7 +31723,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2147360785
 Transform:
@@ -32033,8 +32033,8 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 0
 --- !u!4 &4929707447407701145
 Transform:
   m_ObjectHideFlags: 0
@@ -32147,7 +32147,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8340772319723841391
 Transform:
@@ -33548,6 +33548,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.029339
@@ -33618,6 +33622,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.428094
@@ -33687,6 +33695,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33762,6 +33774,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.9371004
@@ -33828,6 +33844,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 38.39315
@@ -33889,6 +33909,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34008,6 +34032,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &7015120244817143624 stripped
@@ -34025,6 +34053,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34096,6 +34128,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 37.5043
@@ -34161,6 +34197,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34232,6 +34272,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.1114283
@@ -34298,6 +34342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 77.14
@@ -34359,6 +34407,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34426,6 +34478,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36.8594
@@ -34491,6 +34547,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34598,9 +34658,17 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0000001
       objectReference: {fileID: 0}
+    - target: {fileID: 7243276758734610928, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_003(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
@@ -34619,6 +34687,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34682,6 +34754,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 30.035406
@@ -34744,6 +34820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.1150146
@@ -34805,6 +34885,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34872,6 +34956,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36.83757
@@ -34933,6 +35021,10 @@ PrefabInstance:
     - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_004(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35044,6 +35136,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &7015120244232836366 stripped
@@ -35106,6 +35202,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &5132856439838543064 stripped
@@ -35123,6 +35223,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35190,6 +35294,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.642776
@@ -35256,6 +35364,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.35324
@@ -35321,6 +35433,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35392,6 +35508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.255587
@@ -35457,6 +35577,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35528,6 +35652,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.374023
@@ -35598,6 +35726,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.765774
@@ -35663,6 +35795,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35774,6 +35910,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &5132856440143992547 stripped
@@ -35791,6 +35931,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35858,6 +36002,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_007(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 9019201172907945438, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.375184
@@ -35919,6 +36067,10 @@ PrefabInstance:
     - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_007(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 9019201172907945438, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35986,6 +36138,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 23.02471
@@ -36051,6 +36207,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36122,6 +36282,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_004(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.076781
@@ -36191,6 +36355,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36314,6 +36482,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &5132856440321259167 stripped
@@ -36331,6 +36503,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36401,6 +36577,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36512,6 +36692,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &5132856440272061645 stripped
@@ -36529,6 +36713,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36600,6 +36788,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.900533
@@ -36669,6 +36861,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36740,6 +36936,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36.48113
@@ -36802,6 +37002,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 70.17281
@@ -36863,6 +37067,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36929,6 +37137,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37000,6 +37212,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 37.90594
@@ -37065,6 +37281,10 @@ PrefabInstance:
     - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_004(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37180,6 +37400,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &7015120243320620233 stripped
@@ -37197,6 +37421,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37268,6 +37496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.910223
@@ -37338,6 +37570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 37.884598
@@ -37399,6 +37635,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37465,6 +37705,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37535,6 +37779,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37654,6 +37902,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &5132856441169617030 stripped
@@ -37671,6 +37923,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37742,6 +37998,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_004(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.2475026
@@ -37812,6 +38072,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 33.54396
@@ -37877,6 +38141,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37947,6 +38215,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38054,6 +38326,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -38075,6 +38351,10 @@ PrefabInstance:
     - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_004 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38182,6 +38462,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -38203,6 +38487,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38310,6 +38598,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619729256022986 stripped
@@ -38327,6 +38619,10 @@ PrefabInstance:
     - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_004
+      objectReference: {fileID: 0}
+    - target: {fileID: 3718119797497650450, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4094540539251230632, guid: eb218644cd68b9a4aba14d2185e28f6c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38389,6 +38685,10 @@ PrefabInstance:
     - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_007 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 9019201172907945438, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38496,6 +38796,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619729274779998 stripped
@@ -38513,6 +38817,10 @@ PrefabInstance:
     - target: {fileID: 8625426984064507720, guid: b6f7d706f4bd4fd42859c1676b0034d8, type: 3}
       propertyPath: m_Name
       value: Foliage_rock_cliff_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8625426984064507720, guid: b6f7d706f4bd4fd42859c1676b0034d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 9005084382369383922, guid: b6f7d706f4bd4fd42859c1676b0034d8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38624,6 +38932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619729224513899 stripped
@@ -38682,9 +38994,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7243276758734610928, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_003 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
@@ -38703,6 +39023,10 @@ PrefabInstance:
     - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_Name
       value: Target
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5184592664873585283, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38765,6 +39089,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38872,6 +39200,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -38893,6 +39225,10 @@ PrefabInstance:
     - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_Name
       value: Target (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5184592664873585283, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38956,6 +39292,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 95.38
@@ -39018,6 +39358,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 103.8253
@@ -39079,6 +39423,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39186,6 +39534,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -39207,6 +39559,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39270,6 +39626,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 94.0753
@@ -39328,9 +39688,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 706321088834372726, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_4 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4273757077852117220, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39394,6 +39762,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 90.8253
@@ -39456,6 +39828,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 110.0753
@@ -39514,9 +39890,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 929774284910904502, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 6215426494617729726, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215426494617729726, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 6704296184087699460, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39579,6 +39963,10 @@ PrefabInstance:
     - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_007
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530225625104299876, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 9019201172907945438, guid: 3fcb6bbc901b4f44c8eedd14218e4e21, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39686,6 +40074,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619727917827032 stripped
@@ -39703,6 +40095,10 @@ PrefabInstance:
     - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_Name
       value: Target (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184592664873585280, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5184592664873585283, guid: 3ae6829261b369d4aa28646e9231629e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39810,6 +40206,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -39876,6 +40276,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -39897,6 +40301,14 @@ PrefabInstance:
     - target: {fileID: 494179082869950977, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 494179082869950977, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 840675268527131635, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 977419577800790203, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39949,6 +40361,10 @@ PrefabInstance:
     - target: {fileID: 977419577800790203, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
       propertyPath: m_LocalScale.z
       value: 3.1329484
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088113745309801382, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
@@ -40011,6 +40427,10 @@ PrefabInstance:
     - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Name
       value: building_torri_gate_001 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -40078,6 +40498,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_house(4x4)_small_001 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6710877184116477199, guid: 7b45cea5b8d719e47b267ff53d1bc360, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b45cea5b8d719e47b267ff53d1bc360, type: 3}
 --- !u!4 &2714091303217459703 stripped
@@ -40095,6 +40519,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40154,9 +40582,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 706321088834372726, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_4 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4273757077852117220, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40260,9 +40696,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7243276758734610928, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_003
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634807704310538242, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03a308ab7f53aaa4faf8e2b295c9e7b1, type: 3}
@@ -40278,9 +40722,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 706321088834372726, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4273757077852117220, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40343,6 +40795,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40450,6 +40906,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619728328531058 stripped
@@ -40511,6 +40971,10 @@ PrefabInstance:
     - target: {fileID: 1784085782059404521, guid: c4ad3f095471b8142be85803d9ec118e, type: 3}
       propertyPath: m_Name
       value: building_house(8x8)_large_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784085782059404521, guid: c4ad3f095471b8142be85803d9ec118e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4ad3f095471b8142be85803d9ec118e, type: 3}
@@ -40574,6 +41038,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_006 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7643002319502736041, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37da4a7a0d29bcf43abb0a05f217a177, type: 3}
 --- !u!4 &1340619727365791819 stripped
@@ -40635,6 +41103,10 @@ PrefabInstance:
     - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Name
       value: building_torri_gate_001 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -40702,6 +41174,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -40768,6 +41244,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -40789,6 +41269,14 @@ PrefabInstance:
     - target: {fileID: 494179082869950977, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
       propertyPath: m_Name
       value: foliage_tree_large_001 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 494179082869950977, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 840675268527131635, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 977419577800790203, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40842,6 +41330,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3.1329484
       objectReference: {fileID: 0}
+    - target: {fileID: 6088113745309801382, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9cd4ec1208491b4b9c1fe5316f6ea65, type: 3}
 --- !u!4 &9101807654233844596 stripped
@@ -40859,6 +41351,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40966,6 +41462,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &3817910672966339630 stripped
@@ -40983,6 +41483,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41045,6 +41549,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41152,6 +41660,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_tree_large_005 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5507973881603228602, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2aee551d01f8b408d9342fff407755, type: 3}
 --- !u!4 &3817910673334637177 stripped
@@ -41169,6 +41681,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41232,6 +41748,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
       value: 84.8253
@@ -41290,9 +41810,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 706321088834372726, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_4 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460101278823055966, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4273757077852117220, guid: 31a1f1c41f152b94ab7b5c1050998ebf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41400,6 +41928,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: building_torri_gate_001 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 3250006104629568328, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3898616603094565533, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -41421,6 +41953,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41480,9 +42016,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4929707447407701145}
     m_Modifications:
+    - target: {fileID: 929774284910904502, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 6215426494617729726, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
       propertyPath: m_Name
       value: Foliage_Rock_6 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215426494617729726, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 6704296184087699460, guid: c616a1a9bdd45d645abcaa14b82455d2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41545,6 +42089,10 @@ PrefabInstance:
     - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_Name
       value: foliage_bush_medium_001(Polybrush Clone) (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769034825955673958, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4541209079218593244, guid: 58505a068d6572e43937eb9f05fa9233, type: 3}
       propertyPath: m_LocalPosition.x
