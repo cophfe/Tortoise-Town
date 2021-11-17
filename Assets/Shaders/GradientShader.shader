@@ -5,7 +5,8 @@ Shader "Custom/Gradient"
 	{
 		_AColor("AColor", Color) = (1,1,1,1)
 		_BColor("BColor", Color) = (1,1,1,1)
-		_Percent("Percent Through", Float) = 0.5
+		_Percent("Percent Through", Range(0,1)) = 0.5
+		_GradientStrength("Gradient Strength", Range(0,5)) = 2
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_StencilComp("Stencil Comparison", Float) = 8
 		_Stencil("Stencil ID", Float) = 0
@@ -79,6 +80,7 @@ Shader "Custom/Gradient"
 				fixed4 _AColor;
 				fixed4 _BColor;
 				float _Percent;
+				float _GradientStrength;
 				fixed4 _TextureSampleAdd;
 				float4 _ClipRect;
 				float4 _MainTex_ST;
@@ -110,7 +112,7 @@ Shader "Custom/Gradient"
 					clip (color.a - 0.001);
 					#endif
 					
-					float t = 2 * abs(0.5 - IN.texcoord.y);
+					float t = abs(_Percent - IN.texcoord.y) * _GradientStrength;
 					color.rgb = t * _AColor.rgb + (1 - t) * _BColor.rgb;
 					return color;
 				}
