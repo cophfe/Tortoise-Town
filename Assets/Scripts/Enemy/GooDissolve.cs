@@ -42,7 +42,7 @@ public class GooDissolve : MonoBehaviour
 		{
 			for (int j = 0; j < data.dissolveShader.Length; j++)
 			{
-				if (renderers[i].sharedMaterial.shader == data.dissolveShader[j])
+				if (renderers[i].sharedMaterial != null && renderers[i].sharedMaterial.shader == data.dissolveShader[j])
 					renderersToDissolve.Add(renderers[i]);
 			}
 		}
