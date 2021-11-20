@@ -43,72 +43,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 25
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1836985855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8041713970992731309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56387b020a753d94ea0a4f354313531b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gooShotInfo: {fileID: 11400000, guid: 3eda039e9e3009a48a8cadafaf3cef18, type: 2}
-  gooShotPrefab: {fileID: 5359252616260733193, guid: 10377426451eea045b8b8bdb9b5867b5, type: 3}
-  shootIntervel: 3
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  arrowCount: 4
-  arrowTransformPosition: {fileID: 980270025}
-  animator: {fileID: 3616975749893641325}
---- !u!114 &1836985858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8041713970992731309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5292dd1bc4c07a4fa0b5227d26faa90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bSwitch: []
-  activateOnce: 0
-  onActivate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1836985855}
-        m_TargetAssemblyTypeName: GooShooter, Assembly-CSharp
-        m_MethodName: Kill
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onDeactivate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1836985855}
-        m_TargetAssemblyTypeName: GooShooter, Assembly-CSharp
-        m_MethodName: Revive
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  activateOnDissolve: 1
 --- !u!82 &1599072487478174846
 AudioSource:
   m_ObjectHideFlags: 0
@@ -205,6 +139,72 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1836985855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8041713970992731309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56387b020a753d94ea0a4f354313531b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gooShotInfo: {fileID: 11400000, guid: 3eda039e9e3009a48a8cadafaf3cef18, type: 2}
+  gooShotPrefab: {fileID: 5359252616260733193, guid: 10377426451eea045b8b8bdb9b5867b5, type: 3}
+  shootIntervel: 3
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  arrowCount: 4
+  arrowTransformPosition: {fileID: 980270025}
+  animator: {fileID: 3616975749893641325}
+--- !u!114 &1836985858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8041713970992731309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5292dd1bc4c07a4fa0b5227d26faa90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bSwitch: []
+  activateOnce: 0
+  onActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1836985855}
+        m_TargetAssemblyTypeName: GooShooter, Assembly-CSharp
+        m_MethodName: Kill
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDeactivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1836985855}
+        m_TargetAssemblyTypeName: GooShooter, Assembly-CSharp
+        m_MethodName: Revive
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  activateOnDissolve: 1
 --- !u!1001 &7158614467282758140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -230,15 +230,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.699997
+      value: -74.61256
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.715918
+      value: 173.54404
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.9
+      value: -81.29221
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_LocalRotation.x
@@ -283,7 +283,7 @@ PrefabInstance:
     - target: {fileID: -7094623828014455677, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 278f40092216c3c42995e70cdecdc1f9, type: 2}
+      objectReference: {fileID: 2100000, guid: 83a97188b2d63e64aa967ecc49cd8db4, type: 2}
     - target: {fileID: -7080278360885681551, guid: 3ce56b42c3627bb41997a98c81ba3110, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -62.754032
