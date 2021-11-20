@@ -360,8 +360,8 @@ public class OptionsMenu : MonoBehaviour
 		switch ((AreYouSureState)state)
 		{
 			case AreYouSureState.DEFAULT:
-					
-				areYouSureText.text = "Are you sure you want to reset your settings to default?";
+
+				areYouSureText.text = "Do you want to reset everything to default?";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(ApplyDefault);
 				windowManager.AddToQueue(areYouSure);
@@ -369,7 +369,7 @@ public class OptionsMenu : MonoBehaviour
 			case AreYouSureState.BACK:
 				if (IsChanged)
 				{
-					areYouSureText.text = "Are you sure you want to exit? There are unsaved changes.";
+					areYouSureText.text = "Do you want to exit? There are unsaved changes.";
 					areYouSureConfirm.onClick.RemoveAllListeners();
 					areYouSureConfirm.onClick.AddListener(LeaveMenu);
 					windowManager.AddToQueue(areYouSure);
@@ -382,13 +382,13 @@ public class OptionsMenu : MonoBehaviour
 				}
 				break;
 			case AreYouSureState.RESETSAVEDATA:
-				areYouSureText.text = "Resetting save data cannot be undone. Do you want to continue?";
+				areYouSureText.text = "This will perminantly erase your save data.";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(DeleteSave);
 				windowManager.AddToQueue(areYouSure);
 				break;
 			case AreYouSureState.DEFAULTKEYBINDS:
-				areYouSureText.text = "Are you sure you want to reset the keybinds?";
+				areYouSureText.text = "Do you want to reset the keybinds?";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(ResetKeybindings);
 				windowManager.AddToQueue(areYouSure);
@@ -475,5 +475,4 @@ public class OptionsMenu : MonoBehaviour
 		public float sfxVolume;
 		public float musicVolume;
 	}
-
 }
