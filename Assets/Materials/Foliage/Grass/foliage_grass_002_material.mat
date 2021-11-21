@@ -21,15 +21,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: foliage_grass_002_material
-  m_Shader: {fileID: -6465566751694194690, guid: fbcfb050b30c3bc4b99c18409bc6f5af, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_ShaderKeywords: _ALPHATEST_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses:
-  - SHADOWCASTER
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
+  disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -37,12 +37,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: cf770ff42f17c054bb258494522f0c2c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Texture2D_B64743FC:
+        m_Texture: {fileID: 2800000, guid: 1d6a213d51e363646b5d3c13e38d520f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Albedo:
         m_Texture: {fileID: 2800000, guid: cf770ff42f17c054bb258494522f0c2c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: cf770ff42f17c054bb258494522f0c2c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1d6a213d51e363646b5d3c13e38d520f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -78,21 +82,26 @@ Material:
     - Vector1_2540aa9803824b96a5e5f62704c2446e: 2
     - Vector1_2acbd040880a40dbb00aafa79b4a5fad: 0
     - Vector1_2f67095867954595acb67fb41a0da719: 0
-    - Vector1_57862bb8ffed448891b57d4baf23a8fc: 2
+    - Vector1_46ED2D42: 0.5
+    - Vector1_57862bb8ffed448891b57d4baf23a8fc: 10
+    - Vector1_5B4A91F4: 0.22
     - Vector1_7be2bafec6314bc2b73a9c607322efdc: 0.5
+    - Vector1_7fed3191312547ecb16e00b13b5f8293: 0
+    - Vector1_9E2C55EE: 1
     - Vector1_BC26EF7: 0.5
     - Vector1_C8C2B3C0: 0.1
+    - Vector1_F3775B55: 1
     - Vector1_b04fd903af6f440bbf170d2c915b7b17: 10
-    - Vector1_cc311390b86b4f0bbbdb7d48ce5dcfd6: 0.5
+    - Vector1_cc311390b86b4f0bbbdb7d48ce5dcfd6: 0.434
     - Vector1_e2144895e7ed4cb5913f4c68dd799c51: 1
-    - _AlphaClip: 0
+    - _AlphaClip: 1
     - _AlphaClipThreshold: 0.301
     - _AlphaCutoff: 0.5
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -104,10 +113,10 @@ Material:
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
-    - _Surface: 1
+    - _SrcBlend: 1
+    - _Surface: 0
     - _WorkflowMode: 1
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - Color_0736ef410e5f4a859405f46c9da78060: {r: 0.2933891, g: 0.754717, b: 0.18867925, a: 0}
     - Color_C38C1181: {r: 1, g: 1, b: 1, a: 0}
