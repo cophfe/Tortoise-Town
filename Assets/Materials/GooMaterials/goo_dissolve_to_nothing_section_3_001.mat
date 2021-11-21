@@ -55,7 +55,7 @@ Material:
     - _CutoffHeight: 1000
     - _EdgeWidth: 0.05
     - _Metallic: 0
-    - _MoveStength: 50
+    - _MoveStength: 5
     - _NoiseScale: 25
     - _NoiseStrength: 1
     - _ScrollSpeed: 0.05
