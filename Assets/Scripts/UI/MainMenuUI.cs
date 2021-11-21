@@ -57,7 +57,6 @@ public class MainMenuUI : MonoBehaviour
 			input.Disable();
 	}
 
-
 	public void OnMenuButton()
 	{
 		if (windowManager.GetCurrentWindow() == optionsWindow)
