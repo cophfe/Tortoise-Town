@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: building_red_roof_material
-  m_Shader: {fileID: 4800000, guid: 2799475514de1e346945a4a345372040, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: c787e09e322dd644cbf20ac37e362274, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,6 +32,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_26F7D9FE:
+        m_Texture: {fileID: 2800000, guid: 416012b9a92d8ae49bb4675fa9734f96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C4FE8D5F:
+        m_Texture: {fileID: 2800000, guid: 2f9bb9b19eb0ee24b9f0e20da8e19316, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F4EA09DF:
+        m_Texture: {fileID: 2800000, guid: aed4f1bf4009ceb49b952c2371fa6584, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -56,14 +68,43 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_13b2b926bc1b45c5835b01c5e69fb5de_Out_0:
+        m_Texture: {fileID: 2800000, guid: a854054d10b086c44a819d509632dc0a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_3912e130a7da4aafb0870584977fb34c_Out_0:
+        m_Texture: {fileID: 2800000, guid: d8189fbf1a81e76449e94e39221215f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_7b380fa27bbc42f2aba5846b9b7a94e0_Out_0:
+        m_Texture: {fileID: 2800000, guid: 6bfd887ec919ee040b8b5e2085098b0f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_83f33d0cfb654b51ad14c79084d14472_Out_0:
+        m_Texture: {fileID: 2800000, guid: eda6488dd34def044bc1a2f6cdb44e79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_c23bbe346b05420baef4dbbcfbcb8a77_Out_0:
+        m_Texture: {fileID: 2800000, guid: c82206468eb674f488cd5ffc369f3ca7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_ebb5231651524f6fa3fa1308de386635_Out_0:
+        m_Texture: {fileID: 2800000, guid: 388aaf3739090b44790a31ff5d330ba6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_11069F5A: 0.23
+    - Vector1_6D5BCB37: 1
+    - Vector1_B81A60DF: 1
+    - Vector1_BD02BDC6: 0.23
+    - Vector1_E91506B: 1
     - _AlphaCutoff: 0.5
     - _CutoffHeight: 1000
     - _EdgeWidth: 0.05
     - _MetallicAmount: 0
     - _NoiseScale: 25
     - _NoiseStrength: 1
-    - _NormalAmount: 1
+    - _NormalAmount: 0
     - _OcclusionAmount: 1
     - _RoughnessAmount: 0
     m_Colors:

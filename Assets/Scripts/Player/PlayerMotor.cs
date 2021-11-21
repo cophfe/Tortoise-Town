@@ -114,6 +114,7 @@ public class PlayerMotor : MonoBehaviour
 	public float rollTargetSpeedModifier = 1;
 	[Tooltip("Percentage of acceleration used when rolling")]
 	public float rollAccelerationModifier = 1;
+	public float rollAirAccelerationModifier = 1;
 	[Tooltip("The speed of turning while rolling")]
 	public float rollTurnSpeed = 2;
 	[Tooltip("The speed at which the player rotation aligns to the movement direction while rolling"), Min(0)]
@@ -227,7 +228,6 @@ public class PlayerMotor : MonoBehaviour
 		EvaluateDash();
 		UpdateMovementVector();
 		UpdateForcesVector();
-		UpdateFootstepsAudio();
 
 		//set ground magnet enabled/disabled
 		enableGroundMagnet = state == MovementState.GROUNDED || collisionGroundDetected;
@@ -252,20 +252,24 @@ public class PlayerMotor : MonoBehaviour
 			lastNonZeroInputVelocity = inputVelocity;
 		if (isRolling)
 		{
+			targetVelocity = GetTargetDirection() * rollTargetSpeedModifier;
+			if (playerController.inputVector != Vector2.zero)
+			{
+				float acc = acceleration * rollAccelerationModifier;
+				if (state != MovementState.GROUNDED)
+					acc *= rollAirAccelerationModifier;
+
+				inputVelocity += Vector3.ClampMagnitude(targetVelocity, acc * Time.deltaTime);
+			}
+
 			if (state == MovementState.GROUNDED)
 			{
-				targetVelocity = GetTargetDirection() * rollTargetSpeedModifier;
-				if (playerController.inputVector != Vector2.zero)
-				{
-					inputVelocity += Vector3.ClampMagnitude(targetVelocity, acceleration * rollAccelerationModifier * Time.deltaTime);
-				}
 				//add friction
 				inputVelocity = inputVelocity + -Mathf.Clamp(Time.deltaTime * rollFriction, 0, 1) * inputVelocity;//Vector3.MoveTowards(Vector3.ProjectOnPlane(forcesVelocity, Vector3.up), Vector3.zero, groundFriction * Time.deltaTime);
-				//remove vertical force to prevent unwanted accumulation
+																												  //remove vertical force to prevent unwanted accumulation
 				float verticalForce = Vector3.Dot(groundNormal, inputVelocity);
 				inputVelocity = Vector3.ProjectOnPlane(inputVelocity, groundNormal) + groundNormal * Mathf.MoveTowards(verticalForce, 0, acceleration * Time.deltaTime);
-				//clamp to target speed
-				inputVelocity = Vector3.ClampMagnitude(inputVelocity, targetSpeed * rollTargetSpeedModifier);
+				
 				//LINEAR FRICTION
 				//inputVelocity -= Vector3.MoveTowards(Vector3.ProjectOnPlane(inputVelocity, groundNormal), Vector3.zero, groundFriction * Time.deltaTime *0.0000001f);
 
@@ -278,10 +282,11 @@ public class PlayerMotor : MonoBehaviour
 			}
 			else
 			{
-				targetVelocity = Vector3.zero;
 				//FRICTION
 				inputVelocity = Vector3.MoveTowards(inputVelocity, Vector3.zero, airFriction * Time.deltaTime);
 			}
+			//clamp to target speed
+			inputVelocity = Vector3.ClampMagnitude(inputVelocity, targetSpeed * rollTargetSpeedModifier);
 		}
 		else
 		{
@@ -616,15 +621,6 @@ public class PlayerMotor : MonoBehaviour
 			//float fDot = Vector3.Dot(inputVelocity, groundNormal);
 			//forcesVelocity += fDot * groundNormal;
 			//inputVelocity -= fDot * groundNormal;
-		}
-	}
-
-	private void UpdateFootstepsAudio()
-	{
-		Vector3 playerSpeed = Vector3.ProjectOnPlane(TotalVelocity, groundNormal);
-		if (state == MovementState.GROUNDED && playerSpeed.sqrMagnitude > 0.5f)
-		{
-			
 		}
 	}
 
@@ -1010,10 +1006,8 @@ public class PlayerMotor : MonoBehaviour
 			//play collide audio
 			if (isRolling)
 			{
-				if (inputHitAmount < -10 && dotAmount > 0.9f)
+				if (inputHitAmount < -3 && dotAmount > 0.5f)
 					playerController.PlayAudioOnce(playerController.AudioData.hitWallRolling);
-				else if (inputHitAmount < -3 && dotAmount > 0.5f)
-					playerController.PlayAudioOnce(playerController.AudioData.land);
 			}
 			else if (inputHitAmount < -6 && dotAmount > 0.8f)
 			{

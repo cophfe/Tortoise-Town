@@ -5586,13 +5586,13 @@
     },
     "m_Name": "Texture2D",
     "m_DefaultReferenceName": "Texture2D_D5480480",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_MainTex",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "m_GPUInstanced": false,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"cf770ff42f17c054bb258494522f0c2c\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"1d6a213d51e363646b5d3c13e38d520f\",\"type\":3}}",
         "m_Guid": ""
     },
     "m_Modifiable": true,

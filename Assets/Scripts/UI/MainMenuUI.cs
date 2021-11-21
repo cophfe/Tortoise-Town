@@ -57,7 +57,6 @@ public class MainMenuUI : MonoBehaviour
 			input.Disable();
 	}
 
-
 	public void OnMenuButton()
 	{
 		if (windowManager.GetCurrentWindow() == optionsWindow)
@@ -103,6 +102,18 @@ public class MainMenuUI : MonoBehaviour
 		{
 			Debug.LogWarning("Error loading scene:\n" + e.Message);
 		}
+	}
+
+	public void LoadTutorialStart()
+	{
+		StartCoroutine(LoadTutorial());
+	}
+
+	IEnumerator LoadTutorial()
+	{
+		panel.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(tutorialSceneName);
 	}
 
 	public void OnContinueButtonPressed()

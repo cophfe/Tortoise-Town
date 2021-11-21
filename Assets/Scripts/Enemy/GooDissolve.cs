@@ -21,7 +21,7 @@ public class GooDissolve : MonoBehaviour
 	public bool Dissolved { get; private set; }
 	int aliveTargetCount;
 
-	private void Awake()
+	protected virtual void Awake()
 	{
 		GameManager.Instance.RegisterGooDissolver(this);
 		cutOffHeightId = Shader.PropertyToID("_CutoffHeight");
@@ -42,7 +42,7 @@ public class GooDissolve : MonoBehaviour
 		{
 			for (int j = 0; j < data.dissolveShader.Length; j++)
 			{
-				if (renderers[i].sharedMaterial.shader == data.dissolveShader[j])
+				if (renderers[i].sharedMaterial != null && renderers[i].sharedMaterial.shader == data.dissolveShader[j])
 					renderersToDissolve.Add(renderers[i]);
 			}
 		}
@@ -53,7 +53,8 @@ public class GooDissolve : MonoBehaviour
 		block = new MaterialPropertyBlock();
 		SetCutoffHeight(currentCutOffHeight);
 
-		GameManager.Instance.SaveManager.onResetScene += OnResetScene;
+		if (targets.Length > 0)
+			GameManager.Instance.SaveManager.onResetScene += OnResetScene;
 	}
 
 	private void Start()
@@ -69,7 +70,7 @@ public class GooDissolve : MonoBehaviour
 		}
 	}
 
-	void StartDissolving()
+	protected virtual void StartDissolving()
 	{
 		currentCutOffHeight = maximumCutOffHeight;
 		dissolving = true;
@@ -82,6 +83,8 @@ public class GooDissolve : MonoBehaviour
 			activators[i].Dissolve();
 		}
 		Dissolved = true;
+		if (requiredForWin)
+			GameManager.Instance.OnGooDissolve();
 	}
 
 	public void OnResetScene()
@@ -119,6 +122,7 @@ public class GooDissolve : MonoBehaviour
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = false;
 		dissolving = false;
+
 	}
 
 	public void ResetDissolve()
@@ -136,6 +140,7 @@ public class GooDissolve : MonoBehaviour
 		SetCutoffHeight(currentCutOffHeight);
 		enabled = true;
 		dissolving = false;
+
 	}
 
 	private void Update()
@@ -157,7 +162,6 @@ public class GooDissolve : MonoBehaviour
 				currentCutOffHeight = minimumCutOffHeight;
 				SetCutoffHeight(currentCutOffHeight);
 				enabled = false;
-				GameManager.Instance.OnGooDissolve();
 			}
 			else SetCutoffHeight(currentCutOffHeight);
 		}
@@ -173,9 +177,31 @@ public class GooDissolve : MonoBehaviour
 		}
 	}
 
-	private void OnDestroy()
+	public void ForceDissolve()
 	{
-		
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Undissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Undissolve();
+		}
+		enabled = true;
+
+		currentCutOffHeight = maximumCutOffHeight;
+		dissolving = true;
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Dissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Dissolve();
+		}
+		Dissolved = true;
+		if (requiredForWin)
+			GameManager.Instance.OnGooDissolve();
 	}
 
 	private void OnDrawGizmosSelected()

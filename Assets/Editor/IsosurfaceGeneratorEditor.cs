@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -104,7 +104,16 @@ public class IsosurfaceGeneratorEditor : Editor
 
 		GUILayout.EndHorizontal();
 
-		EditorGUILayout.PropertyField(saveAsAsset);
+
+
+		GUILayout.BeginHorizontal();
+		if (GUILayout.Button("Save Mesh To File"))
+		{
+			GenerateAsset(true);
+		}
+		GUILayout.Space(15);
+		EditorGUILayout.PropertyField(saveAsAsset, new GUIContent("Save Mesh On Generate"));
+		GUILayout.EndHorizontal();
 
 		var before = GUI.backgroundColor;
 		GUI.backgroundColor = new Color(0.9f,0.7f,0.7f);
@@ -147,7 +156,7 @@ public class IsosurfaceGeneratorEditor : Editor
 		serializedObject.ApplyModifiedProperties();
 	}
 
-	void GenerateAsset()
+	void GenerateAsset(bool generateNewName = false)
 	{
 		var mesh = generator.GetComponent<MeshFilter>().sharedMesh;
 		if (!AssetDatabase.IsValidFolder("Assets/IsosurfaceMeshes"))
@@ -159,7 +168,10 @@ public class IsosurfaceGeneratorEditor : Editor
 		}
 		else
 		{
-			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + mesh.name);
+			string name = mesh.name;
+			if (generateNewName)
+				name += mesh.GetInstanceID();
+			AssetDatabase.CreateAsset(mesh, "Assets/IsosurfaceMeshes/" + name);
 			AssetDatabase.SaveAssets();
 		}
 	}
