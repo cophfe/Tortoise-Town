@@ -139,7 +139,6 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		PlayerPrefs.SetInt("TutorialCompleted", 1);
 		StartCoroutine(ContinueToMain());
-
 	}
 
 	public enum AreYouSureState
@@ -154,19 +153,19 @@ public class GameplayUIManager : MonoBehaviour
 		switch ((AreYouSureState)state)
 		{
 			case AreYouSureState.QUIT:
-				areYouSureText.text = "Are you sure you want to quit? Progress up to the last checkpoint will be saved.";
+				areYouSureText.text = "Progress up to the last checkpoint will be saved.";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(OnExitButtonPressed);
 				WindowManager.AddToQueue(areYouSure);
 				break;
 			case AreYouSureState.RESTART:
-				areYouSureText.text = "Are you sure you want to restart? This will erase your save data.";
+				areYouSureText.text = "This will perminantly erase your save data.";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(() => OnRestartButtonPressed(true));
 				WindowManager.AddToQueue(areYouSure);
 				break;
 			case AreYouSureState.SKIPTUTORIAL:
-				areYouSureText.text = "Do you want to skip the tutorial?";
+				areYouSureText.text = "The tutorial can be replayed at any time.";
 				areYouSureConfirm.onClick.RemoveAllListeners();
 				areYouSureConfirm.onClick.AddListener(OnTutorialContinueButtonPressed);
 				WindowManager.AddToQueue(areYouSure);

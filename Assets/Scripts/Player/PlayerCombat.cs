@@ -10,6 +10,7 @@ public class PlayerCombat : MonoBehaviour
 
 	[Header("Ranged")]
 	public GameObject rangedWeapon;
+	public BowString bowString;
 	public ArrowData arrowData;
 	public Transform arrowPosRest;
 	public Transform arrowPosCharged;
@@ -112,7 +113,7 @@ public class PlayerCombat : MonoBehaviour
 			//charge bow
 			chargeUpPercent = Mathf.Min(chargeUpPercent + Time.deltaTime * rangedChargeUpSpeed, 1);
 
-			//draw hit position
+			//aim
 			if (Physics.Raycast(playerController.MainCamera.transform.position, playerController.MainCamera.transform.forward, out var hit, Mathf.Infinity, ~arrowData.ignoreCollisionLayers, QueryTriggerInteraction.Ignore))
 			{
 				ArrowAimPoint = hit.point;
@@ -148,6 +149,7 @@ public class PlayerCombat : MonoBehaviour
 
 			equippedArrow.transform.SetPositionAndRotation(Vector3.Lerp(arrowPosRest.position, arrowPosCharged.position, chargeUpPercent)
 				,Quaternion.Slerp(arrowPosRest.rotation, arrowPosCharged.rotation, chargeUpPercent));
+			bowString?.LerpNewPoint(chargeUpPercent);
 		}
 		else
 		{
