@@ -15,14 +15,19 @@ public class TabController : MonoBehaviour
 			int j = i;
 			tabs[i].tabButton.onClick.AddListener(() => SetActive(j));
 		}
+
+		SetActive(0);
 	}
 
 	void SetActive(int index)
 	{
 		for (int i = 0; i < tabs.Length; i++)
 		{
-			if (tabs[i].tab)
+			if (tabs[i].tab && tabs[i].tabButton)
+			{
 				tabs[i].tab.SetActive(i == index);
+				tabs[i].tabButton.interactable = i != index;
+			}
 		}
 	}
 
