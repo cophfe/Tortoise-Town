@@ -5,7 +5,9 @@ Shader "Custom/Gradient"
 	{
 		_AColor("AColor", Color) = (1,1,1,1)
 		_BColor("BColor", Color) = (1,1,1,1)
-		_Percent("Percent Through", Float) = 0.5
+		_Percent("Percent Through", Range(0,1)) = 0.5
+		_Color("Tint", Color) = (1,1,1,1)
+		_GradientStrength("Gradient Strength", Range(0,5)) = 2
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_StencilComp("Stencil Comparison", Float) = 8
 		_Stencil("Stencil ID", Float) = 0
@@ -62,6 +64,7 @@ Shader "Custom/Gradient"
 				struct appdata_t
 				{
 					float4 vertex   : POSITION;
+					float4 color    : COLOR;
 					float2 texcoord : TEXCOORD0;
 					UNITY_VERTEX_INPUT_INSTANCE_ID
 				};
@@ -69,16 +72,18 @@ Shader "Custom/Gradient"
 				struct v2f
 				{
 					float4 vertex   : SV_POSITION;
+					fixed4 color : COLOR;
 					float2 texcoord  : TEXCOORD0;
 					float4 worldPosition : TEXCOORD1;
 					//use to store screenpos
 					UNITY_VERTEX_OUTPUT_STEREO
 				};
 
-				sampler2D _MainTex;
 				fixed4 _AColor;
 				fixed4 _BColor;
+				fixed4 _Color;
 				float _Percent;
+				float _GradientStrength;
 				fixed4 _TextureSampleAdd;
 				float4 _ClipRect;
 				float4 _MainTex_ST;
@@ -92,8 +97,7 @@ Shader "Custom/Gradient"
 					OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);
 
 					OUT.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
-
-					//get screen position
+					OUT.color = v.color * _Color;
 					return OUT;
 				}
 
@@ -101,17 +105,19 @@ Shader "Custom/Gradient"
 				fixed4 frag(v2f IN) : SV_Target
 				{
 					half4 color;
-					color.a = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd).a;
 
-					#ifdef UNITY_UI_CLIP_RECT
-					color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
-					#endif
-					#ifdef UNITY_UI_ALPHACLIP
-					clip (color.a - 0.001);
-					#endif
+					float t = abs(_Percent - IN.texcoord.y) * _GradientStrength;
+					color = t * _AColor + (1 - t) * _BColor;
 					
-					float t = 2 * abs(0.5 - IN.texcoord.y);
-					color.rgb = t * _AColor.rgb + (1 - t) * _BColor.rgb;
+					color *= IN.color;
+
+#ifdef UNITY_UI_CLIP_RECT
+					color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
+#endif
+#ifdef UNITY_UI_ALPHACLIP
+					clip(color.a - 0.001);
+#endif
+
 					return color;
 				}
 			ENDCG

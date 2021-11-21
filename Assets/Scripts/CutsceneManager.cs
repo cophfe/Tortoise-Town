@@ -12,16 +12,58 @@ public class CutsceneManager : BooleanSwitch
 	bool ended = false;
 	public Camera cutsceneCamera;
 	public bool goBackOnStop = true;
+	public UnityEvent onStartCutscene;
 	public UnityEvent onEndCutscene;
+	public UnityEventTime[] timedEvents;
+	bool playing = false;
 
+	[System.Serializable]
+	public class UnityEventTime
+	{
+		public float time;
+		public UnityEvent @event;
+		[System.NonSerialized] public bool played = false;
+	}
+
+	private void OnValidate()
+	{
+		if (!director)
+			director = GetComponent<PlayableDirector>();
+
+		foreach (var e in timedEvents)
+		{
+			if (e != null && e.time > director.duration)
+			{
+				e.time = (float)director.duration;
+			}
+		}
+	}
 	private void Awake()
 	{
 		director = GetComponent<PlayableDirector>();
 		cutsceneCamera.enabled = false;
 		cutsceneCamera.GetComponent<AudioListener>().enabled = false;
 		cutsceneCamera.GetComponent<CinemachineBrain>().enabled = false;
+		director.played += d => { playing = true; };
+		director.stopped += d => { playing = false; };
 	}
 
+	private void Update()
+	{
+		if (playing)
+		{
+			double time = director.time;
+
+			foreach (var e in timedEvents)
+			{
+				if (e != null && !e.played && time >= e.time)
+				{
+					e.played = true;
+					e.@event?.Invoke();
+				}
+			}
+		}
+	}
 	public override bool SwitchValue { get => base.SwitchValue; 
 		protected set 
 		{
@@ -45,6 +87,12 @@ public class CutsceneManager : BooleanSwitch
 
 	private void StartCutscene()
 	{
+		foreach (var e in timedEvents)
+		{
+			if (e != null)
+				e.played = false;
+		}
+
 		gameObject.SetActive(true);
 		var gm = GameManager.Instance;
 		gm.InCutscene = true;
@@ -58,6 +106,8 @@ public class CutsceneManager : BooleanSwitch
 		cutsceneCamera.GetComponent<CinemachineBrain>().enabled = true;
 		director.stopped += OnCutsceneEnded;
 		GameManager.Instance.GUI.onCutsceneSkipped += SwitchFalse;
+		onStartCutscene?.Invoke();
+		
 
 		ended = false;
 	}
