@@ -63,7 +63,14 @@ public class PlayerHealth : Health
 
 			//set Animation and sound effects
 			controller.PlayerAudio.Stop();
-			controller.PlayAudioOnce(controller.AudioData.death);
+			
+			if (CurrentHealth <= 0)
+				controller.PlayAudioOnce(controller.AudioData.death);
+			else if (controller.Motor.IsRolling)
+				controller.PlayAudioOnce(controller.AudioData.hitWhileBall);
+			else
+				controller.PlayAudioOnce(controller.AudioData.hit);
+			
 			return true;
 		}
 		else return false;
