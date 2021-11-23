@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
 	public void PlayAudioOnce(AudioClipList clipList, bool doNotOverlap = false)
 	{
-		if (doNotOverlap && PlayerAudio.isPlaying) return;
+		if (doNotOverlap && PlayerAudio.isPlaying || !clipList.CanBePlayed()) return;
 		PlayerAudio.PlayOneShot(clipList.GetRandom());
 	}
 

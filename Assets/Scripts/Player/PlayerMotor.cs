@@ -202,6 +202,13 @@ public class PlayerMotor : MonoBehaviour
 		playerController = GetComponent<PlayerController>();
 		TargetSpeedManipulator = 1;
 		lastNonZeroInputVelocity = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up).normalized;
+	
+		if (transform.rotation != Quaternion.identity)
+		{
+			Quaternion rot = playerController.RotateChild.rotation;
+			transform.rotation = Quaternion.identity;
+			playerController.RotateChild.rotation = rot;
+		}
 	}
 
 	private void Update()
@@ -740,10 +747,13 @@ public class PlayerMotor : MonoBehaviour
 			OnLeaveGround();
 		}
 		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastNonZeroInputVelocity, Vector3.up), Vector3.up);
+
 		if (fromJump)
 			playerController.PlayAudioOnce(playerController.AudioData.jumpRollPop);
-		else
+		else if (InputVelocity.sqrMagnitude > 9)
 			playerController.PlayAudioOnce(playerController.AudioData.rollPop);
+		else
+			playerController.PlayAudioOnce(playerController.AudioData.rollPopNotMoving);
 	}
 
 	public void CancelRoll()
@@ -1076,6 +1086,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
+	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
 	public bool IsExternalDash { get; private set; }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Portal : MonoBehaviour
+public class Portal : BooleanSwitch
 {
 	public bool open = false;
 	public Renderer Renderer {get; private set;}
@@ -52,19 +52,21 @@ public class Portal : MonoBehaviour
 		}
 	}
 
+	[System.NonSerialized]
+	public int travIndex = 0;
 	public void UndoTravel(Portal other)
 	{
-		for (int i = 0; i < travelling.Count; i++)
+		for (travIndex = 0; travIndex < travelling.Count; travIndex++)
 		{
-			if (!travelling[i].RevertMove(this, other))
+			if (!travelling[travIndex].RevertMove(this, other))
 			{
-				if (travelling[i].EligableForEarlyMove())
+				if (travelling[travIndex].EligableForEarlyMove())
 				{
-					other.GetTravellers().Add(travelling[i]);
-					travelling[i].OnEnter(other);
+					other.GetTravellers().Add(travelling[travIndex]);
+					travelling[travIndex].OnEnter(other);
 				}
-				travelling.Remove(travelling[i]);
-				i -= 1;
+				travelling.Remove(travelling[travIndex]);
+				travIndex -= 1;
 			}
 		}
 	}
@@ -106,13 +108,37 @@ public class Portal : MonoBehaviour
 		return outRotation;
 	}
 
+	public Vector3 TransformDirectionToOtherPortal(Portal other, Vector3 direction)
+	{
+		//get position relative to this portal
+		Vector3 inDirection = transform.InverseTransformDirection(direction);
+		//flip to opposite side
+		inDirection = Quaternion.Euler(0, 180, 0) * inDirection;
+		//set final positions relative to the other portal
+		Vector3 outDirection = other.transform.TransformDirection(inDirection);
+		return outDirection;
+	}
+
 	public bool CheckPointInBounds(Vector3 point)
 	{
 		return point == collider.ClosestPoint(point);
 	}
 
+	public bool CheckPointInBounds2D(Vector3 point)
+	{
+		point = collider.transform.InverseTransformPoint(point);
+
+		return point.x > collider.center.x - collider.size.x / 2 && point.x < collider.center.x + collider.size.x / 2
+			&& point.y > collider.center.y - collider.size.y / 2 && point.y < collider.center.y + collider.size.y / 2;
+	}
+
 	public Transform GetRenderBox()
 	{
 		return Renderer.transform;
+	}
+
+	public override void ResetSwitchTo(bool on)
+	{
+		Switch(on);
 	}
 }
