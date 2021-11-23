@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NewPortalTraveller : MonoBehaviour
 {
+	public UnityEvent tempTPStart;
+	public UnityEvent tempTPEnd;
+
 	protected Vector3 storedPosition;
 	protected Quaternion storedRotation;
 
@@ -11,6 +15,8 @@ public class NewPortalTraveller : MonoBehaviour
 	protected NewPortal inPortal, outPortal;
 	public virtual void MoveToNextPortal()
 	{
+		tempTPStart?.Invoke();
+
 		storedPosition = transform.position;
 		storedRotation = transform.rotation;
 		transform.position = inPortal.TransformPositionToOtherPortal(transform.position);
@@ -19,6 +25,8 @@ public class NewPortalTraveller : MonoBehaviour
 
 	public virtual void RevertMove()
 	{
+		tempTPEnd?.Invoke();
+
 		Vector3 pos = transform.position;
 		Quaternion rot = transform.rotation;
 		transform.position = storedPosition;

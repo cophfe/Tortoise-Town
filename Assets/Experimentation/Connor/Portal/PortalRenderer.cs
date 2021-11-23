@@ -18,7 +18,6 @@ public class PortalRenderer : BooleanSwitch
 	CameraPortalTraveller cameraTraveller;
 	bool cameraWithPlayer = true;
 	bool playerInFirstPortal = true;
-	bool cameraJustTeleported = false;
 	Portal lastTeleportedThroughPortal;
 	private void Awake()
 	{
@@ -32,7 +31,7 @@ public class PortalRenderer : BooleanSwitch
 		portalTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
 	}
 
-	void Start()
+	protected override void Start()
     {
 		portals[0].Renderer.material.mainTexture = portalTexture;
 		portals[1].Renderer.material.mainTexture = portalTexture;

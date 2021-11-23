@@ -2,27 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewPortal : BooleanSwitch
+public class NewPortal : BooleanSwitch, IBooleanSaveable
 {
-	public bool open = false;
+	public bool Open { get; private set; } = false;
 	public Renderer Renderer { get; private set; }
 	List<NewPortalTraveller> travelling;
 	new BoxCollider collider;
 	Transform renderBox;
 
+	//open transition
+	Vector3 initialScale;
+	float openSpeed = 2;
+	Spherize spherizer;
+	bool transitioning = false;
+	float t = 0;
+
 	public NewPortal OtherPortal { get; set; }
+
+	public bool InitialSaveState { get; private set; }
+
 	void Awake()
 	{
 		Renderer = GetComponentInChildren<Renderer>();
 		travelling = new List<NewPortalTraveller>();
 		collider = GetComponent<BoxCollider>();
+		GameManager.Instance.SaveManager.RegisterSaveable(this);
+
+		spherizer = GetComponentInChildren<Spherize>();
+		initialScale = transform.localScale;
+		InitialSaveState = SwitchOnAwake;
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+		if (!on)
+		{
+			Renderer.enabled = false;
+			t = 0;
+		}
+		else
+		{
+			t = 1;
+		}
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		var traveller = other.GetComponent<NewPortalTraveller>();
 
-		if (traveller && !travelling.Contains(traveller))
+		if (traveller && traveller.enabled && !travelling.Contains(traveller))
 		{
 			traveller.OnEnter(this, OtherPortal);
 			travelling.Add(traveller);
@@ -116,8 +145,101 @@ public class NewPortal : BooleanSwitch
 		return Renderer.transform;
 	}
 
+	public override bool SwitchValue
+	{
+		get => base.SwitchValue; protected set
+		{
+			if (on != value)
+			{
+				transitioning = true;
+				if (value)
+				{
+					Renderer.enabled = true;
+					Open = true;
+				}
+
+				on = value;
+				collider.enabled = on;
+			}
+		}
+	}
+
+	private void Update()
+	{
+		if (transitioning)
+		{
+			if (on)
+			{
+				t += Time.deltaTime;
+
+				if (t >= 1)
+				{
+					transitioning = false;
+					t = 1;
+				}
+			}
+			else
+			{
+				t -= Time.deltaTime * openSpeed;
+				if (t <= 0)
+				{
+					t = 0;
+					Renderer.enabled = false;
+					transitioning = false;
+					Open = false;
+				}
+
+			}
+
+			if (spherizer)
+				spherizer.PercentSpherized = 1 - Ease.EaseOutQuad(t);
+			transform.localScale = GetScale(t);
+		}
+	}
+
+	Vector3 GetScale(float t)
+	{
+		Vector3 scale = initialScale;
+		if (t < 0.001f)
+			t = 0.001f;
+
+		scale.y *= Ease.EaseOutQuad(t);
+		scale.x *= Ease.EaseInQuad(t);
+		scale.z *= t;
+		return scale;
+	}
+
 	public override void ResetSwitchTo(bool on)
 	{
 		Switch(on);
+		transitioning = false;
+		if (on)
+		{
+			transform.localScale = initialScale;
+			t = 1;
+			Renderer.enabled = true;
+			Open = true;
+		}
+		else
+		{
+			transform.localScale = Vector3.one * 0.0001f;
+			t = 0;
+			Renderer.enabled = false;
+		}
+	}
+
+	public MonoBehaviour GetMonoBehaviour()
+	{
+		return this;
+	}
+
+	public bool GetCurrentState()
+	{
+		return on;
+	}
+
+	public void SetToState(bool state)
+	{
+		ResetSwitchTo(state);
 	}
 }

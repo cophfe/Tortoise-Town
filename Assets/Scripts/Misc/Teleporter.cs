@@ -5,14 +5,15 @@ using UnityEngine;
 public class Teleporter : BooleanSwitch, IBooleanSaveable
 {
 	MeshRenderer meshRenderer;
-	public bool onlyVisual = false;
-	public Teleporter otherEnd = null;
 	Vector3 initialScale;
 	float openSpeed = 14;
-	public bool enableOnWin = false;
 	Spherize spherizer;
 	bool transitioning = false;
 	float t = 0;
+
+	public bool onlyVisual = false;
+	public Teleporter otherEnd = null;
+	public bool enableOnWin = false;
 
 	public override void ResetSwitchTo(bool on)
 	{

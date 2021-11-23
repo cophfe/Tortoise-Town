@@ -24,12 +24,14 @@ public class NewPortalRenderer : BooleanSwitch
 	private void Awake()
 	{
 		portalTextures = new RenderTexture[2];
-		portalTextures[0] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-		portalTextures[1] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-		
+
+		GameManager.Instance.RegisterWinSwitch(this);
+
 		portalCamera = GetComponent<Camera>();
 		portalCamera.enabled = false;
 
+		portalTextures[0] = new RenderTexture(Screen.width/5, Screen.height/5, 24, RenderTextureFormat.ARGB32);
+		portalTextures[1] = new RenderTexture(Screen.width/5, Screen.height/5, 24, RenderTextureFormat.ARGB32);
 	}
 	protected override void Start()
 	{
@@ -47,6 +49,7 @@ public class NewPortalRenderer : BooleanSwitch
 	{
 		RenderPipelineManager.beginCameraRendering += RenderPipelineManager_beginCameraRendering;
 		RenderPipelineManager.endCameraRendering += RenderPipelineManager_endCameraRendering;
+		
 	}
 
 	private void OnDisable()
@@ -57,8 +60,7 @@ public class NewPortalRenderer : BooleanSwitch
 	}
 	private void RenderPipelineManager_beginCameraRendering(ScriptableRenderContext arg1, Camera camera)
 	{
-		if (!portals[0].open || !portals[1].open) return;
-
+		if (!portals[0].Open || !portals[1].Open) return;
 		//update camera
 		if (cameraPortalIndex == playerPortalIndex)
 		{
@@ -66,7 +68,6 @@ public class NewPortalRenderer : BooleanSwitch
 			{
 				cameraPortalIndex = 1 - playerPortalIndex;
 
-				Debug.Log("Enter " + playerPortalIndex);
 				UpdateCamera();
 
 			}
@@ -77,7 +78,6 @@ public class NewPortalRenderer : BooleanSwitch
 			{
 				cameraPortalIndex = playerPortalIndex;
 
-				Debug.Log("Exit " + playerPortalIndex);
 				UpdateCamera();
 
 			}
@@ -94,8 +94,6 @@ public class NewPortalRenderer : BooleanSwitch
 
 			portalCamTransform.SetPositionAndRotation(p1.TransformPositionToOtherPortal(mainCamTransform.position),
 				p1.TransformRotationToOtherPortal(mainCamTransform.rotation));
-
-			
 
 			if (cameraPortalIndex == playerPortalIndex)
 			{
@@ -146,14 +144,6 @@ public class NewPortalRenderer : BooleanSwitch
 
 		
 	}
-
-	private void Update()
-	{
-		for (int i = 0; i < 2; i++)
-		{
-			portals[i].TeleportTravellers();
-		}
-	}
 	private void RenderPipelineManager_endCameraRendering(ScriptableRenderContext arg1, Camera arg2)
 	{
 		if (travelledThisFrame)
@@ -165,6 +155,15 @@ public class NewPortalRenderer : BooleanSwitch
 			else
 			{
 				portals[playerPortalIndex].TempTravelEnd();
+			}
+			travelledThisFrame = false;
+		}
+
+		if (portals[0].SwitchValue && portals[1].SwitchValue)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				portals[i].TeleportTravellers();
 			}
 		}
 	}
@@ -238,4 +237,25 @@ public class NewPortalRenderer : BooleanSwitch
 			mainCamera.cullingMask = ~portalLayer;
 		}
 	}
+
+	public override bool SwitchValue { get => base.SwitchValue; protected set 
+		{
+			on = value;
+
+			SetRenderTextures();
+			portals[0].Switch(on);
+			portals[1].Switch(on);
+		} }
+
+
+	public void SetRenderTextures()
+	{
+		portalTextures[0]?.Release();
+		portalTextures[1]?.Release();
+		portalTextures[0] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+		portalTextures[1] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+		portals[0].Renderer.material.mainTexture = portalTextures[0];
+		portals[1].Renderer.material.mainTexture = portalTextures[1];
+	}
+
 }

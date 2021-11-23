@@ -747,10 +747,13 @@ public class PlayerMotor : MonoBehaviour
 			OnLeaveGround();
 		}
 		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastNonZeroInputVelocity, Vector3.up), Vector3.up);
+
 		if (fromJump)
 			playerController.PlayAudioOnce(playerController.AudioData.jumpRollPop);
-		else
+		else if (InputVelocity.sqrMagnitude > 9)
 			playerController.PlayAudioOnce(playerController.AudioData.rollPop);
+		else
+			playerController.PlayAudioOnce(playerController.AudioData.rollPopNotMoving);
 	}
 
 	public void CancelRoll()
