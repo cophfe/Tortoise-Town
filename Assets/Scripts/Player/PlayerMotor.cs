@@ -202,6 +202,13 @@ public class PlayerMotor : MonoBehaviour
 		playerController = GetComponent<PlayerController>();
 		TargetSpeedManipulator = 1;
 		lastNonZeroInputVelocity = Vector3.ProjectOnPlane(playerController.RotateChild.forward, Vector3.up).normalized;
+	
+		if (transform.rotation != Quaternion.identity)
+		{
+			Quaternion rot = playerController.RotateChild.rotation;
+			transform.rotation = Quaternion.identity;
+			playerController.RotateChild.rotation = rot;
+		}
 	}
 
 	private void Update()

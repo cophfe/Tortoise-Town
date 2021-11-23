@@ -10,7 +10,7 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 	Vector3 initialScale;
 	float openSpeed = 14;
 	public bool enableOnWin = false;
-
+	Spherize spherizer;
 	bool transitioning = false;
 	float t = 0;
 
@@ -61,6 +61,7 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 
 	private void Awake()
 	{
+		spherizer = GetComponent<Spherize>();
 		initialScale = transform.localScale;
 		meshRenderer = GetComponent<MeshRenderer>();
 		if (enableOnWin)
@@ -123,16 +124,17 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 			else
 			{
 				t -= Time.deltaTime * openSpeed;
-
-
 				if (t <= 0)
 				{
 					t = 0;
 					meshRenderer.enabled = false;
 					transitioning = false;
 				}
+
 			}
 
+			if (spherizer)
+				spherizer.PercentSpherized = 1 - Ease.EaseOutQuad(t);
 			transform.localScale = GetScale(t);
 		}
 	}
