@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSwitch: 0
-  SwitchOnAwake: 1
+  SwitchOnAwake: 0
   onSwitchOn:
     m_PersistentCalls:
       m_Calls: []
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 307965934, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_VersionIndex
-      value: 2031
+      value: 2034
       objectReference: {fileID: 0}
     - target: {fileID: 1987477826, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_Size.z
@@ -418,19 +418,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.9837146
+      value: 0.078459114
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.17973769
+      value: 0.99691737
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_RootOrder
@@ -442,7 +442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -200.709
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2761137552805837298, guid: cb262287fbded4b41a1bbdbb45215308, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -485,7 +485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 307965934, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_VersionIndex
-      value: 2040
+      value: 2043
       objectReference: {fileID: 0}
     - target: {fileID: 1987477826, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_Size.z
