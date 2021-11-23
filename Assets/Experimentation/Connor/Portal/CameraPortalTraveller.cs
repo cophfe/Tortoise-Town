@@ -7,6 +7,8 @@ public class CameraPortalTraveller : PortalTraveller
 	public PortalRenderer portalRenderer;
 	CameraController cameraController;
 	//bool justTeleported;
+	[System.NonSerialized]
+	public bool tempMovedThisTime = false;
 
 	void Start()
     {
@@ -18,34 +20,31 @@ public class CameraPortalTraveller : PortalTraveller
 	{
 		storedPosition = inPortal.TransformPositionToOtherPortal(outPortal, transform.position);
 		storedRotation = inPortal.TransformRotationToOtherPortal(outPortal, transform.rotation);
+		tempMovedThisTime = true;
 	}
 
 	public override bool RevertMove(Portal inPortal, Portal outPortal)
 	{
-		bool newDot = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
-		bool returnValue = oldDot == newDot;
-		if (!returnValue)
-		{
-			portalRenderer.OnCameraThroughPortal();
-			//justTeleported = true;
-		}
-		oldDot = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
-		return returnValue;
+		return true;
 	}
 
+	public bool CheckIfWillCompleteTeleport(Portal inPortal)
+	{
+		if (!tempMovedThisTime) return false;
+
+		bool newDot = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
+		return oldDot != newDot;
+
+	}
+
+	public override void OnEnter(Portal inPortal)
+	{
+		portalRenderer.OnCameraThroughPortal();
+	}
 	public override void OnExit(Portal inPortal)
 	{
-		bool newDot = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
-		if (newDot != oldDot)
-		{
-			portalRenderer.OnCameraThroughPortal();
-		}
+		portalRenderer.OnCameraThroughPortal();
 		oldDot = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
-		//if (justTeleported)
-		//{
-		//	justTeleported = false;
-		//	portalRenderer.firstPortalActive = !portalRenderer.firstPortalActive;
-		//}
 	}
 
 	public override bool EligableForEarlyMove()

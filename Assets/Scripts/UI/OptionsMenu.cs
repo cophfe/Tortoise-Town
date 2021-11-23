@@ -448,6 +448,9 @@ public class OptionsMenu : MonoBehaviour
 
 	public static float LinearToDecibels(float linear)
 	{
+		if (linear <= 0)
+			return -80;
+			
 		return 20.0f * Mathf.Log10(linear);
 	}
 
