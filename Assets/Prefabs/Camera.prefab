@@ -98,7 +98,8 @@ MonoBehaviour:
   target: {fileID: 0}
   globalOffset: 0
   defaultCameraData: {fileID: 11400000, guid: 47ed7641f1b47ec4ba099038a62aee7d, type: 2}
-  inverted: 0
+  invertX: 0
+  invertY: 0
   sensitivity: 0.054
   movementUpdateType: 0
   shakeDeteriorateSpeed: 7
@@ -130,7 +131,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.01
   far clip plane: 5000
   field of view: 59.2
   orthographic: 0

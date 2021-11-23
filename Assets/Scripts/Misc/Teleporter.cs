@@ -5,14 +5,15 @@ using UnityEngine;
 public class Teleporter : BooleanSwitch, IBooleanSaveable
 {
 	MeshRenderer meshRenderer;
-	public bool onlyVisual = false;
-	public Teleporter otherEnd = null;
 	Vector3 initialScale;
 	float openSpeed = 14;
-	public bool enableOnWin = false;
-
+	Spherize spherizer;
 	bool transitioning = false;
 	float t = 0;
+
+	public bool onlyVisual = false;
+	public Teleporter otherEnd = null;
+	public bool enableOnWin = false;
 
 	public override void ResetSwitchTo(bool on)
 	{
@@ -61,6 +62,7 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 
 	private void Awake()
 	{
+		spherizer = GetComponent<Spherize>();
 		initialScale = transform.localScale;
 		meshRenderer = GetComponent<MeshRenderer>();
 		if (enableOnWin)
@@ -123,16 +125,17 @@ public class Teleporter : BooleanSwitch, IBooleanSaveable
 			else
 			{
 				t -= Time.deltaTime * openSpeed;
-
-
 				if (t <= 0)
 				{
 					t = 0;
 					meshRenderer.enabled = false;
 					transitioning = false;
 				}
+
 			}
 
+			if (spherizer)
+				spherizer.PercentSpherized = 1 - Ease.EaseOutQuad(t);
 			transform.localScale = GetScale(t);
 		}
 	}
