@@ -419,6 +419,10 @@ public class OptionsMenu : MonoBehaviour
 		{
 			mainMenu.continueButton.interactable = false;
 		}
+		else if (GameManager.Instance)
+		{
+			GameManager.Instance.GUI.OnRestartButtonPressed(true);
+		}
 	}
 
 	public void PopWindow()

@@ -4541,6 +4541,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 75.51666
       objectReference: {fileID: 0}
+    - target: {fileID: 1884361161682608377, guid: 8507f90f2ffb35b4183a8b6d315e3547, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1541178873}
+    - target: {fileID: 1884361161682608377, guid: 8507f90f2ffb35b4183a8b6d315e3547, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RemoveFromQueue
+      objectReference: {fileID: 0}
     - target: {fileID: 2468876241928091269, guid: 8507f90f2ffb35b4183a8b6d315e3547, type: 3}
       propertyPath: m_AnchorMin.y
       value: 1
