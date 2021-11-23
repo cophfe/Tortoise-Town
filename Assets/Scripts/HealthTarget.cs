@@ -16,7 +16,8 @@ public class HealthTarget : Health
 		deathlegate?.Invoke();
 
 		base.OnDeath();
-		gameObject.SetActive(false);
+		GetComponent<MeshRenderer>().enabled = false;
+		enabled = false;
 	}
 
 	public override void ResetTo(float healthValue)

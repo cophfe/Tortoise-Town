@@ -1685,6 +1685,38 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1710857565455057103}
+    - target: {fileID: 6516419301217831699, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: cd4b86742c5cb274f9d032adc8aab3d3, type: 2}
+    - target: {fileID: 6516419301217831699, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419301217831699, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419301217831699, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419302074836660, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419302074836660, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419302074836660, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516419302074836660, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 472a7e41e00ce164fa500cbf437cf102, type: 3}
 --- !u!114 &5307708827869532188 stripped
@@ -3710,6 +3742,14 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MinValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MaxValue
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2044071483444174200, guid: e86205142de7a22448660720e608db5e, type: 3}
       propertyPath: m_Name
       value: Master Volume
@@ -3986,6 +4026,14 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MinValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MaxValue
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2044071483444174200, guid: e86205142de7a22448660720e608db5e, type: 3}
       propertyPath: m_Name
       value: SFX Volume
@@ -4145,6 +4193,14 @@ PrefabInstance:
     - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MinValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672921411743422064, guid: e86205142de7a22448660720e608db5e, type: 3}
+      propertyPath: m_MaxValue
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2044071483444174200, guid: e86205142de7a22448660720e608db5e, type: 3}
       propertyPath: m_Name
