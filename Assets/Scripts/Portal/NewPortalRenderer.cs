@@ -12,7 +12,7 @@ public class NewPortalRenderer : BooleanSwitch
 	public Camera mainCamera;
 	public Camera portalCamera;
 
-	RenderTexture[] portalTextures;
+	RenderTexture portalTexture;
 
 	int cameraPortalIndex = 0;
 	int playerPortalIndex = 0;
@@ -20,24 +20,23 @@ public class NewPortalRenderer : BooleanSwitch
 	public LayerMask portalLayer;
 	Matrix4x4 defaultMatrix;
 
+	Vector2Int lastScreenSize;
 	bool travelledThisFrame = false;
 	private void Awake()
 	{
-		portalTextures = new RenderTexture[2];
-
 		GameManager.Instance.RegisterWinSwitch(this);
 
 		portalCamera = GetComponent<Camera>();
 		portalCamera.enabled = false;
 
-		portalTextures[0] = new RenderTexture(Screen.width/5, Screen.height/5, 24, RenderTextureFormat.ARGB32);
-		portalTextures[1] = new RenderTexture(Screen.width/5, Screen.height/5, 24, RenderTextureFormat.ARGB32);
+		lastScreenSize.x = Screen.width;
+		lastScreenSize.y = Screen.height;
+		
 	}
 	protected override void Start()
 	{
 		mainCamera = GameManager.Instance.Player.MainCamera.GetComponent<Camera>();
-		portals[0].Renderer.material.mainTexture = portalTextures[0];
-		portals[1].Renderer.material.mainTexture = portalTextures[1];
+		SetRenderTextures();
 		defaultMatrix = mainCamera.projectionMatrix;
 
 		portals[0].OtherPortal = portals[1];
@@ -109,7 +108,7 @@ public class NewPortalRenderer : BooleanSwitch
 				rBPos.z = -sign * Mathf.Abs(rBPos.z);
 				rB.localPosition = rBPos;
 
-				portalCamera.targetTexture = portalTextures[playerPortalIndex];
+				portalCamera.targetTexture = portalTexture;
 				p1.TempTravelStart();
 				UniversalRenderPipeline.RenderSingleCamera(arg1, portalCamera);
 				p1.TempTravelEnd();
@@ -131,7 +130,7 @@ public class NewPortalRenderer : BooleanSwitch
 				rBPos.z = sign * Mathf.Abs(rBPos.z);
 				rB.localPosition = rBPos;
 
-				mainCamera.targetTexture = portalTextures[1 - playerPortalIndex];
+				mainCamera.targetTexture = portalTexture;
 
 				p2.TempTravelStart();
 				UniversalRenderPipeline.RenderSingleCamera(arg1, mainCamera);
@@ -168,6 +167,18 @@ public class NewPortalRenderer : BooleanSwitch
 		}
 	}
 
+	private void Update()
+	{
+		if (!portals[0].Open || !portals[1].Open) return;
+
+		Vector2Int newScreenSize = new Vector2Int(Screen.width, Screen.height);
+		if (newScreenSize != lastScreenSize)
+		{
+			Debug.Log("Screen size change detected");
+			SetRenderTextures();
+			lastScreenSize = newScreenSize;
+		}
+	}
 	void SetFrustram(Camera c1, Camera c2)
 	{
 		NewPortal p1 = portals[playerPortalIndex];
@@ -210,8 +221,15 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public void OnPlayerThroughPortal(NewPortal inPortal)
 	{
-		playerPortalIndex = inPortal == portals[0] ? 1 : 0;
+		CalculatePlayerPortal();
+		//playerPortalIndex = inPortal == portals[0] ? 1 : 0;
+
 		UpdateCamera();
+	}
+
+	private void FixedUpdate()
+	{
+		CalculatePlayerPortal();
 	}
 
 	public void UpdateCamera()
@@ -250,12 +268,32 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public void SetRenderTextures()
 	{
-		portalTextures[0]?.Release();
-		portalTextures[1]?.Release();
-		portalTextures[0] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-		portalTextures[1] = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-		portals[0].Renderer.material.mainTexture = portalTextures[0];
-		portals[1].Renderer.material.mainTexture = portalTextures[1];
+		portalTexture?.Release();
+		portalTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.DefaultHDR);
+		portals[0].Renderer.material.mainTexture = portalTexture;
+		portals[1].Renderer.material.mainTexture = portalTexture;
+	}
+
+	public void CalculatePlayerPortal()
+	{
+		if (Vector3.SqrMagnitude(portals[0].transform.position - GameManager.Instance.Player.transform.position) <
+			Vector3.SqrMagnitude(portals[1].transform.position - GameManager.Instance.Player.transform.position))
+		{
+			if (playerPortalIndex != 0)
+			{
+				playerPortalIndex = 0;
+				UpdateCamera();
+			}
+			
+		}
+		else
+		{
+			if (playerPortalIndex != 1)
+			{
+				playerPortalIndex = 1;
+				UpdateCamera();
+			}
+		}
 	}
 
 }
