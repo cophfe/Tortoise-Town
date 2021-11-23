@@ -12,7 +12,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 
 	//open transition
 	Vector3 initialScale;
-	float openSpeed = 2;
+	float openSpeed = 0.5f;
 	Spherize spherizer;
 	bool transitioning = false;
 	float t = 0;
@@ -170,7 +170,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 		{
 			if (on)
 			{
-				t += Time.deltaTime;
+				t += Time.deltaTime * openSpeed;
 
 				if (t >= 1)
 				{
@@ -192,7 +192,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 			}
 
 			if (spherizer)
-				spherizer.PercentSpherized = 1 - Ease.EaseOutQuad(t);
+				spherizer.PercentSpherized = 1 - Ease.EaseOutPower(t, 4);
 			transform.localScale = GetScale(t);
 		}
 	}
@@ -204,7 +204,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 			t = 0.001f;
 
 		scale.y *= Ease.EaseOutQuad(t);
-		scale.x *= Ease.EaseInQuad(t);
+		scale.x *= Ease.EaseOutQuad(t);
 		scale.z *= t;
 		return scale;
 	}

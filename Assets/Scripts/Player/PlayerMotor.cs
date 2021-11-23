@@ -1086,6 +1086,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
+	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
 	public bool IsExternalDash { get; private set; }
