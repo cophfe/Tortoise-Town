@@ -1020,6 +1020,8 @@ public class PlayerMotor : MonoBehaviour
 			{
 				//cancel dash if going into wall
 				dashing = false;
+				if (dashParticles)
+					dashParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 			}
 
 			//play collide audio
