@@ -42,7 +42,7 @@ public class GooDissolve : MonoBehaviour
 		{
 			for (int j = 0; j < data.dissolveShader.Length; j++)
 			{
-				if (renderers[i].sharedMaterial.shader == data.dissolveShader[j])
+				if (renderers[i].sharedMaterial != null && renderers[i].sharedMaterial.shader == data.dissolveShader[j])
 					renderersToDissolve.Add(renderers[i]);
 			}
 		}
@@ -53,7 +53,8 @@ public class GooDissolve : MonoBehaviour
 		block = new MaterialPropertyBlock();
 		SetCutoffHeight(currentCutOffHeight);
 
-		GameManager.Instance.SaveManager.onResetScene += OnResetScene;
+		if (targets.Length > 0)
+			GameManager.Instance.SaveManager.onResetScene += OnResetScene;
 	}
 
 	private void Start()
@@ -82,7 +83,8 @@ public class GooDissolve : MonoBehaviour
 			activators[i].Dissolve();
 		}
 		Dissolved = true;
-		GameManager.Instance.OnGooDissolve();
+		if (requiredForWin)
+			GameManager.Instance.OnGooDissolve();
 	}
 
 	public void OnResetScene()
@@ -175,9 +177,31 @@ public class GooDissolve : MonoBehaviour
 		}
 	}
 
-	private void OnDestroy()
+	public void ForceDissolve()
 	{
-		
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Undissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Undissolve();
+		}
+		enabled = true;
+
+		currentCutOffHeight = maximumCutOffHeight;
+		dissolving = true;
+		for (int i = 0; i < damagers.Length; i++)
+		{
+			damagers[i].Dissolve();
+		}
+		for (int i = 0; i < activators.Length; i++)
+		{
+			activators[i].Dissolve();
+		}
+		Dissolved = true;
+		if (requiredForWin)
+			GameManager.Instance.OnGooDissolve();
 	}
 
 	private void OnDrawGizmosSelected()

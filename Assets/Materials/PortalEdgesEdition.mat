@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PortalEdgesEdition
+  m_Shader: {fileID: 4800000, guid: 07c7218f6d98dd343a7e82f624df94b0, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f4a4a0dcb38e58a45900ae36c5b68421, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_28C506EB: 0.5
+    - Vector1_610F019B: 100
+    - Vector1_8A3B304C: 0.1
+    - Vector1_E07D012C: 1
+    - Voroni_Scale: 27.48
+    - _Alpha: 1
+    - _AlphaCutoff: 0.5
+    - _Amplitude: 0.1
+    - _FadeDistance: 3.06
+    - _FresnelPower: 0.16
+    - _NearDistance: 1
+    - _Offset: 2
+    - _OutlineDetailScale: 27.48
+    - _OutlineOffset: 0.54
+    - _PortalStrength: 0.66
+    - _RotationSpeed: 2.17
+    - _ScaleAmount: 0
+    - _ScaleSize: 10
+    - _TwistAmount: 30
+    - _WaveLength: 1
+    - _ZoomAmount: 0.1
+    m_Colors:
+    - Color_6E279938: {r: 1, g: 1, b: 1, a: 0}
+    - Color_A9CA057: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_61631E4: {r: 0, g: 1, b: 0, a: 0}
+    - Vector2_C450566B: {r: 1, g: 0, b: 0, a: 0}
+    - _Center: {r: 0, g: -0.04, b: 0, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 0.08330364, g: 0.30501953, b: 0.45283014, a: 0}
+    - _MaxBrightness: {r: 1, g: 1, b: 1, a: 0}
+    - _Outline: {r: 0, g: 0.39757198, b: 1, a: 0}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SecondColor: {r: 0, g: 0.6829066, b: 1, a: 0}
+  m_BuildTextureStacks: []

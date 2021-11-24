@@ -3,7 +3,32 @@ guid: e098edb94cd947d4abc53f5678cc07ce
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 0863affea8dcda64f8033954c843d050, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plaster
+    second: {fileID: 2100000, guid: 42fcf7a3e2df1bb4eaf21e90c5713629, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rock
+    second: {fileID: 2100000, guid: 42fcf7a3e2df1bb4eaf21e90c5713629, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: roof
+    second: {fileID: 2100000, guid: 1afbc5ea8c0e4ee4fa080cb26486627c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood
+    second: {fileID: 2100000, guid: 65c2417b12bd5844d803d2f1f898da11, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
