@@ -133,8 +133,8 @@ public partial class CameraController : MonoBehaviour
 		MoveToTarget();
 
 		//set camera box extents, used for obstruction checking
-		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
-		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
+		float yExtend = 2 * Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad * 0.5f) * cam.nearClipPlane;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
 	}
 
 	void LateUpdate()
