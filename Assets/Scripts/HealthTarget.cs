@@ -19,8 +19,15 @@ public class HealthTarget : Health
 		if (deathParticles != null)
 			deathParticles.Play(true);
 
+		var arrow = GetComponentInChildren<Arrow>();
+		if (arrow)
+		{
+			arrow.BeforeReset();
+		}
+
 		base.OnDeath();
-		GetComponent<MeshRenderer>().enabled = false;
+		GetComponentInChildren<MeshRenderer>().enabled = false;
+		GetComponent<Collider>().enabled = false;
 		enabled = false;
 	}
 
