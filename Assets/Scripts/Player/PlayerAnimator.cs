@@ -269,7 +269,9 @@ public class PlayerAnimator : MonoBehaviour
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
 		if (switchingIntoRoll)
+		{
 			rollColliderTransitionTime = rollColliderTransitionTimeIn;
+		}
 		else
 		{
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;

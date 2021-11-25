@@ -26,6 +26,7 @@ public class PlayerCombat : MonoBehaviour
 	bool gotToEndOfZoom = false;
 	bool cameraChanged = false;
 	public CameraData aimingCameraData;
+	public ParticleSystem bowShoot;
 
 	Arrow equippedArrow = null;
 	bool charging = false;
@@ -215,6 +216,12 @@ public class PlayerCombat : MonoBehaviour
 		velocity += xAxis * v.x;
 		//Debug.Log($"x: {positionToHit.x}, y: {positionToHit.y} v: {initialSpeed}, g: {arrowData.gravity}, sq: {possibleNeg}");
 		arrow.Shoot(velocity, arrowData);
+		if (bowShoot)
+		{
+			bowShoot.transform.forward = velocity;
+			bowShoot.transform.position = arrow.transform.position;
+			bowShoot.Play(true);
+		}
 
 		cooldownTimer = rangedCooldownTime;
 		playerController.Animator.AnimateAttack();
