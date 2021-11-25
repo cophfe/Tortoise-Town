@@ -53,10 +53,12 @@ public class OptionsMenu : MonoBehaviour
 
 	[Header("Other")]
 	public Button applyButton;
+	public Button backButton;
 	public OptionsData defaultOptions;
 	public MainMenuUI mainMenu;
 	public PlayerInput backupInput;
 	public Camera mainCameraPrefab;
+	public TabController tabController;
 
 	//Internal
 	List<Vector2Int> resolutions;
@@ -142,6 +144,7 @@ public class OptionsMenu : MonoBehaviour
 			inputActionMap = backupInput.currentActionMap;
 		}
 
+		KeyBindingNavigator keyNav = keybindContent.GetComponent<KeyBindingNavigator>();
 		foreach (var action in inputActionMap.actions)
 		{
 			if (action.bindings[0].isComposite)
@@ -158,6 +161,7 @@ public class OptionsMenu : MonoBehaviour
 						GameManager.Instance != null);
 					bindings.Add(keybind);
 					count++;
+					keyNav.SetNavigationForKeybind(keybind.GetComponent<Selectable>());
 				}
 			}
 			else
@@ -171,6 +175,7 @@ public class OptionsMenu : MonoBehaviour
 					GameManager.Instance != null);
 				bindings.Add(keybind);
 				count++;
+				keyNav.SetNavigationForKeybind(keybind.GetComponent<Selectable>());
 			}
 		}
 		var rect = keybindContent.sizeDelta;
@@ -203,6 +208,7 @@ public class OptionsMenu : MonoBehaviour
 		IsChanged = false;
 		ApplyUIToGame();
 		Save();
+		backButton.Select();
 	}
 
 	public void OnChangedValue()
@@ -240,6 +246,28 @@ public class OptionsMenu : MonoBehaviour
 			Debug.LogWarning("Options data does not exist on device. Setting to default.");
 			ApplyDataToUI(defaultOptions);
 		}
+	}
+
+	public OptionsData GetOptionsData()
+	{
+		OptionsData options;
+		if (File.Exists(GetOptionsPath()))
+		{
+			try
+			{
+				string saved = File.ReadAllText(GetOptionsPath());
+				options = (OptionsData)JsonUtility.FromJson(saved, typeof(OptionsData));
+			}
+			catch
+			{
+				options = defaultOptions;
+			}
+		}
+		else
+		{
+			options = defaultOptions;
+		}
+		return options;
 	}
 
 	void ApplyDataToUI(OptionsData options)
@@ -293,26 +321,28 @@ public class OptionsMenu : MonoBehaviour
 		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
 	}
 
-	public void Save()
+	public void Save(OptionsData options = null)
 	{
-		OptionsData options = new OptionsData
+		if (options == null)
 		{
-			fov = fov.value,
-			screenShake = screenShake.value,
+			options = new OptionsData
+			{
+				fov = fov.value,
+				screenShake = screenShake.value,
 
-			sensitivity = cameraSensitivity.value,
-			invertX = invertedCameraX.isOn,
-			invertY = invertedCameraY.isOn,
+				sensitivity = cameraSensitivity.value,
+				invertX = invertedCameraX.isOn,
+				invertY = invertedCameraY.isOn,
 
-			windowMode = windowMode.value,
-			vSyncMode = vSyncMode.value,
-			graphicsQuality = graphicsQuality.value,
+				windowMode = windowMode.value,
+				vSyncMode = vSyncMode.value,
+				graphicsQuality = graphicsQuality.value,
 
-			masterVolume = masterVolume.value,
-			sfxVolume = sFXVolume.value,
-			musicVolume = musicVolume.value
-		};
-
+				masterVolume = masterVolume.value,
+				sfxVolume = sFXVolume.value,
+				musicVolume = musicVolume.value
+			};
+		}
 
 		string optionsJson = JsonUtility.ToJson(options);
 		try
@@ -355,6 +385,33 @@ public class OptionsMenu : MonoBehaviour
 		DEFAULTKEYBINDS
 	}
 
+	bool ConfirmSomethingActuallyChanged()
+	{
+		OptionsData options = GetOptionsData();
+		return options.fov != fov.value ||
+			options.screenShake != screenShake.value ||
+			options.sensitivity != cameraSensitivity.value ||
+			options.invertX != invertedCameraX.isOn ||
+			options.invertY != invertedCameraY.isOn ||
+			options.windowMode != windowMode.value ||
+			options.vSyncMode != vSyncMode.value ||
+			options.graphicsQuality != graphicsQuality.value;
+	}
+
+	public void OnAudioChanged()
+	{
+		OptionsData options = GetOptionsData();
+		options.masterVolume = masterVolume.value;
+		options.sfxVolume = sFXVolume.value;
+		options.musicVolume = musicVolume.value;
+		//apply to game
+		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolume.value));
+		mixer.SetFloat(musicParameterName, LinearToDecibels(musicVolume.value));
+		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
+		//save to file
+		Save(options);
+	}
+
 	public void SetAreYouSure(int state)
 	{
 		switch ((AreYouSureState)state)
@@ -367,7 +424,7 @@ public class OptionsMenu : MonoBehaviour
 				windowManager.AddToQueue(areYouSure);
 				break;
 			case AreYouSureState.BACK:
-				if (IsChanged)
+				if (IsChanged && ConfirmSomethingActuallyChanged())
 				{
 					areYouSureText.text = "Do you want to exit? There are unsaved changes.";
 					areYouSureConfirm.onClick.RemoveAllListeners();

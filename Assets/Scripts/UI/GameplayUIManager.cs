@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
 
@@ -46,6 +47,8 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
+		input.UI.Back.performed += _ => OnBackButton();
+		input.UI.ChangeTabs.performed += _ => OnShoulderButton(_.ReadValue<float>());
 		WindowManager = GetComponent<GameWindowManager>();
 	}
 
@@ -73,7 +76,44 @@ public class GameplayUIManager : MonoBehaviour
 	{
 		crosshair.enabled = enable;
 	}
-	
+
+	public void OnShoulderButton(float value)
+	{
+		if (optionsWindow == WindowManager.GetCurrentWindow() && optionsWindow != null)
+		{
+			options.tabController.ChangeTabs(value);
+		}
+	}
+	public void OnBackButton()
+	{
+		if (GameManager.Instance.InCutscene)
+		{
+			if (cutsceneNotifyText.alpha > 0)
+			{
+				onCutsceneSkipped?.Invoke();
+			}
+			else
+				cutsceneNotify.SetTrigger("Start");
+		}
+		else if (!disableMenuInput)
+		{
+			var window = WindowManager.GetCurrentWindow();
+			if (window != null)
+			{
+				if (window.onBackPressedSelectable != null && window.onBackPressedSelectable.gameObject != EventSystem.current.currentSelectedGameObject)
+				{
+					window.onBackPressedSelectable.Select();
+				}
+				else if (optionsWindow == window)
+				{
+					options.SetAreYouSure(1);
+				}
+				else
+					WindowManager.RemoveFromQueue();
+			}
+		}
+	}
+
 	public void OnMenuButton()
 	{
 		if (GameManager.Instance.InCutscene)
@@ -89,6 +129,8 @@ public class GameplayUIManager : MonoBehaviour
 		}
 		else if (!disableMenuInput && !GameManager.Instance.Player.Health.IsDead)
 		{
+			fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
 			if (WindowManager.GetCurrentWindow() == null)
 			{
 				WindowManager.AddToQueue(pauseMenu);

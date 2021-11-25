@@ -5,6 +5,8 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 //my original portal script had a massive bug that I can't fix, so this version will play it safe and stick closer to a tutorial
+//(actually nvm it is still completely different)
+
 public class NewPortalRenderer : BooleanSwitch
 {
 	public NewPortal[] portals = new NewPortal[2];
@@ -68,7 +70,6 @@ public class NewPortalRenderer : BooleanSwitch
 				cameraPortalIndex = 1 - playerPortalIndex;
 
 				UpdateCamera();
-
 			}
 		}
 		else
@@ -78,7 +79,6 @@ public class NewPortalRenderer : BooleanSwitch
 				cameraPortalIndex = playerPortalIndex;
 
 				UpdateCamera();
-
 			}
 		}
 
@@ -174,7 +174,6 @@ public class NewPortalRenderer : BooleanSwitch
 		Vector2Int newScreenSize = new Vector2Int(Screen.width, Screen.height);
 		if (newScreenSize != lastScreenSize)
 		{
-			Debug.Log("Screen size change detected");
 			SetRenderTextures();
 			lastScreenSize = newScreenSize;
 		}
@@ -190,7 +189,6 @@ public class NewPortalRenderer : BooleanSwitch
 		Vector4 nearPlane = new Vector4(normal.x, normal.y, normal.z, -Vector3.Dot(normal, p2.transform.position));
 		Vector4 nearPlaneCamera = Matrix4x4.Transpose(Matrix4x4.Inverse(portalCamera.worldToCameraMatrix)) * nearPlane;
 		c2.projectionMatrix = mainCamera.CalculateObliqueMatrix(nearPlaneCamera);
-		c1.projectionMatrix = defaultMatrix;
 	}
 	public bool CameraRayIntersectsPortal(NewPortal portal)
 	{
@@ -229,7 +227,8 @@ public class NewPortalRenderer : BooleanSwitch
 
 	private void FixedUpdate()
 	{
-		CalculatePlayerPortal();
+		if (portals[0].Open && portals[1].Open)
+			CalculatePlayerPortal();
 	}
 
 	public void UpdateCamera()
@@ -242,6 +241,7 @@ public class NewPortalRenderer : BooleanSwitch
 			portalCamera.enabled = false;
 			mainCamera.targetTexture = null;
 			portalCamera.cullingMask = ~portalLayer;
+			mainCamera.ResetProjectionMatrix();
 			mainCamera.cullingMask = 0xFFFF;
 		}
 		else
@@ -251,6 +251,7 @@ public class NewPortalRenderer : BooleanSwitch
 			mainCamera.enabled = false;
 			portalCamera.enabled = true;
 			portalCamera.targetTexture = null;
+			portalCamera.ResetProjectionMatrix();
 			portalCamera.cullingMask = 0xFFFF;
 			mainCamera.cullingMask = ~portalLayer;
 		}

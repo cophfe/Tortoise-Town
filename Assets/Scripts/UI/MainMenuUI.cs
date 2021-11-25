@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,6 +19,7 @@ public class MainMenuUI : MonoBehaviour
 	public GameWindow areYouSure;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
+	public Button playTutorialButton;
 	public OptionsMenu optionsMenu;
 	public GameWindow optionsWindow;
 	InputMaster input;
@@ -33,17 +35,32 @@ public class MainMenuUI : MonoBehaviour
 				{
 					continueButton.interactable = true;
 				}
+				else
+				{
+					continueButton.interactable = false;
+				}
 			} 
 		}
+		else
+		{
+			continueButton.interactable = false;
+		}
+
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
+		input.UI.Back.performed += _ => OnBackButton();
+		input.UI.ChangeTabs.performed += _ => OnShoulderButton(_.ReadValue<float>());
 		windowManager = GetComponent<GameWindowManager>();
+
+		if (!PlayerPrefs.HasKey("Hey you! stop poking around in the registry >:("))
+			PlayerPrefs.SetString("Hey you! stop poking around in the registry >:(", "if the earth isn't flat, it's definitely turtle-shaped");
 	}
 	private void Start()
 	{
 		if (optionsMenu)
 			optionsMenu.Initiate();
 
+		playTutorialButton.gameObject.SetActive(PlayerPrefs.GetInt("TutorialCompleted", 0) == 1);
 	}
 
 	public void OnEnable()
@@ -55,6 +72,31 @@ public class MainMenuUI : MonoBehaviour
 	{
 		if (input != null)
 			input.Disable();
+	}
+
+	public void OnShoulderButton(float value)
+	{
+		if (optionsWindow == windowManager.GetCurrentWindow() && optionsWindow != null)
+		{
+			optionsMenu.tabController.ChangeTabs(value);
+		}
+	}
+	public void OnBackButton()
+	{
+		var window = windowManager.GetCurrentWindow();
+		if (window != null)
+		{
+			if (window.onBackPressedSelectable != null && window.onBackPressedSelectable.gameObject != EventSystem.current.currentSelectedGameObject)
+			{
+				window.onBackPressedSelectable.Select();
+			}
+			else if (optionsWindow == window)
+			{
+				optionsMenu.SetAreYouSure(1);
+			}
+			else
+				windowManager.RemoveFromQueue();
+		}
 	}
 
 	public void OnMenuButton()
