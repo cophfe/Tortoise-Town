@@ -52,9 +52,9 @@ Material:
     - Vector2_C450566B: {r: 1, g: 0, b: 0, a: 0}
     - _Center: {r: 0, g: -0.04, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.08330364, g: 0.30501953, b: 0.45283014, a: 0}
+    - _MainColor: {r: 0.08330361, g: 0.30501947, b: 0.45283008, a: 0}
     - _MaxBrightness: {r: 1, g: 1, b: 1, a: 0}
-    - _Outline: {r: 0, g: 0.39757198, b: 1, a: 0}
+    - _Outline: {r: 0, g: 0.39757195, b: 1, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _SecondColor: {r: 0, g: 0.6829066, b: 1, a: 0}
   m_BuildTextureStacks: []

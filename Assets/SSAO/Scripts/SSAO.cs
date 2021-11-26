@@ -44,7 +44,7 @@ public class SSAO : ScriptableRendererFeature
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                ResourceReloader.TryReloadAllNullIn(this, "Packages/com.sbstn_hn.rendererfeatures.urp-ssao");
+                ResourceReloader.TryReloadAllNullIn(this, "Assets/SSAO");
             }
 #endif 
             

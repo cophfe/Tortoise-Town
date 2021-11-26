@@ -269,7 +269,9 @@ public class PlayerAnimator : MonoBehaviour
 		switchingIntoRoll = playerController.Motor.IsRolling;
 		switchingColliderSize = true;
 		if (switchingIntoRoll)
+		{
 			rollColliderTransitionTime = rollColliderTransitionTimeIn;
+		}
 		else
 		{
 			rollColliderTransitionTime = rollColliderTransitionTimeOut;
@@ -299,7 +301,7 @@ public class PlayerAnimator : MonoBehaviour
 		playerController.CharacterController.radius = playerController.RollColliderRadius;
 		playerController.CharacterController.height = playerController.RollColliderRadius * 2;
 		playerController.CharacterController.center = playerController.RollColliderOffset;
-		playerController.MainCamera.GetCameraData().targetOffset.y =  playerController.RollCameraOffset;
+		playerController.MainCamera.ResetCameraData();
 	}
 	#endregion
 }

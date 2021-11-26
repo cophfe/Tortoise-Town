@@ -12,11 +12,14 @@ public class VelocitySetterTrampoline : PlayerCollision
 	[Tooltip("The minimum velocity into the trampoline before it bounces")]
 	[SerializeField, Min(0)] float minBounceVelocity = 1;
 	[SerializeField] AudioClipList launchSounds = null;
+	[SerializeField] ParticleSystem trampolineVFX = null;
+	Animator trampolineAnimator = null;
 	AudioSource source;
 
 	private void Start()
 	{
 		source = GetComponent<AudioSource>();
+		trampolineAnimator = GetComponentInChildren<Animator>();
 	}
 	public override bool OnCollideWithPlayer(PlayerController player, ControllerColliderHit hit)
 	{
@@ -31,6 +34,13 @@ public class VelocitySetterTrampoline : PlayerCollision
 				source.clip = launchSounds.GetRandom();
 				source.Play();
 			}
+
+			if (trampolineVFX != null)
+				trampolineVFX.Play();
+
+			if (trampolineAnimator)
+				trampolineAnimator.SetTrigger("Bounce");
+
 			player.Motor.RefreshDash();
 		}
 		
@@ -51,6 +61,11 @@ public class VelocitySetterTrampoline : PlayerCollision
 				source.clip = launchSounds.GetRandom();
 				source.Play();
 			}
+			if (trampolineVFX != null)
+				trampolineVFX.Play();
+
+			if (trampolineAnimator)
+				trampolineAnimator.SetTrigger("Bounce");
 			player.Motor.RefreshDash();
 		}
 

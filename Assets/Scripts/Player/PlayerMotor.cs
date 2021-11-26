@@ -142,6 +142,9 @@ public class PlayerMotor : MonoBehaviour
 	public UnityEvent onChangeRoll;
 	[Tooltip("The event called when dashing")]
 	public UnityEvent onDash;
+
+	[Header("Particle Effects")]
+	public ParticleSystem dashParticles;
 	#endregion
 
 	#region Private Variables
@@ -162,7 +165,7 @@ public class PlayerMotor : MonoBehaviour
 	float currentDashDuration;
 	float currentDashVelocity;
 	Vector3 currentDashDirection;
-	public AnimationCurve currentDashCurve;
+	[System.NonSerialized] public AnimationCurve currentDashCurve;
 	float dashCooldownTimer = 0;
 	float dashTimer = 0;
 	bool dashing = false;
@@ -834,6 +837,12 @@ public class PlayerMotor : MonoBehaviour
 		}
 		OnRoll();
 		onDash.Invoke();
+
+		if (dashParticles != null)
+		{
+			dashParticles.transform.forward = -currentDashDirection;
+			dashParticles.Play(true);
+		}
 		IsExternalDash = false;
 	}
 
@@ -1011,6 +1020,8 @@ public class PlayerMotor : MonoBehaviour
 			{
 				//cancel dash if going into wall
 				dashing = false;
+				if (dashParticles)
+					dashParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 			}
 
 			//play collide audio
@@ -1082,11 +1093,13 @@ public class PlayerMotor : MonoBehaviour
 	#region Properties
 	public MovementState State { get { return state; } }
 	public Vector3 TotalVelocity { get { return forcesVelocity + inputVelocity; } }
-	public Vector3 TargetVelocity { get { return targetVelocity; } }
+	public Vector3 TargetVelocity { get { return targetVelocity; } set { targetVelocity = value; } }
+
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
 	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; } }
+	public Quaternion TargetRotation { get { return targetRotation; } set { targetRotation = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }
 	public bool IsExternalDash { get; private set; }
