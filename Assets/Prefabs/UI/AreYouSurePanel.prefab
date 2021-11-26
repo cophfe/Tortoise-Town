@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1509492233300260812}
   - component: {fileID: 3583042863399257296}
   - component: {fileID: 2205754278824585189}
+  - component: {fileID: 372761207421181224}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -92,9 +93,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1884361161682608377}
+    m_SelectOnDown: {fileID: 1884361161682608377}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 3
@@ -161,6 +162,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &372761207421181224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334540024226966372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0a560728d676944a2b9a98a225ee27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1212316120384992200
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionScale: 0
   canBeExited: 1
+  defaultSelectable: {fileID: 0}
 --- !u!225 &6442264189468212627
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -712,7 +726,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cancel
+  m_text: No
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 428b5e123428c3643a4279ec5e8c7294, type: 2}
   m_sharedMaterial: {fileID: -52790434779017847, guid: 428b5e123428c3643a4279ec5e8c7294, type: 2}
@@ -846,7 +860,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Continue
+  m_text: Yes
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 428b5e123428c3643a4279ec5e8c7294, type: 2}
   m_sharedMaterial: {fileID: -52790434779017847, guid: 428b5e123428c3643a4279ec5e8c7294, type: 2}
@@ -1141,9 +1155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1509492233300260812}
+    m_SelectOnDown: {fileID: 1509492233300260812}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 3

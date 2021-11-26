@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpSounds:
     clips:
-    - {fileID: 8300000, guid: 65a8f67a3f93a424e938c1450f314d67, type: 3}
+    - {fileID: 8300000, guid: 946781e57c120ae479f39aff3aa3cd1e, type: 3}
     - {fileID: 8300000, guid: 946781e57c120ae479f39aff3aa3cd1e, type: 3}
     - {fileID: 8300000, guid: 65b0042d59f7369469116cb5db222744, type: 3}
   dash:
@@ -28,11 +28,13 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 11e3d861526066f47a0c026d199fd0e7, type: 3}
     - {fileID: 8300000, guid: b2092cb1b049d3c4b941cc6a4e10bbc4, type: 3}
-    - {fileID: 8300000, guid: 1586b5b1c13eba442baea6a66121102e, type: 3}
+    - {fileID: 8300000, guid: b2092cb1b049d3c4b941cc6a4e10bbc4, type: 3}
     - {fileID: 8300000, guid: 64dcfbb37ecb6bc4684d2d4868d128b6, type: 3}
   rollPop:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
+  rollPopNotMoving:
+    clips: []
   jumpRollPop:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
@@ -50,9 +52,14 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 37aff17720f056b4e82ea62008a0970d, type: 3}
   arrowShoot:
     clips:
-    - {fileID: 8300000, guid: a8df80184d431064b823d7f64b3eeda0, type: 3}
-    - {fileID: 8300000, guid: 3b63933942890ec4d80fd3be825b8eba, type: 3}
-    - {fileID: 8300000, guid: 2fe562f3bd8a12d48afd0775d05d8398, type: 3}
+    - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
+    - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
+    - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
+  hit:
+    clips:
+    - {fileID: 0}
+  hitWhileBall:
+    clips: []
   death:
     clips:
     - {fileID: 8300000, guid: 4075be96a61a16c408092db76285ade5, type: 3}
