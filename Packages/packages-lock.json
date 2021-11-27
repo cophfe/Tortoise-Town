@@ -7,13 +7,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.sbstn_hn.rendererfeatures.urp-ssao": {
-      "version": "https://github.com/sebastianhein/urp-ssao.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "4958115f46d11e781af478ae78732c55f2bed446"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

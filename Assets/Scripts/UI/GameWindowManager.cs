@@ -10,6 +10,7 @@ public class GameWindowManager : MonoBehaviour
 	[SerializeField] float windowOpenTime = 1;
 	float openTimer = 0;
 	bool transitioning = false;
+	public Selectable selectOnNothing = null;
 
 	void Start()
 	{
@@ -57,9 +58,13 @@ public class GameWindowManager : MonoBehaviour
 								GameManager.Instance.Player.InputIsEnabled = true;
 								Time.timeScale = 1;
 							}
+							if (selectOnNothing) {
+								selectOnNothing.Select();
+							}
 						}
 						else
 						{
+							current.SelectDefault();
 							current.SetInteractive(true);
 						}
 					}
@@ -144,6 +149,7 @@ public class GameWindowManager : MonoBehaviour
 				}
 				else
 				{
+					current.SelectDefault();
 					current.SetInteractive(true);
 				}
 
