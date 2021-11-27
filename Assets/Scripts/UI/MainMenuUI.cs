@@ -14,6 +14,7 @@ public class MainMenuUI : MonoBehaviour
 	public string gameplaySceneName = "Main";
 	public string tutorialSceneName = "Tutorial_Level";
 	public Animator panel = null;
+	public LoadingBar loadingManager = null;
 	public float fadeTime = 1;
 	public Button continueButton;
 	public GameWindow areYouSure;
@@ -52,8 +53,8 @@ public class MainMenuUI : MonoBehaviour
 		input.UI.ChangeTabs.performed += _ => OnShoulderButton(_.ReadValue<float>());
 		windowManager = GetComponent<GameWindowManager>();
 
-		if (!PlayerPrefs.HasKey("Hey you! stop poking around in the registry >:("))
-			PlayerPrefs.SetString("Hey you! stop poking around in the registry >:(", "if the earth isn't flat, it's definitely turtle-shaped");
+		if (!PlayerPrefs.HasKey("Hey you! stop poking around in the registry!"))
+			PlayerPrefs.SetString("Hey you! stop poking around in the registry!", ">:(");
 	}
 	private void Start()
 	{
@@ -113,69 +114,40 @@ public class MainMenuUI : MonoBehaviour
 		if (continueButton.interactable)
 		{
 			areYouSureConfirm.onClick.RemoveAllListeners();
-			areYouSureConfirm.onClick.AddListener(() => StartCoroutine(LoadNewGame()));
+			areYouSureConfirm.onClick.AddListener(LoadNewGame);
 			areYouSureText.text = "Are you sure you want to continue? This will erase all of your save data.";
 			GetComponent<GameWindowManager>().AddToQueue(areYouSure);
 		}
 		else
 		{
-			StartCoroutine(LoadNewGame());
+			LoadNewGame();
+
 		}
 	}
 
-	IEnumerator LoadNewGame()
+	void LoadNewGame()
 	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
+		if (File.Exists(SaveManager.GetPath()))
+			File.Delete(SaveManager.GetPath());
 
-		try
+		if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
 		{
-			if (File.Exists(SaveManager.GetPath()))
-				File.Delete(SaveManager.GetPath());
-		
-			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
-			{
-				SceneManager.LoadScene(tutorialSceneName);
-			}
-			else
-				SceneManager.LoadScene(gameplaySceneName);
+			StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
+
 		}
-		catch (System.Exception e)
-		{
-			Debug.LogWarning("Error loading scene:\n" + e.Message);
-		}
+		else
+			StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
+
 	}
 
 	public void LoadTutorialStart()
 	{
-		StartCoroutine(LoadTutorial());
-	}
-
-	IEnumerator LoadTutorial()
-	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
-		SceneManager.LoadScene(tutorialSceneName);
+		StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
 	}
 
 	public void OnContinueButtonPressed()
 	{
-		StartCoroutine(LoadGame());
-	}
-
-	IEnumerator LoadGame()
-	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
-
-		try
-		{
-			SceneManager.LoadScene(gameplaySceneName);
-		}
-		catch (System.Exception e)
-		{
-			Debug.LogWarning("Error loading scene:\n" + e.Message);
-		}
+		StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
 	}
 
 	public void OnExitButtonPressed()

@@ -710,6 +710,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7899034648897405625, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
+      propertyPath: loadFadeTime
+      value: 1.3
+      objectReference: {fileID: 0}
     - target: {fileID: 8041265257317559500, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0

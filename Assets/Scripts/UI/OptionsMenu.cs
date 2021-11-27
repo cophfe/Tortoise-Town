@@ -303,6 +303,7 @@ public class OptionsMenu : MonoBehaviour
 				cameraController.sensitivityModifier = cameraSensitivity.value;
 				cameraController.invertX = invertedCameraX.isOn;
 				cameraController.invertY = invertedCameraY.isOn;
+				cameraController.RecalculateCameraBox();
 			}
 		}
 

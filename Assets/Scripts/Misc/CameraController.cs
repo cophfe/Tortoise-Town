@@ -137,6 +137,14 @@ public partial class CameraController : MonoBehaviour
 		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
 	}
 
+	public void RecalculateCameraBox()
+	{
+		if (cam == null) return;
+
+		float yExtend = 2 * Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad * 0.5f) * cam.nearClipPlane;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
+	}
+
 	void LateUpdate()
 	{
 		//move toward pivot
