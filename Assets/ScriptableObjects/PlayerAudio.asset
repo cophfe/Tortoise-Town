@@ -33,6 +33,8 @@ MonoBehaviour:
   rollPop:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
+  rollPopNotMoving:
+    clips: []
   jumpRollPop:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
@@ -53,6 +55,11 @@ MonoBehaviour:
     - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
     - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
     - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
+  hit:
+    clips:
+    - {fileID: 0}
+  hitWhileBall:
+    clips: []
   death:
     clips:
     - {fileID: 8300000, guid: 4075be96a61a16c408092db76285ade5, type: 3}

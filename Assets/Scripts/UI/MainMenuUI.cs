@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,11 +14,13 @@ public class MainMenuUI : MonoBehaviour
 	public string gameplaySceneName = "Main";
 	public string tutorialSceneName = "Tutorial_Level";
 	public Animator panel = null;
+	public LoadingBar loadingManager = null;
 	public float fadeTime = 1;
 	public Button continueButton;
 	public GameWindow areYouSure;
 	public TextMeshProUGUI areYouSureText;
 	public Button areYouSureConfirm;
+	public Button playTutorialButton;
 	public OptionsMenu optionsMenu;
 	public GameWindow optionsWindow;
 	InputMaster input;
@@ -33,17 +36,32 @@ public class MainMenuUI : MonoBehaviour
 				{
 					continueButton.interactable = true;
 				}
+				else
+				{
+					continueButton.interactable = false;
+				}
 			} 
 		}
+		else
+		{
+			continueButton.interactable = false;
+		}
+
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
+		input.UI.Back.performed += _ => OnBackButton();
+		input.UI.ChangeTabs.performed += _ => OnShoulderButton(_.ReadValue<float>());
 		windowManager = GetComponent<GameWindowManager>();
+
+		if (!PlayerPrefs.HasKey("Hey you! stop poking around in the registry!"))
+			PlayerPrefs.SetString("Hey you! stop poking around in the registry!", ">:(");
 	}
 	private void Start()
 	{
 		if (optionsMenu)
 			optionsMenu.Initiate();
 
+		playTutorialButton.gameObject.SetActive(PlayerPrefs.GetInt("TutorialCompleted", 0) == 1);
 	}
 
 	public void OnEnable()
@@ -55,6 +73,31 @@ public class MainMenuUI : MonoBehaviour
 	{
 		if (input != null)
 			input.Disable();
+	}
+
+	public void OnShoulderButton(float value)
+	{
+		if (optionsWindow == windowManager.GetCurrentWindow() && optionsWindow != null)
+		{
+			optionsMenu.tabController.ChangeTabs(value);
+		}
+	}
+	public void OnBackButton()
+	{
+		var window = windowManager.GetCurrentWindow();
+		if (window != null)
+		{
+			if (window.onBackPressedSelectable != null && window.onBackPressedSelectable.gameObject != EventSystem.current.currentSelectedGameObject)
+			{
+				window.onBackPressedSelectable.Select();
+			}
+			else if (optionsWindow == window)
+			{
+				optionsMenu.SetAreYouSure(1);
+			}
+			else
+				windowManager.RemoveFromQueue();
+		}
 	}
 
 	public void OnMenuButton()
@@ -71,69 +114,40 @@ public class MainMenuUI : MonoBehaviour
 		if (continueButton.interactable)
 		{
 			areYouSureConfirm.onClick.RemoveAllListeners();
-			areYouSureConfirm.onClick.AddListener(() => StartCoroutine(LoadNewGame()));
+			areYouSureConfirm.onClick.AddListener(LoadNewGame);
 			areYouSureText.text = "Are you sure you want to continue? This will erase all of your save data.";
 			GetComponent<GameWindowManager>().AddToQueue(areYouSure);
 		}
 		else
 		{
-			StartCoroutine(LoadNewGame());
+			LoadNewGame();
+
 		}
 	}
 
-	IEnumerator LoadNewGame()
+	void LoadNewGame()
 	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
+		if (File.Exists(SaveManager.GetPath()))
+			File.Delete(SaveManager.GetPath());
 
-		try
+		if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
 		{
-			if (File.Exists(SaveManager.GetPath()))
-				File.Delete(SaveManager.GetPath());
-		
-			if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
-			{
-				SceneManager.LoadScene(tutorialSceneName);
-			}
-			else
-				SceneManager.LoadScene(gameplaySceneName);
+			StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
+
 		}
-		catch (System.Exception e)
-		{
-			Debug.LogWarning("Error loading scene:\n" + e.Message);
-		}
+		else
+			StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
+
 	}
 
 	public void LoadTutorialStart()
 	{
-		StartCoroutine(LoadTutorial());
-	}
-
-	IEnumerator LoadTutorial()
-	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
-		SceneManager.LoadScene(tutorialSceneName);
+		StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
 	}
 
 	public void OnContinueButtonPressed()
 	{
-		StartCoroutine(LoadGame());
-	}
-
-	IEnumerator LoadGame()
-	{
-		panel.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(fadeTime);
-
-		try
-		{
-			SceneManager.LoadScene(gameplaySceneName);
-		}
-		catch (System.Exception e)
-		{
-			Debug.LogWarning("Error loading scene:\n" + e.Message);
-		}
+		StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
 	}
 
 	public void OnExitButtonPressed()

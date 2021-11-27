@@ -6,6 +6,7 @@ public class Checkpoint : MonoBehaviour
 {
 	public LayerMask playerMask;
 	public Transform spawnPositionRotation;
+	public ParticleSystem onActivate;
 
 	private void Awake()
 	{
@@ -16,7 +17,11 @@ public class Checkpoint : MonoBehaviour
 	{
 		if (((1 << other.gameObject.layer) & playerMask) != 0)
 		{
-			GameManager.Instance.SaveManager.SetCurrentCheckpoint(this);
+			if (GameManager.Instance.SaveManager.SetCurrentCheckpoint(this))
+			{
+				if (onActivate)
+					onActivate.Play();
+			}
 		}
 	}
 

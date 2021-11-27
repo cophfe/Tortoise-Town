@@ -20,9 +20,13 @@ public class NewPlayerPortalTraveller : NewPortalTraveller
 		{
 			//teleport to other side
 			transform.position = inPortal.TransformPositionToOtherPortal(transform.position);
+
 			controller.RotateChild.rotation = inPortal.TransformRotationToOtherPortal(controller.RotateChild.rotation);
+			controller.Motor.TargetRotation = inPortal.TransformRotationToOtherPortal(controller.Motor.TargetRotation);
+			controller.Motor.TargetVelocity = inPortal.TransformDirectionToOtherPortal(controller.Motor.TargetVelocity);
 
 			portalRenderer.OnPlayerThroughPortal(inPortal);
+			
 			controller.Interpolator.ResetPosition();
 			controller.MainCamera.SetPositionAndRotation(portalRenderer.transform.position, portalRenderer.transform.rotation);
 			controller.Motor.InputVelocity = inPortal.TransformDirectionToOtherPortal(controller.Motor.InputVelocity);

@@ -323,6 +323,24 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""aaa3a81a-cd49-42d7-826f-bfda86fbfaa3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeTabs"",
+                    ""type"": ""Value"",
+                    ""id"": ""645cd8dc-aefd-4fbf-903e-85cef0ed0750"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -347,6 +365,50 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9bef5529-7a38-4623-b855-3f92cfcdfaf9"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""453ca9eb-f023-4854-9cae-6c9e243c6af0"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTabs"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""117ab978-63c2-46ff-9216-79ea33cf319d"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ChangeTabs"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""81c2d8dc-ca55-43b5-8f2b-8db89eb08daa"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ChangeTabs"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -395,6 +457,8 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Menu = m_UI.FindAction("Menu", throwIfNotFound: true);
+        m_UI_Back = m_UI.FindAction("Back", throwIfNotFound: true);
+        m_UI_ChangeTabs = m_UI.FindAction("ChangeTabs", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -561,11 +625,15 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Menu;
+    private readonly InputAction m_UI_Back;
+    private readonly InputAction m_UI_ChangeTabs;
     public struct UIActions
     {
         private @InputMaster m_Wrapper;
         public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Menu => m_Wrapper.m_UI_Menu;
+        public InputAction @Back => m_Wrapper.m_UI_Back;
+        public InputAction @ChangeTabs => m_Wrapper.m_UI_ChangeTabs;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -578,6 +646,12 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Menu.started -= m_Wrapper.m_UIActionsCallbackInterface.OnMenu;
                 @Menu.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnMenu;
                 @Menu.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnMenu;
+                @Back.started -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
+                @Back.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
+                @Back.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
+                @ChangeTabs.started -= m_Wrapper.m_UIActionsCallbackInterface.OnChangeTabs;
+                @ChangeTabs.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnChangeTabs;
+                @ChangeTabs.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnChangeTabs;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -585,6 +659,12 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Menu.started += instance.OnMenu;
                 @Menu.performed += instance.OnMenu;
                 @Menu.canceled += instance.OnMenu;
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
+                @ChangeTabs.started += instance.OnChangeTabs;
+                @ChangeTabs.performed += instance.OnChangeTabs;
+                @ChangeTabs.canceled += instance.OnChangeTabs;
             }
         }
     }
@@ -623,5 +703,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnMenu(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
+        void OnChangeTabs(InputAction.CallbackContext context);
     }
 }
