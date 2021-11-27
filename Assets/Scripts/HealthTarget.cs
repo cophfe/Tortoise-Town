@@ -36,12 +36,16 @@ public class HealthTarget : Health
 		base.ResetTo(healthValue);
 		if (IsDead)
 		{
-			gameObject.SetActive(false);
+			GetComponentInChildren<MeshRenderer>().enabled = false;
+			GetComponent<Collider>().enabled = false;
+			enabled = false;
 		}
 		else
 		{
 			CurrentHealth = maxHealth;
-			gameObject.SetActive(true);
+			GetComponentInChildren<MeshRenderer>().enabled = true;
+			GetComponent<Collider>().enabled = true;
+			enabled = true;
 		}
 	}
 }
