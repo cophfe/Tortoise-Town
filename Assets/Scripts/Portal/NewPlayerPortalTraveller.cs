@@ -27,7 +27,7 @@ public class NewPlayerPortalTraveller : NewPortalTraveller
 
 			portalRenderer.OnPlayerThroughPortal(inPortal);
 			
-			controller.Interpolator.ResetPosition();
+			controller.Interpolator.TransformStartAndEndByPortal(inPortal);
 			controller.MainCamera.SetPositionAndRotation(portalRenderer.transform.position, portalRenderer.transform.rotation);
 			controller.Motor.InputVelocity = inPortal.TransformDirectionToOtherPortal(controller.Motor.InputVelocity);
 			controller.Motor.ForcesVelocity = inPortal.TransformDirectionToOtherPortal(controller.Motor.ForcesVelocity);
