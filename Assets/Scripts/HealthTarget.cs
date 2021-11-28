@@ -22,7 +22,7 @@ public class HealthTarget : Health
 		var arrow = GetComponentInChildren<Arrow>();
 		if (arrow)
 		{
-			arrow.BeforeReset();
+			arrow.SetRendering(false);
 		}
 
 		base.OnDeath();

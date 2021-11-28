@@ -441,8 +441,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52688760920932074}
-  m_LocalRotation: {x: -0.013931923, y: -0.5420748, z: -0.0007037558, w: 0.8402145}
-  m_LocalPosition: {x: -0.9, y: 102.4, z: -316.7}
+  m_LocalRotation: {x: -0.013931907, y: -0.5420748, z: -0.000703747, w: 0.8402145}
+  m_LocalPosition: {x: 1.5422207, y: 103.76975, z: -261.30032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 52688761902105370}
@@ -484,7 +484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &52688761902105370
 Transform:
   m_ObjectHideFlags: 0
@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testSwitch: 0
-  SwitchOnAwake: 1
+  SwitchOnAwake: 0
   onSwitchOn:
     m_PersistentCalls:
       m_Calls: []
@@ -557,9 +557,13 @@ MonoBehaviour:
       m_Calls: []
   cutsceneCamera: {fileID: 52688760596297165}
   goBackOnStop: 1
+  onStartCutscene:
+    m_PersistentCalls:
+      m_Calls: []
   onEndCutscene:
     m_PersistentCalls:
       m_Calls: []
+  timedEvents: []
 --- !u!1 &52688761906833209
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Path: {fileID: 52688760616038564}
-  m_PathPosition: 0
+  m_PathPosition: 16.91491
   m_PositionUnits: 1
   m_PathOffset: {x: 0, y: 0, z: 0}
   m_XDamping: 0
