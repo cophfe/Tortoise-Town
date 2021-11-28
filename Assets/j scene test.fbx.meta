@@ -3,7 +3,22 @@ guid: ae800610dae1e704bb75ee5a41d32838
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sandstone_Material1
+    second: {fileID: 2100000, guid: d32c66ee00e34994e9eccafcc15d7d5b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: roof
+    second: {fileID: 2100000, guid: 1afbc5ea8c0e4ee4fa080cb26486627c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood
+    second: {fileID: 2100000, guid: 68e8188785f75fd40a1baa4837e08fc0, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
