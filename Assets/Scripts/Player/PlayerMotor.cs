@@ -728,7 +728,7 @@ public class PlayerMotor : MonoBehaviour
 
 	void OnRoll()
 	{
-		playerController.FootstepAudio.clip = playerController.AudioData.ballRoll.GetRandom();
+		//playerController.FootstepAudio.clip = playerController.AudioData.ballRoll.GetRandom();
 		rollCooldownTimer = rollCooldownTime;
 		isRolling = true;
 		onChangeRoll.Invoke();
@@ -1098,7 +1098,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; } }
+	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; dashParticles.transform.forward = -currentDashDirection; } }
 	public Quaternion TargetRotation { get { return targetRotation; } set { targetRotation = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }

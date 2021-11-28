@@ -8,7 +8,7 @@ using UnityEngine.Playables;
 [RequireComponent(typeof(PlayableDirector)), DefaultExecutionOrder(1000)]
 public class CutsceneManager : BooleanSwitch
 {
-	PlayableDirector director;
+	public PlayableDirector Director { get; private set; }
 	bool ended = false;
 	public Camera cutsceneCamera;
 	public bool goBackOnStop = true;
@@ -27,16 +27,16 @@ public class CutsceneManager : BooleanSwitch
 
 	private void OnValidate()
 	{
-		if (!director)
-			director = GetComponent<PlayableDirector>();
+		if (!Director)
+			Director = GetComponent<PlayableDirector>();
 
 		if (timedEvents != null)
 		{
 			foreach (var e in timedEvents)
 			{
-				if (e != null && e.time > director.duration)
+				if (e != null && e.time > Director.duration)
 				{
-					e.time = (float)director.duration;
+					e.time = (float)Director.duration;
 				}
 			}
 		}
@@ -44,19 +44,19 @@ public class CutsceneManager : BooleanSwitch
 	}
 	private void Awake()
 	{
-		director = GetComponent<PlayableDirector>();
+		Director = GetComponent<PlayableDirector>();
 		cutsceneCamera.enabled = false;
 		cutsceneCamera.GetComponent<AudioListener>().enabled = false;
-		cutsceneCamera.GetComponent<CinemachineBrain>().enabled = false;
-		director.played += d => { playing = true; };
-		director.stopped += d => { playing = false; };
+		//cutsceneCamera.GetComponent<CinemachineBrain>().enabled = false;
+		Director.played += d => { playing = true; };
+		Director.stopped += d => { playing = false; };
 	}
 
 	private void Update()
 	{
 		if (playing)
 		{
-			double time = director.time;
+			double time = Director.time;
 
 			foreach (var e in timedEvents)
 			{
@@ -102,13 +102,13 @@ public class CutsceneManager : BooleanSwitch
 		gm.InCutscene = true;
 		gm.Player.MainCamera.GetComponent<AudioListener>().enabled = false;
 		gm.Player.MainCamera.GetComponent<Camera>().enabled = false;
-		gm.Player.gameObject.SetActive(false);
-		director.Play();
-		director.time = 0;
+		gm.Player.DisablePlayer(true);
+		Director.Play();
+		Director.time = 0;
 		cutsceneCamera.enabled = true;
 		cutsceneCamera.GetComponent<AudioListener>().enabled = true;
-		cutsceneCamera.GetComponent<CinemachineBrain>().enabled = true;
-		director.stopped += OnCutsceneEnded;
+		//cutsceneCamera.GetComponent<CinemachineBrain>().enabled = true;
+		Director.stopped += OnCutsceneEnded;
 		GameManager.Instance.GUI.onCutsceneSkipped += SwitchFalse;
 		onStartCutscene?.Invoke();
 		
@@ -142,11 +142,12 @@ public class CutsceneManager : BooleanSwitch
 		gameObject.SetActive(false);
 		cutsceneCamera.enabled = false;
 		cutsceneCamera.GetComponent<AudioListener>().enabled = false;
-		cutsceneCamera.GetComponent<CinemachineBrain>().enabled = false;
+		//cutsceneCamera.GetComponent<CinemachineBrain>().enabled = false;
 		var gm = GameManager.Instance;
 		gm.Player.MainCamera.GetComponent<AudioListener>().enabled = true;
 		gm.Player.MainCamera.GetComponent<Camera>().enabled = true;
-		gm.Player.gameObject.SetActive(true);
+		gm.Player.DisablePlayer(false);
+
 		if (goBackOnStop)
 			onEndCutscene?.Invoke();
 	}

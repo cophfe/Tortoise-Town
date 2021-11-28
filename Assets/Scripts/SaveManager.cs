@@ -120,6 +120,8 @@ public class SaveManager
 		if (!saveDataToFile)
 			return;
 
+		if (saveData == null || saveData.checkpointIndex == -1) return;
+
 		//idk how to do serialization so we'll do it the old fashioned way
 		//on the bright side this is way faster
 		using (FileStream fs = new FileStream(GetPath(), FileMode.OpenOrCreate, FileAccess.ReadWrite))
