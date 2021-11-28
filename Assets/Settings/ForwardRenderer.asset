@@ -32,7 +32,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     renderPassEvent: 500
-    material: {fileID: 0}
+    material: {fileID: 2100000, guid: 2de178adc44124b41aab0d348d6173ae, type: 2}
     totalStrength: 0.38
     brightnessCorrection: 0
     area: 5
