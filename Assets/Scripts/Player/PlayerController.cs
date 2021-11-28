@@ -207,5 +207,15 @@ public class PlayerController : MonoBehaviour
 		if (cameraController && PlayerInput)
 			cameraController.SetControllerInput(PlayerInput.currentControlScheme == "Controller");
 	}
+
+	public void DisablePlayer(bool disable)
+	{
+		Motor.enabled = !disable;
+		Health.enabled = !disable;
+		Combat.enabled = !disable;
+		//(has potentially looping audio)
+		if (disable)
+			FootstepAudio.Stop();
+	}
 	#endregion
 }

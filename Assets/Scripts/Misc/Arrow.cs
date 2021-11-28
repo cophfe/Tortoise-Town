@@ -9,6 +9,7 @@ public class Arrow : Poolable
 	protected float disappearTimer = float.MaxValue;
 	protected bool shooting = false;
 	TrailRenderer trailRenderer;
+	MeshRenderer meshRenderer;
 	float trailTime;
 	NewArrowPortalTraveller pTraveller;
 	public Vector3 Velocity { get => velocity; set => velocity = value; }
@@ -24,10 +25,10 @@ public class Arrow : Poolable
 
 	public override void OnReset()
 	{
-
 		transform.localScale = Vector3.one;
 		enabled = false;
-		
+		meshRenderer.enabled = true;
+
 		if (trailRenderer)
 			trailRenderer.Clear();
 		if (pTraveller)
@@ -39,6 +40,7 @@ public class Arrow : Poolable
 	{
 		pTraveller = GetComponent<NewArrowPortalTraveller>();
 
+		meshRenderer = GetComponentInChildren<MeshRenderer>();
 		enabled = false;
 		trailRenderer = GetComponent<TrailRenderer>();
 		if (trailRenderer)
@@ -68,6 +70,10 @@ public class Arrow : Poolable
 			pTraveller.enabled = true;
 	}
 
+	public void SetRendering(bool rendering)
+	{
+		meshRenderer.enabled = rendering;
+	}
 	void FixedUpdate()   
     {
 		if (shooting)
@@ -95,7 +101,7 @@ public class Arrow : Poolable
 				if (trailRenderer)
 				{
 					trailRenderer.emitting = false;
-					trailRenderer.time = trailTime/2;
+					trailRenderer.time = trailTime * 0.8f;
 				}
 
 				OnCollide(hit.collider);

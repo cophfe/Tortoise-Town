@@ -28,25 +28,6 @@ public class MainMenuUI : MonoBehaviour
 
 	private void Awake()
 	{
-		if (File.Exists(SaveManager.GetPath()))
-		{
-			using (FileStream fs = new FileStream(SaveManager.GetPath(), FileMode.Open))
-			{
-				if (fs.Length > 0)
-				{
-					continueButton.interactable = true;
-				}
-				else
-				{
-					continueButton.interactable = false;
-				}
-			} 
-		}
-		else
-		{
-			continueButton.interactable = false;
-		}
-
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
 		input.UI.Back.performed += _ => OnBackButton();
@@ -62,6 +43,25 @@ public class MainMenuUI : MonoBehaviour
 			optionsMenu.Initiate();
 
 		playTutorialButton.gameObject.SetActive(PlayerPrefs.GetInt("TutorialCompleted", 0) == 1);
+
+		if (File.Exists(SaveManager.GetPath()))
+		{
+			using (FileStream fs = new FileStream(SaveManager.GetPath(), FileMode.Open))
+			{
+				if (fs.Length > 0)
+				{
+					continueButton.interactable = true;
+				}
+				else
+				{
+					continueButton.interactable = false;
+				}
+			}
+		}
+		else
+		{
+			continueButton.interactable = false;
+		}
 	}
 
 	public void OnEnable()
