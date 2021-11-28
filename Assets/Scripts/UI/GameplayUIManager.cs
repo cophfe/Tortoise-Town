@@ -225,6 +225,11 @@ public class GameplayUIManager : MonoBehaviour
 		GameManager.Instance.ExitToMenu();
 	}
 
+	public void FadeWinOut()
+	{
+		fadeAnimator.SetTrigger("FadeWin");
+	}
+
 	IEnumerator ContinueToMain()
 	{
 		Fade(true);
@@ -235,6 +240,8 @@ public class GameplayUIManager : MonoBehaviour
 
 	public IEnumerator StartCutscene(CutsceneManager cutscene)
 	{
+		if (cutscene == null)
+			yield break;
 		Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
@@ -245,12 +252,37 @@ public class GameplayUIManager : MonoBehaviour
 
 	public IEnumerator EndCutscene(CutsceneManager cutscene)
 	{
-		Fade(true);
-		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
-		yield return new WaitForSecondsRealtime(fadeTime);
-		GameManager.Instance.InCutscene = false;
-		cutscene?.OnCompleteStop();
-		Fade(false);
+		if (cutscene == GameManager.Instance.initialCutscene)
+		{
+			//if finished through skip
+			if (cutscene.Director.time != 0)
+			{
+				Fade(true);
+				fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+				yield return new WaitForSecondsRealtime(fadeTime);
+				GameManager.Instance.InCutscene = false;
+				cutscene?.OnCompleteStop();
+				Fade(false);
+			}
+			else
+			{
+				GameManager.Instance.InCutscene = false;
+				cutscene?.OnCompleteStop();
+				Fade(false);
+			}
+			if (GameManager.Instance.MusicSource)
+				GameManager.Instance.MusicSource.Play();
+		}
+		else
+		{
+			Fade(true);
+			fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+			yield return new WaitForSecondsRealtime(fadeTime);
+			GameManager.Instance.InCutscene = false;
+			cutscene?.OnCompleteStop();
+			Fade(false);
+		}
+		
 	}
 
 	public IEnumerator OpenWinMenu()

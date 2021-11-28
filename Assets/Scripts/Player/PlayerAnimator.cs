@@ -161,7 +161,7 @@ public class PlayerAnimator : MonoBehaviour
 	{
 		if (!playerController.Motor.IsRolling)
 		{
-			if (enableLookIK)
+			if (enableLookIK && !playerController.Health.IsDead)
 			{
 				//look toward camera
 				animator.SetLookAtWeight(1, lookBodyWeight, lookHeadWeight, 0, turnPercent);

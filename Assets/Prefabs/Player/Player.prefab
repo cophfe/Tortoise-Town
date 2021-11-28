@@ -883,6 +883,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: c6fdacfa-5d0c-40b3-9745-89a2923896c1
     m_ActionName: UI/Menu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aaa3a81a-cd49-42d7-826f-bfda86fbfaa3
+    m_ActionName: UI/Back
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 645cd8dc-aefd-4fbf-903e-85cef0ed0750
+    m_ActionName: UI/ChangeTabs
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KBM
   m_DefaultActionMap: Player
