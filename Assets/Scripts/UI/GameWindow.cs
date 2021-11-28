@@ -16,6 +16,9 @@ public class GameWindow : MonoBehaviour
 	Vector3 initialScale;
 	float initialAlpha;
 	Vector3 smallScale;
+	public Selectable defaultSelectable;
+	public Selectable onBackPressedSelectable;
+	
 	public enum TransitionState
 	{
 		OPEN,
@@ -45,8 +48,10 @@ public class GameWindow : MonoBehaviour
 
 		if (openValue)
 		{
+
 			gameObject.SetActive(true);
 			state = TransitionState.OPENING;
+
 			if (transitionScale)
 				rectTransform.localScale = smallScale;
 			SetAlpha(0);
@@ -61,6 +66,11 @@ public class GameWindow : MonoBehaviour
 		return true;
 	}
 
+	public void SelectDefault()
+	{
+		if (defaultSelectable)
+			defaultSelectable.Select();
+	}
 	public void UpdateOpenState(float t)
 	{
 		switch (state)
@@ -73,6 +83,7 @@ public class GameWindow : MonoBehaviour
 						rectTransform.localScale = initialScale;
 					state = TransitionState.OPEN;
 					SetAlpha(initialAlpha);
+
 				}
 				else
 				{

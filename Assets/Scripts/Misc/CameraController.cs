@@ -133,8 +133,16 @@ public partial class CameraController : MonoBehaviour
 		MoveToTarget();
 
 		//set camera box extents, used for obstruction checking
-		float yExtend = Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad) * cam.nearClipPlane;
-		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane) / 2;
+		float yExtend = 2 * Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad * 0.5f) * cam.nearClipPlane;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
+	}
+
+	public void RecalculateCameraBox()
+	{
+		if (cam == null) return;
+
+		float yExtend = 2 * Mathf.Tan(cam.fieldOfView * Mathf.Deg2Rad * 0.5f) * cam.nearClipPlane;
+		cameraBoxHalfExtents = new Vector3(yExtend * cam.aspect, yExtend, cam.nearClipPlane);
 	}
 
 	void LateUpdate()
@@ -365,10 +373,22 @@ public partial class CameraController : MonoBehaviour
 
 	public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
 	{
-		currentPivotPosition -= transform.position;
+		currentPivotPosition  -= transform.position;
 		currentPivotPosition += position;
 		transform.position = position;
 		transform.rotation = rotation;
+
+		//orbitVector = currentOrbit * Vector3.forward;
+		////the camera will look in the opposite direction of the orbit vector, toward the target position
+		//transform.forward = -orbitVector;
+		var euler = rotation.eulerAngles;
+		this.rotation.x = Mathf.PingPong(-euler.x + 90, 180) - 90;
+		this.rotation.y = euler.y + 180;
+		if (this.rotation.x > 90)
+			this.rotation.x -= 360;
+		currentOrbit = targetOrbit * Quaternion.Inverse(currentOrbit);
+		targetOrbit = Quaternion.Euler(this.rotation);
+		currentOrbit = targetOrbit;
 	}
 
 	/// <summary>
@@ -431,5 +451,15 @@ public partial class CameraController : MonoBehaviour
 	public CameraData GetCameraData()
 	{
 		return data;
+	}
+
+	public Vector3 GetCurrentPivotPosition()
+	{
+		return currentPivotPosition;
+	}
+
+	public Vector3 GetTargetPivotPosition()
+	{
+		return data.targetOffset.y * Vector3.up + target.position;
 	}
 }

@@ -18,6 +18,7 @@ public class PlayerAudioData : ScriptableObject
 	[Header("Rolling")]
 	public AudioClipList rollTuck;
 	public AudioClipList rollPop;
+	public AudioClipList rollPopNotMoving;
 	public AudioClipList jumpRollPop;
 	public AudioClipList ballRoll;
 	public AudioClipList hitWallRolling;
@@ -28,7 +29,8 @@ public class PlayerAudioData : ScriptableObject
 	public AudioClipList arrowShoot;
 	
 	[Header("Health")]
-	//public AudioClip[] hit;
+	public AudioClipList hit;
+	public AudioClipList hitWhileBall;
 	public AudioClipList death;
 }
 

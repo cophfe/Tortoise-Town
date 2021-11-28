@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class BooleanSwitch : MonoBehaviour
+public class BooleanSwitch : MonoBehaviour
 {
 	[SerializeField] bool testSwitch = false;
 	[SerializeField] protected bool SwitchOnAwake = false;
@@ -36,6 +36,6 @@ public abstract class BooleanSwitch : MonoBehaviour
 		SwitchValue = on;
 	}
 
-	public abstract void ResetSwitchTo(bool on);
+	public virtual void ResetSwitchTo(bool on) { Switch(on); }
 	
 }

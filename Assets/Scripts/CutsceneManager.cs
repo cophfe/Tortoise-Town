@@ -30,13 +30,17 @@ public class CutsceneManager : BooleanSwitch
 		if (!director)
 			director = GetComponent<PlayableDirector>();
 
-		foreach (var e in timedEvents)
+		if (timedEvents != null)
 		{
-			if (e != null && e.time > director.duration)
+			foreach (var e in timedEvents)
 			{
-				e.time = (float)director.duration;
+				if (e != null && e.time > director.duration)
+				{
+					e.time = (float)director.duration;
+				}
 			}
 		}
+		
 	}
 	private void Awake()
 	{
