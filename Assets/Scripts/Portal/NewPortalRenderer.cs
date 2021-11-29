@@ -13,6 +13,8 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public Camera mainCamera;
 	public Camera portalCamera;
+	public UniversalAdditionalCameraData portalCameraData;
+	public UniversalAdditionalCameraData mainCameraData;
 
 	RenderTexture portalTexture;
 
@@ -26,9 +28,8 @@ public class NewPortalRenderer : BooleanSwitch
 	bool travelledThisFrame = false;
 	private void Awake()
 	{
-		GameManager.Instance.RegisterWinSwitch(this);
-
 		portalCamera = GetComponent<Camera>();
+		portalCameraData = GetComponent<UniversalAdditionalCameraData>();
 		portalCamera.enabled = false;
 
 		lastScreenSize.x = Screen.width;
@@ -38,6 +39,7 @@ public class NewPortalRenderer : BooleanSwitch
 	protected override void Start()
 	{
 		mainCamera = GameManager.Instance.Player.MainCamera.GetComponent<Camera>();
+		mainCameraData = mainCamera.GetComponent<UniversalAdditionalCameraData>();
 		SetRenderTextures();
 		defaultMatrix = mainCamera.projectionMatrix;
 
@@ -85,6 +87,11 @@ public class NewPortalRenderer : BooleanSwitch
 		travelledThisFrame = portals[cameraPortalIndex].Renderer.isVisible;
 		if (travelledThisFrame)
 		{
+			if (portalCamera.useOcclusionCulling)
+				portalCamera.useOcclusionCulling = false;
+			if (mainCamera.useOcclusionCulling)
+				mainCamera.useOcclusionCulling = false;
+
 			NewPortal p1 = portals[playerPortalIndex];
 			NewPortal p2 = portals[1 - playerPortalIndex];
 
@@ -139,6 +146,13 @@ public class NewPortalRenderer : BooleanSwitch
 				//do a final temp travel that will be reverted later
 				p1.TempTravelStart();
 			}
+		}
+		else
+		{
+			if (!portalCamera.useOcclusionCulling)
+				portalCamera.useOcclusionCulling = true;
+			if (!mainCamera.useOcclusionCulling)
+				mainCamera.useOcclusionCulling = true;
 		}
 
 		
@@ -219,24 +233,26 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public void OnPlayerThroughPortal(NewPortal inPortal)
 	{
-		CalculatePlayerPortal();
-		//playerPortalIndex = inPortal == portals[0] ? 1 : 0;
+		//CalculatePlayerPortal();
+		playerPortalIndex = inPortal == portals[0] ? 1 : 0;
 
 		UpdateCamera();
 	}
 
-	private void FixedUpdate()
-	{
-		if (portals[0].Open && portals[1].Open)
-			CalculatePlayerPortal();
-	}
+	//private void FixedUpdate()
+	//{
+	//	//if (portals[0].Open && portals[1].Open)
+	//	//	CalculatePlayerPortal();
+	//}
 
 	public void UpdateCamera()
 	{
 		if (cameraPortalIndex == playerPortalIndex)
 		{
-			mainCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
-			portalCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+			mainCameraData.renderPostProcessing = true;
+			portalCameraData.renderPostProcessing = false;
+			mainCameraData.SetRenderer(0);
+			portalCameraData.SetRenderer(1);
 			mainCamera.enabled = true;
 			portalCamera.enabled = false;
 			mainCamera.targetTexture = null;
@@ -246,8 +262,10 @@ public class NewPortalRenderer : BooleanSwitch
 		}
 		else
 		{
-			mainCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
-			portalCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
+			mainCameraData.renderPostProcessing = false;
+			portalCameraData.renderPostProcessing = true;
+			mainCameraData.SetRenderer(1);
+			portalCameraData.SetRenderer(0);
 			mainCamera.enabled = false;
 			portalCamera.enabled = true;
 			portalCamera.targetTexture = null;
