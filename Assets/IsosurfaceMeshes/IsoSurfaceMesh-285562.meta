@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Prefabs/Areas/Section_4/Section_4 1.prefab.meta
+guid: 02353895ea97cef4080cfbdc8ff07972
+PrefabImporter:
+=======
 guid: 91878c84f8809ef49859da65c8ff23c4
 DefaultImporter:
+>>>>>>> main:Assets/IsosurfaceMeshes/IsoSurfaceMesh-285562.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
