@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField] string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
-	[SerializeField] CutsceneManager finalCutscene = null;
+	public CutsceneManager initialCutscene = null;
+	public CutsceneManager finalCutscene = null;
 
 	[Header("References")]
 	[SerializeField] PlayerController player = null;
@@ -40,7 +41,6 @@ public class GameManager : MonoBehaviour
 	public GameplayUIManager GUI { get { return gUI; } }
 	public bool IsTutorial {get {return isTutorial; } }
 	public bool WonGame { get; private set; } = false;
-
 	Vector3 initialPlayerPosition;
 	Quaternion initialPlayerRotation;
 	int currentDissolverCount;
@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
 	List<GooDissolve> gooDissolvers;
 	List<BooleanSwitch> winSwitches = null;
 	bool inCutscene = false;
+	public AudioSource MusicSource { get; private set; }
 
 
 	public bool InCutscene { get => inCutscene; set
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
 			initialPlayerPosition = player.transform.position;
 			initialPlayerRotation = player.transform.rotation;
 			gooDissolvers = new List<GooDissolve>();
+			MusicSource = GetComponent<AudioSource>();
 		}
 	}
 
@@ -87,11 +89,13 @@ public class GameManager : MonoBehaviour
 		{
 			player.transform.position = checkpoint.GetSpawnPosition();
 			player.RotateChild.localRotation = checkpoint.GetSpawnRotation();
+			if (MusicSource) MusicSource.Play();
 		}
 		else
 		{
 			player.transform.position = initialPlayerPosition;
 			player.RotateChild.localRotation = initialPlayerRotation;
+			InitiateInitialCutscene();
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
@@ -101,9 +105,9 @@ public class GameManager : MonoBehaviour
 
 	public void OnExitToMenu()
 	{
-		GUI.OnExitButtonPressed();
 		SaveManager.saveDataToFile = false;
 		SaveManager.DeleteAllData();
+		StartCoroutine(GUI.OpenWinMenu());
 	}
 	public void OnPlayerDeath()
 	{
@@ -262,6 +266,15 @@ public class GameManager : MonoBehaviour
 		GUI.InputIsEnabled = false;
 		StartCoroutine(GUI.StartCutscene(finalCutscene));
 		
+	}
+
+	public void InitiateInitialCutscene()
+	{
+		GUI.InputIsEnabled = true;
+		GUI.Fade(false);
+
+		if (initialCutscene)
+			initialCutscene.Switch(true);
 	}
 
 	private void OnDestroy()
