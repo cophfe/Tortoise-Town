@@ -598,9 +598,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1.1
-  damageTimeout: 1
+  damageTimeout: 0.5
   startToRegenerateTime: 3
-  regenerateSpeed: 1
+  regenerateSpeed: 0.7
   vignetteDamageColor: {r: 0.41509432, g: 0, b: 0, a: 1}
   vignetteMagnitudeMultiplier: 1.3
 --- !u!54 &6578186051642721078
