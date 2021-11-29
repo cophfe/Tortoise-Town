@@ -95,7 +95,10 @@ public class GameManager : MonoBehaviour
 		{
 			player.transform.position = initialPlayerPosition;
 			player.RotateChild.localRotation = initialPlayerRotation;
-			InitiateInitialCutscene();
+			if (isTutorial)
+				if (MusicSource) MusicSource.Play();
+			else
+				InitiateInitialCutscene();
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
@@ -197,7 +200,8 @@ public class GameManager : MonoBehaviour
 		currentDissolverCount = 0;
 		foreach(var dissolver in gooDissolvers)
 		{
-			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
+			if (dissolver.requiredForWin && !dissolver.Dissolved) 
+				currentDissolverCount++;
 		}
 		//Debug.Log($"current: {currentDissolverCount}. total: {totalDissolverCount}");
 
@@ -285,6 +289,15 @@ public class GameManager : MonoBehaviour
 			Time.timeScale = 1;
 			IsCursorRestricted = false;
 			SaveManager.OnDestroy();
+		}
+	}
+	
+	public void ForceDissolveRemainingGoo()
+	{
+		foreach (var goo in gooDissolvers)
+		{
+			if (!goo.Dissolved)
+				goo.ForceDissolve();
 		}
 	}
 }
