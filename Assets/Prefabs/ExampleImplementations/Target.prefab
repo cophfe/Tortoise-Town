@@ -183,19 +183,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.49744308
+      value: -0.48339158
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8166322
+      value: 0.8090998
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.12728125
+      value: 0.16865966
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.26355606
+      value: -0.28852051
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_RootOrder
@@ -203,15 +203,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 3.114
+      value: 0.344
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 213.911
+      value: 219.047
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934810, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -61.745
+      value: -61.59
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934813, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
@@ -340,6 +340,18 @@ PrefabInstance:
     - target: {fileID: 4586782682174934813, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].probability
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586782682174934813, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586782682174934813, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586782682174934813, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
+      propertyPath: lengthInSec
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4586782682174934815, guid: c69d7de57072b1a4c8c130642f35e754, type: 3}
       propertyPath: m_Name
