@@ -13,6 +13,7 @@ public class PlayerAudioData : ScriptableObject
 	//public AudioClip[] hitWall;
 	public AudioClipList dash;
 	public AudioClipList land;
+	public AudioClipList footsteps;
 	
 
 	[Header("Rolling")]
