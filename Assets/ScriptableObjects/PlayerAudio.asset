@@ -24,6 +24,12 @@ MonoBehaviour:
   land:
     clips:
     - {fileID: 8300000, guid: 5c9ad51e01a09b24cac0be4ede230420, type: 3}
+  footsteps:
+    clips:
+    - {fileID: 8300000, guid: 9006dd84fe9555640a114613ac29d86e, type: 3}
+    - {fileID: 8300000, guid: 651f5521b37ccfd4c8967ec88b611d70, type: 3}
+    - {fileID: 8300000, guid: ea4f4b5c707e8f54e8681c11320db4ac, type: 3}
+    - {fileID: 8300000, guid: f7517d581c1fb9747b43163767978cb6, type: 3}
   rollTuck:
     clips:
     - {fileID: 8300000, guid: 11e3d861526066f47a0c026d199fd0e7, type: 3}
@@ -34,7 +40,8 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
   rollPopNotMoving:
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
   jumpRollPop:
     clips:
     - {fileID: 8300000, guid: dd3dd4e84654cdc479c1cbd5f8be3c4a, type: 3}
@@ -57,9 +64,10 @@ MonoBehaviour:
     - {fileID: 8300000, guid: a1b68df66b842684da085ec65ce88f16, type: 3}
   hit:
     clips:
-    - {fileID: 0}
+    - {fileID: 8300000, guid: cdcf5492b3c3f8843a91a91ed027e71f, type: 3}
   hitWhileBall:
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: c591af8b2e9682d4eaf0f9678c2223a4, type: 3}
   death:
     clips:
-    - {fileID: 8300000, guid: 4075be96a61a16c408092db76285ade5, type: 3}
+    - {fileID: 8300000, guid: c483d3b4dd1789a4e88b3be14fcb620f, type: 3}

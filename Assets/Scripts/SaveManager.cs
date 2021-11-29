@@ -80,6 +80,12 @@ public class SaveManager
 		}
 		else
 		{
+			var current = GetCurrentCheckpoint();
+			if (current != null)
+			{
+				current.passive?.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+				current.Mat?.DisableKeyword("_EMISSION");
+			}
 			for (int i = 0; i < checkpoints.Count; i++)
 			{
 				if (checkpoint == checkpoints[i])
@@ -303,6 +309,17 @@ public class SaveManager
 		}
 		GameManager.Instance.CalculateCurrentDissolverCount();
 		checkpointIndex = saveData.checkpointIndex;
+		if (checkpointIndex != -1)
+		{
+			foreach (var checkpoint in checkpoints)
+			{
+				if (checkpoint.passive != null && !checkpoint.passive.isStopped)
+					checkpoint.passive.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
+				checkpoint.Mat?.DisableKeyword("_EMISSION");
+			}
+			checkpoints[checkpointIndex].passive.Play();
+			checkpoints[checkpointIndex].Mat?.EnableKeyword("_EMISSION");
+		}
 		
 		if (onResetScene != null)
 			onResetScene.Invoke(); 
