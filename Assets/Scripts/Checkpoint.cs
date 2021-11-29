@@ -7,10 +7,14 @@ public class Checkpoint : MonoBehaviour
 	public LayerMask playerMask;
 	public Transform spawnPositionRotation;
 	public ParticleSystem onActivate;
-
+	public ParticleSystem passive;
+	AudioSource saveSoundSource;
+	public Material Mat { get; private set; }
 	private void Awake()
 	{
+		Mat = GetComponentInChildren<MeshRenderer>().material;
 		GameManager.Instance.SaveManager.RegisterCheckpoint(this);
+		saveSoundSource = GetComponent<AudioSource>();
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -19,12 +23,20 @@ public class Checkpoint : MonoBehaviour
 		{
 			if (GameManager.Instance.SaveManager.SetCurrentCheckpoint(this))
 			{
-				if (onActivate)
-					onActivate.Play();
+				onActivate?.Play();
+				saveSoundSource?.Play();
+				passive?.Play();
+				StartCoroutine(LightEyes());
 			}
+			
 		}
 	}
 
+	IEnumerator LightEyes()
+	{
+		yield return new WaitForSecondsRealtime(0.2f);
+		Mat?.EnableKeyword("_EMISSION");
+	}
 	public Vector3 GetSpawnPosition()
 	{
 		if (spawnPositionRotation)

@@ -14,6 +14,8 @@ public class PlayerCombat : MonoBehaviour
 	public ArrowData arrowData;
 	public Transform arrowPosRest;
 	public Transform arrowPosCharged;
+	public AudioSource bowShotSource;
+	public AudioSource bowDrawSource;
 	public float rangedCooldownTime = 0.5f;
 	public float rangedCameraShakeMagnitude = 2;
 	[Header("Aiming")]
@@ -164,6 +166,9 @@ public class PlayerCombat : MonoBehaviour
 		//first add camera shake
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
 		playerController.PlayAudioOnce(playerController.AudioData.arrowShoot);
+		if (playerController.AudioData.arrowShoot.CanBePlayed())
+			bowShotSource.PlayOneShot(playerController.AudioData.arrowShoot.GetRandom());
+
 		//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 		//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
 
@@ -191,7 +196,7 @@ public class PlayerCombat : MonoBehaviour
 		{
 			//find closest valid point that gives a 0 'possibleNeg' value
 			//this is technically wrong sometimes, but not when possibleNeg is less than 0
-			//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses one)
+			//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses the result that is mostly correct)
 			//here is a visualisation: https://www.desmos.com/calculator/olszi1qcpd
 
 			//this should fix for floating point error by looking not for 0 neg value, but errorfix neg value
@@ -240,13 +245,15 @@ public class PlayerCombat : MonoBehaviour
 		charging = true;
 		cameraChanged = true;
 		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
-
+		if (playerController.AudioData.arrowCharge.CanBePlayed())
+			bowDrawSource.PlayOneShot(playerController.AudioData.arrowCharge.GetRandom());
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(true);
 	}
 
 	public void EndChargeUp()
 	{
+		bowDrawSource.Stop();
 		charging = false;
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(false);

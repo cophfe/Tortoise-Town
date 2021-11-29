@@ -30,9 +30,15 @@ public class Arrow : Poolable
 		meshRenderer.enabled = true;
 
 		if (trailRenderer)
+		{
 			trailRenderer.Clear();
+			trailRenderer.emitting = false;
+		}
 		if (pTraveller)
+		{
 			pTraveller.enabled = false;
+
+		}
 
 	}
 
@@ -90,13 +96,17 @@ public class Arrow : Poolable
 			{
 				enabled = false;
 				transform.position = hit.point - transform.forward * (data.arrowLength / 2 * data.arrowPenetratePercent);
-				transform.parent = hit.transform;
+				
 
 				var health = hit.transform.GetComponent<Health>();
 				if (health)
 				{
 					health.Damage(data.damage);
+					transform.parent = hit.transform;
 				}
+				else if (hit.transform.GetComponent<Rigidbody>())
+					transform.parent = hit.transform;
+
 
 				if (trailRenderer)
 				{

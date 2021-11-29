@@ -103,6 +103,7 @@ public class CutsceneManager : BooleanSwitch
 		gm.Player.MainCamera.GetComponent<AudioListener>().enabled = false;
 		gm.Player.MainCamera.GetComponent<Camera>().enabled = false;
 		gm.Player.DisablePlayer(true);
+		gm.Player.InputIsEnabled = false;
 		Director.Play();
 		Director.time = 0;
 		cutsceneCamera.enabled = true;
@@ -133,6 +134,7 @@ public class CutsceneManager : BooleanSwitch
 			{
 				GameManager.Instance.GUI.onCutsceneSkipped -= SwitchFalse;
 				StartCoroutine(GameManager.Instance.GUI.EndCutscene(this));
+				GameManager.Instance.Player.InputIsEnabled = true;
 			}
 		}
 	}

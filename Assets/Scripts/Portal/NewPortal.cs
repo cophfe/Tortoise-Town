@@ -187,6 +187,11 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 					Renderer.enabled = false;
 					transitioning = false;
 					Open = false;
+					foreach (var traveller in travelling)
+					{
+						traveller.OnEnter(null, null);
+					}
+					travelling.Clear();
 				}
 
 			}

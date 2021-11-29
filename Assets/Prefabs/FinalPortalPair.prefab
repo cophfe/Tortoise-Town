@@ -494,6 +494,8 @@ MonoBehaviour:
   - {fileID: 301645932171513206}
   mainCamera: {fileID: 0}
   portalCamera: {fileID: 0}
+  portalCameraData: {fileID: 0}
+  mainCameraData: {fileID: 0}
   portalLayer:
     serializedVersion: 2
     m_Bits: 4096
@@ -626,7 +628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 307965934, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_VersionIndex
-      value: 2046
+      value: 2049
       objectReference: {fileID: 0}
     - target: {fileID: 1987477826, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_Size.z
@@ -797,6 +799,10 @@ PrefabInstance:
     - target: {fileID: 901485285905275699, guid: a08fec84967adf44f94b6eb21ab123dd, type: 3}
       propertyPath: m_AntialiasingQuality
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 901485285905275699, guid: a08fec84967adf44f94b6eb21ab123dd, type: 3}
+      propertyPath: m_RendererIndex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 901485285905275698, guid: a08fec84967adf44f94b6eb21ab123dd, type: 3}
@@ -978,7 +984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 307965934, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_VersionIndex
-      value: 2052
+      value: 2055
       objectReference: {fileID: 0}
     - target: {fileID: 1987477826, guid: 2d92373e02eef17498417598c1904b0d, type: 3}
       propertyPath: m_Size.z

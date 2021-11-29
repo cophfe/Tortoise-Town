@@ -96,7 +96,10 @@ public class GameManager : MonoBehaviour
 			player.transform.position = initialPlayerPosition;
 			player.RotateChild.localRotation = initialPlayerRotation;
 			if (isTutorial)
-				if (MusicSource) MusicSource.Play();
+			{
+				if (MusicSource) 
+					MusicSource.Play();
+			}
 			else
 				InitiateInitialCutscene();
 		}

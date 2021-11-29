@@ -273,14 +273,13 @@ public class GameplayUIManager : MonoBehaviour
 			if (GameManager.Instance.MusicSource)
 				GameManager.Instance.MusicSource.Play();
 		}
-		else
+		else if (cutscene == GameManager.Instance.finalCutscene)
 		{
 			Fade(true);
 			fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 			yield return new WaitForSecondsRealtime(fadeTime);
 			GameManager.Instance.InCutscene = false;
 			cutscene?.OnCompleteStop();
-			Fade(false);
 		}
 		
 	}

@@ -323,6 +323,9 @@ public class OptionsMenu : MonoBehaviour
 		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolume.value));
 		mixer.SetFloat(musicParameterName, LinearToDecibels(musicVolume.value));
 		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
+		defaultOptions.masterVolume = masterVolume.value;
+		defaultOptions.sfxVolume = sFXVolume.value;
+		defaultOptions.musicVolume = musicVolume.value;
 	}
 
 	public void Save(OptionsData options = null)

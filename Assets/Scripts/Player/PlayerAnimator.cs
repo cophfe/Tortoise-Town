@@ -156,6 +156,12 @@ public class PlayerAnimator : MonoBehaviour
 		}
     }
 
+	void Footstep()
+	{
+		if (currentSpeed > 0.1f && !playerController.Motor.IsRolling && !playerController.Motor.IsDashing && playerController.Motor.State == PlayerMotor.MovementState.GROUNDED)
+		playerController.PlayFootstep(currentSpeed);
+	}
+
 	//Called for animator inverse kinematics
 	private void OnAnimatorIK(int layerIndex)
 	{
