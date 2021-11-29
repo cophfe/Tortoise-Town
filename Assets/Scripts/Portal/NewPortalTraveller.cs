@@ -56,6 +56,7 @@ public class NewPortalTraveller : MonoBehaviour
 		this.inPortal = inPortal;
 		this.outPortal = outPortal;
 
+		if (inPortal != null && outPortal != null)
 		enterDotIsPositive = Vector3.Dot(transform.position - inPortal.transform.position, inPortal.transform.forward) > 0;
 	}
 

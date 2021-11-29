@@ -62,7 +62,7 @@ public class SSAO : ScriptableRendererFeature
             var height = cameraTextureDescriptor.height;
 
             int tmpId = Shader.PropertyToID("ssao_RT");
-            cmd.GetTemporaryRT(tmpId, width, height, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32);
+            cmd.GetTemporaryRT(tmpId, width, height, 0, FilterMode.Bilinear, RenderTextureFormat.DefaultHDR);
             tmpRT1 = new RenderTargetIdentifier(tmpId);            
             ConfigureTarget(tmpRT1);
         }
