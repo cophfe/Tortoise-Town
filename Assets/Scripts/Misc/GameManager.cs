@@ -287,4 +287,13 @@ public class GameManager : MonoBehaviour
 			SaveManager.OnDestroy();
 		}
 	}
+	
+	public void ForceDissolveRemainingGoo()
+	{
+		foreach (var goo in gooDissolvers)
+		{
+			if (!goo.Dissolved)
+				goo.ForceDissolve();
+		}
+	}
 }
