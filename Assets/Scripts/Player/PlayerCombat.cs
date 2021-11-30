@@ -166,8 +166,11 @@ public class PlayerCombat : MonoBehaviour
 		//first add camera shake
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
 		playerController.PlayAudioOnce(playerController.AudioData.arrowShoot);
-		if (playerController.AudioData.arrowShoot.CanBePlayed())
-			bowShotSource.PlayOneShot(playerController.AudioData.arrowShoot.GetRandom());
+		if (!bowShotSource.isPlaying && playerController.AudioData.arrowShoot.CanBePlayed())
+		{
+			bowShotSource.clip = playerController.AudioData.arrowShoot.GetRandom();
+			bowShotSource.Play();
+		}
 
 		//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 		//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
@@ -245,8 +248,11 @@ public class PlayerCombat : MonoBehaviour
 		charging = true;
 		cameraChanged = true;
 		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
-		if (playerController.AudioData.arrowCharge.CanBePlayed())
-			bowDrawSource.PlayOneShot(playerController.AudioData.arrowCharge.GetRandom());
+		if (!bowDrawSource.isPlaying && playerController.AudioData.arrowCharge.CanBePlayed())
+		{
+			bowDrawSource.clip = playerController.AudioData.arrowCharge.GetRandom();
+			bowDrawSource.Play();
+		}
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(true);
 	}

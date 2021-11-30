@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField] PlayerController player = null;
 	[SerializeField] GameplayUIManager gUI = null;
 
+	[Header("Audio")]
+	[SerializeField] OtherAudioData audioData = null;
+
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
 	[SerializeField] int targetFrameRate = -1;
@@ -303,4 +306,6 @@ public class GameManager : MonoBehaviour
 				goo.ForceDissolve();
 		}
 	}
+
+	public OtherAudioData AudioData { get => audioData; }
 }
