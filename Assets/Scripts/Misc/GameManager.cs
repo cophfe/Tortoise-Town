@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
 	[SerializeField] PlayerController player = null;
 	[SerializeField] GameplayUIManager gUI = null;
 
+	[Header("Audio")]
+	[SerializeField] OtherAudioData audioData = null;
+
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
 	[SerializeField] int targetFrameRate = -1;
@@ -95,7 +98,13 @@ public class GameManager : MonoBehaviour
 		{
 			player.transform.position = initialPlayerPosition;
 			player.RotateChild.localRotation = initialPlayerRotation;
-			InitiateInitialCutscene();
+			if (isTutorial)
+			{
+				if (MusicSource) 
+					MusicSource.Play();
+			}
+			else
+				InitiateInitialCutscene();
 		}
 		CalculateTotalDissolvers();
 		CalculateCurrentDissolverCount();
@@ -197,7 +206,8 @@ public class GameManager : MonoBehaviour
 		currentDissolverCount = 0;
 		foreach(var dissolver in gooDissolvers)
 		{
-			if (dissolver.requiredForWin && !dissolver.Dissolved) currentDissolverCount++;
+			if (dissolver.requiredForWin && !dissolver.Dissolved) 
+				currentDissolverCount++;
 		}
 		//Debug.Log($"current: {currentDissolverCount}. total: {totalDissolverCount}");
 
@@ -287,4 +297,15 @@ public class GameManager : MonoBehaviour
 			SaveManager.OnDestroy();
 		}
 	}
+	
+	public void ForceDissolveRemainingGoo()
+	{
+		foreach (var goo in gooDissolvers)
+		{
+			if (!goo.Dissolved)
+				goo.ForceDissolve();
+		}
+	}
+
+	public OtherAudioData AudioData { get => audioData; }
 }

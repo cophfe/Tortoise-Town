@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainMenuCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 236242120853872075, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
+      propertyPath: tutorialSceneName
+      value: Joshs_Tutorial_Level_1.0
+      objectReference: {fileID: 0}
     - target: {fileID: 236242120853872076, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -232,6 +236,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 236242120890059842, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 236242120890059842, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472608885356116961, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
@@ -625,6 +633,10 @@ PrefabInstance:
     - target: {fileID: 7331784637349578794, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7347508554880163784, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
+      propertyPath: m_Volume
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7354283571578553842, guid: 766f696954cd73b4db8ae1b00032dbbf, type: 3}
       propertyPath: m_AnchorMin.y

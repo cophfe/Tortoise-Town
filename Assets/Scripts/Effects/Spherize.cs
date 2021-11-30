@@ -9,6 +9,7 @@ public class Spherize : MonoBehaviour
 	Vector3[] initialVertices;
 	Vector3[] sphereVertices;
 	Vector3 centre;
+	MeshFilter mFilter;
 
 	float percentSpherized = 0;
 	public float PercentSpherized
@@ -26,11 +27,11 @@ public class Spherize : MonoBehaviour
 	private void Awake()
 	{
 		SetupMesh();
+		mFilter = GetComponent<MeshFilter>();
 	}
 
 	public void SetupMesh()
 	{
-		var mFilter = GetComponent<MeshFilter>();
 		if (!mFilter || !mFilter.mesh || mFilter.mesh.vertices == null || mFilter.mesh.vertices.Length == 0) return;
 
 		mesh = new Mesh();
@@ -51,7 +52,9 @@ public class Spherize : MonoBehaviour
 
 	void SpherizeMesh()
 	{
-		var mFilter = GetComponent<MeshFilter>();
+		if (mesh == null)
+			SetupMesh();
+
 		if (initialVertices == null || initialVertices.Length == 0 || !mFilter || !mFilter.mesh) return;
 
 		Vector3[] vertices = new Vector3[initialVertices.Length];

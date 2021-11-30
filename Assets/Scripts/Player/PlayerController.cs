@@ -51,10 +51,11 @@ public class PlayerController : MonoBehaviour
 		set
 		{
 			cameraController.EnableInput = value;
-			PlayerInput.enabled = value;
+			inputIsEnabled = value;
+			if (value) inputVector = Vector3.zero;
 		}
 	}
-
+	bool inputIsEnabled = true;
 	public bool InterpolateVisuals {
 		get
 		{
@@ -102,7 +103,11 @@ public class PlayerController : MonoBehaviour
 		InitialColliderOffset = CharacterController.center;
 		rollColliderOffset = CharacterController.center + new Vector3(0, (rollColliderRadius - CharacterController.height)/2, 0);
 	}
-	
+	private void Start()
+	{
+		if (cameraController && PlayerInput)
+			cameraController.SetControllerInput(PlayerInput.currentControlScheme == "Controller");
+	}
 	public void ResetPlayerToDefault()
 	{
 		if (!Health) return;
@@ -116,10 +121,15 @@ public class PlayerController : MonoBehaviour
 		//Reset player and camera to default state
 	}
 
-	public void PlayAudioOnce(AudioClipList clipList, bool doNotOverlap = false)
+	public void PlayFootstep(float volume = 1)
+	{
+		if (AudioData.footsteps != null && AudioData.footsteps.CanBePlayed())
+			FootstepAudio.PlayOneShot(AudioData.footsteps.GetRandom(), volume);
+	}
+	public void PlayAudioOnce(AudioClipList clipList, bool doNotOverlap = false, float volumeModifier = 1)
 	{
 		if (doNotOverlap && PlayerAudio.isPlaying || !clipList.CanBePlayed()) return;
-		PlayerAudio.PlayOneShot(clipList.GetRandom());
+		PlayerAudio.PlayOneShot(clipList.GetRandom(), volumeModifier);
 	}
 
 	#region Evaluate Functions
@@ -165,41 +175,44 @@ public class PlayerController : MonoBehaviour
 
 	public void OnMoveInput(InputAction.CallbackContext ctx)
 	{
-		inputVector = ctx.ReadValue<Vector2>();
+		if (!inputIsEnabled)
+			inputVector = Vector2.zero;
+		else
+			inputVector = ctx.ReadValue<Vector2>();
 	}
 
 	public void OnJumpPressed(InputAction.CallbackContext ctx)
 	{
 		if (ctx.canceled)
-			jumpCancelled = true;
+			jumpCancelled = inputIsEnabled;
 		else
-			jumpPressed = true;
+			jumpPressed = inputIsEnabled;
 	}
 
 	public void OnSprintInput(InputAction.CallbackContext ctx)
 	{
 		if (ctx.performed)
-			sprintPressed = true;
+			sprintPressed = inputIsEnabled;
 	}
 
 	public void OnCrouchInput(InputAction.CallbackContext ctx)
 	{
 		if (ctx.performed)
-			crouchPressed = true;
+			crouchPressed = inputIsEnabled;
 	}
 
 	public void OnAimPressed(InputAction.CallbackContext ctx)
 	{
 		if (ctx.canceled)
 			Combat.EndChargeUp();
-		else
+		else if (inputIsEnabled)
 			Combat.StartChargeUp();
 	}
 
 	public void OnAttackInput(InputAction.CallbackContext ctx)
 	{
 		if (ctx.performed)
-			attackPressed = true;
+			attackPressed = inputIsEnabled;
 	}
 
 	public void OnControlsChanged()

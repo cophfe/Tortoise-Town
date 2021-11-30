@@ -72,12 +72,12 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.365
+    m_Value: 0.231
     min: 0
     max: 1
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.333
+    m_Value: 0.11
     min: 0.01
     max: 1
   rounded:
@@ -99,15 +99,15 @@ MonoBehaviour:
   m_AdvancedMode: 0
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.65
+    m_Value: 1
   contrast:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 2
     min: -100
     max: 100
   colorFilter:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.8349056, g: 0.9784475, b: 1, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -133,17 +133,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   lift:
-    m_OverrideState: 1
-    m_Value: {x: 0.88530815, y: 0.8539042, z: 1, w: 0}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 0.7609155, z: 0, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.963366, y: 1, z: 0.84360635, w: 0}
+    m_Value: {x: 1, y: 0.75, z: 0, w: 0}
   gain:
-    m_OverrideState: 1
-    m_Value: {x: 0.79929394, y: 0.7299259, z: 1, w: 0}
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 0.75212485, z: 0, w: 0}
 --- !u!114 &-917287647603157191
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -160,19 +160,19 @@ MonoBehaviour:
   m_AdvancedMode: 0
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.084905684, g: 0.084905684, b: 0.084905684, a: 1}
+    m_Value: {r: 0.3254717, g: 0.37929595, b: 0.4339623, a: 1}
     hdr: 0
     showAlpha: 0
     showEyeDropper: 1
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.9150943, g: 0.9148416, b: 0.82444817, a: 1}
     hdr: 0
     showAlpha: 0
     showEyeDropper: 1
   balance:
     m_OverrideState: 1
-    m_Value: -10
+    m_Value: -7
     min: -100
     max: 100
 --- !u!114 &11400000
