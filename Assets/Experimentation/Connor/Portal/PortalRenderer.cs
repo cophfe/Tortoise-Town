@@ -157,9 +157,6 @@ public class PortalRenderer : BooleanSwitch
 
 	public void OnPlayerThroughPortal()
 	{
-
-
-		Debug.Log("Player teleporting");
 		//if the player is going to be joining the camera that is already on the other side
 		if (playerInFirstPortal == firstPortalActive)
 		{

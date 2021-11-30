@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gooShotInfo: {fileID: 11400000, guid: 3eda039e9e3009a48a8cadafaf3cef18, type: 2}
   gooShotPrefab: {fileID: 5359252616260733193, guid: 10377426451eea045b8b8bdb9b5867b5, type: 3}
-  shootIntervel: 3
+  shootIntervel: 2
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
