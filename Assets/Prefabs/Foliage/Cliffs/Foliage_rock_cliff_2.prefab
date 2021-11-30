@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4291359922634245349}
   - component: {fileID: 2047183263950614575}
   - component: {fileID: 1047364373333638186}
+  - component: {fileID: -6116932105448345877}
   m_Layer: 0
   m_Name: Foliage_rock_cliff_2
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1047364373333638186
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534224272408252922}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -881981529291494907, guid: 1fd1545358f3607459d7685e27098154, type: 3}
+--- !u!64 &-6116932105448345877
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
