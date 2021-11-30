@@ -32,7 +32,7 @@ public class LoadingBar : MonoBehaviour
 
 		while (!operation.isDone)
 		{
-			Debug.Log(operation.progress);
+			//Debug.Log(operation.progress);
 			yield return null;
 		}
 	}
@@ -60,7 +60,7 @@ public class LoadingBar : MonoBehaviour
 
 		while (!operation.isDone)
 		{
-			Debug.Log(operation.progress);
+			//Debug.Log(operation.progress);
 			yield return null;
 		}
 
