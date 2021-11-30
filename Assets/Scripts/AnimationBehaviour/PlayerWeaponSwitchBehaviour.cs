@@ -9,6 +9,7 @@ public class PlayerWeaponSwitchBehaviour : StateMachineBehaviour
 	//If we ever get equip animations this is for that
 	[Min(0)] public float switchToWeaponTime = 0;
 	bool done;
+	PlayerCombat player;
 
 	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -23,10 +24,6 @@ public class PlayerWeaponSwitchBehaviour : StateMachineBehaviour
 		{
 			var pC = animator.GetComponentInParent<PlayerCombat>();
 			if (pC) pC.EquipWeapon(equipped);
-			if (enforce && animator.GetBool("Equipped") != equipped)
-			{
-				animator.SetBool("Equipped", equipped);
-			}
 			done = true;
 		}
 	}

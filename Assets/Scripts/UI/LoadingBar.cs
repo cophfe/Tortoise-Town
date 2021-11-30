@@ -7,14 +7,13 @@ using UnityEngine.SceneManagement;
 public class LoadingBar : MonoBehaviour
 {
 	public Animator loadAnimation;
-	public Image loadBar;
 	public GameObject loadingStuff;
 	public float loadFadeTime = 1;
 	public float loadBarTime = 0.1f;
 
 	public IEnumerator LoadLevel(string name)
 	{
-		if (loadAnimation == null || loadBar == null)
+		if (loadAnimation == null)
 			yield break;
 
 		loadAnimation.SetBool("FadeIn", true);
@@ -24,22 +23,43 @@ public class LoadingBar : MonoBehaviour
 		//loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
 		//loadAnimation.SetTrigger("Load");
 		//loadingStuff.SetActive(true);
-		//yield return new WaitForSeconds(loadBarTime);
 		//AsyncOperation operation = SceneManager.LoadSceneAsync(name);
 		////operation.allowSceneActivation = false;
 
 		//while (!operation.isDone)
 		//{
-		//	loadBar.fillAmount = Mathf.Clamp01(operation.progress / 0.9f);
-		//	Debug.Log(loadBar.fillAmount);
-
-		//	//if (operation.progress >= 0.9f)
-		//	//{
-		//	//	operation.allowSceneActivation = true;
-		//	//}
+		//	Debug.Log(operation.progress);
 		//	yield return null;
 		//}
 	}
+
+	public IEnumerator RestartLevel(string name)
+	{
+		if (loadAnimation == null)
+			yield break;
+
+		loadAnimation.SetBool("FadeIn", true);
+		yield return new WaitForSeconds(loadFadeTime);
+		Time.timeScale = 1;
+		GameManager.Instance.SaveManager.ClearSaveData();
+		GameManager.Instance.ReloadScene();
+		SceneManager.LoadScene(name);
+
+		//loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
+		//loadAnimation.SetTrigger("Load");
+		//loadingStuff.SetActive(true);
+		//AsyncOperation operation = SceneManager.LoadSceneAsync(name);
+		////operation.allowSceneActivation = false;
+
+		//while (!operation.isDone)
+		//{
+		//	Debug.Log(operation.progress);
+		//	yield return null;
+		//}
+
+
+	}
+
 
 	public IEnumerator LoadLevelWithoutLoadBar(string name)
 	{

@@ -24,6 +24,7 @@ public class GameplayUIManager : MonoBehaviour
 	public OptionsMenu options;
 	public TextMeshProUGUI cutsceneNotifyText;
 	public Animator cutsceneNotify;
+	public AudioSource buttonSound;
 
 	public delegate void VoidEvent();
 	public event VoidEvent onCutsceneSkipped;
@@ -60,7 +61,22 @@ public class GameplayUIManager : MonoBehaviour
 			options = GetComponentInChildren<OptionsMenu>();
 		}
 		options.Initiate();
+
+		var buttons = GetComponentsInChildren<Button>(true);
+		if (buttons != null)
+		{
+			foreach (var button in buttons)
+			{
+				button.onClick.AddListener(PlayButtonSound);
+			} 
+		}
 	}
+
+	public void PlayButtonSound()
+	{
+		buttonSound.Play();
+	}
+
 	public void OnEnable()
 	{
 		if (input != null)
@@ -149,12 +165,23 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void OnRestartButtonPressed(bool reloadSceneCompletely)
 	{
-		StartCoroutine(RestartGame(reloadSceneCompletely));
+		GameManager.Instance.FadeSnapshot();
+		if (reloadSceneCompletely)
+		{
+			StartCoroutine(RestartGame(reloadSceneCompletely));
+		}
+		else
+		{
+			StartCoroutine(RestartGame(reloadSceneCompletely));
+			GameManager.Instance.UnFadeSnapshot();
+
+		}
 	}
 
 	IEnumerator RestartGame(bool reloadSceneCompletely)
 	{
-		Fade(true);
+		if (!reloadSceneCompletely)
+			Fade(true);
 		fadeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		yield return new WaitForSecondsRealtime(fadeTime);
 		if (reloadSceneCompletely)
@@ -174,12 +201,16 @@ public class GameplayUIManager : MonoBehaviour
 
 	public void OnExitButtonPressed()
 	{
+		GameManager.Instance.FadeSnapshot();
+
 		StartCoroutine(ExitGame());
 	}
 
 	public void OnTutorialContinueButtonPressed()
 	{
 		PlayerPrefs.SetInt("TutorialCompleted", 1);
+		GameManager.Instance.FadeSnapshot();
+
 		StartCoroutine(ContinueToMain());
 	}
 

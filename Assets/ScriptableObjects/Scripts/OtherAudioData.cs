@@ -7,4 +7,6 @@ using UnityEngine;
 public class OtherAudioData : ScriptableObject
 {
 	public AudioClipList targetPopSounds;
+	public AudioClipList lastBreath;
+	public AudioClipList chime;
 }

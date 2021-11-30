@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,9 +26,12 @@ public class MainMenuUI : MonoBehaviour
 	public GameWindow optionsWindow;
 	InputMaster input;
 	GameWindowManager windowManager;
-
+	public AudioMixerSnapshot defaultSnapshot;
+	public AudioMixerSnapshot fadeOutSnapshot;
+	public AudioSource buttonSound;
 	private void Awake()
 	{
+		defaultSnapshot.TransitionTo(0);
 		input = new InputMaster();
 		input.UI.Menu.performed += _ => OnMenuButton();
 		input.UI.Back.performed += _ => OnBackButton();
@@ -62,7 +66,21 @@ public class MainMenuUI : MonoBehaviour
 		{
 			continueButton.interactable = false;
 		}
+		var buttons = GetComponentsInChildren<Button>(true);
+		if (buttons != null)
+		{
+			foreach (var button in buttons)
+			{
+				button.onClick.AddListener(PlayButtonSound);
+			}
+		}
 	}
+
+	public void PlayButtonSound()
+	{
+		buttonSound.Play();
+	}
+
 
 	public void OnEnable()
 	{
@@ -132,21 +150,27 @@ public class MainMenuUI : MonoBehaviour
 
 		if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 0)
 		{
+			fadeOutSnapshot.TransitionTo(fadeTime / 2);
 			StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
 
 		}
 		else
+		{
+			fadeOutSnapshot.TransitionTo(fadeTime / 2);
 			StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
+		}
 
 	}
 
 	public void LoadTutorialStart()
 	{
+		fadeOutSnapshot.TransitionTo(fadeTime / 2);
 		StartCoroutine(loadingManager.LoadLevel(tutorialSceneName));
 	}
 
 	public void OnContinueButtonPressed()
 	{
+		fadeOutSnapshot.TransitionTo(fadeTime / 2);
 		StartCoroutine(loadingManager.LoadLevel(gameplaySceneName));
 	}
 
@@ -158,6 +182,8 @@ public class MainMenuUI : MonoBehaviour
 	IEnumerator ExitGame()
 	{
 		panel.SetBool("FadeIn", true);
+		defaultSnapshot.TransitionTo(fadeTime/2);
+
 		yield return new WaitForSeconds(fadeTime);
 #if UNITY_EDITOR
 		EditorApplication.isPlaying = false;

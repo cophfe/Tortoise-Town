@@ -101,8 +101,8 @@ public class Arrow : Poolable
 				var health = hit.transform.GetComponent<Health>();
 				if (health)
 				{
-					health.Damage(data.damage);
 					transform.parent = hit.transform;
+					health.Damage(data.damage);
 				}
 				else if (hit.transform.GetComponent<Rigidbody>())
 					transform.parent = hit.transform;
