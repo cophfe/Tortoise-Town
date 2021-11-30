@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
 	[Header("General Stuff")]
 	[SerializeField] float deathTime = 6;
 	[SerializeField] float winWaitTime = 3;
-	[SerializeField] string menuSceneName = "Main_Menu";
-	[SerializeField] string mainSceneName = "Main";
+	public string menuSceneName = "Main_Menu";
+	public string mainSceneName = "Main";
 	[SerializeField] bool saveDataToFile = true;
 	[SerializeField] bool isTutorial = false;
 	public CutsceneManager initialCutscene = null;
@@ -27,9 +27,12 @@ public class GameManager : MonoBehaviour
 
 	[Header("Audio")]
 	[SerializeField] OtherAudioData audioData = null;
+	[SerializeField] AudioSource dissolveSource = null;
 	[SerializeField] AudioMixer mixer = null;
 	[SerializeField] AudioMixerSnapshot defaultSnapshot = null;
 	[SerializeField] AudioMixerSnapshot deadSnapshot = null;
+	[SerializeField] AudioMixerSnapshot cutsceneSnapshot = null;
+	[SerializeField] AudioMixerSnapshot silenceSnapshot = null;
 	public float audioTransitionTime = 2;
 
 	[Header("Debug Settings")]
@@ -57,13 +60,35 @@ public class GameManager : MonoBehaviour
 	List<BooleanSwitch> winSwitches = null;
 	bool inCutscene = false;
 	public AudioSource MusicSource { get; private set; }
-
+	[System.NonSerialized]
+	public NewPortalRenderer portalRenderer;
+	
+	public void FadeSnapshot()
+	{
+		mixer.updateMode = AudioMixerUpdateMode.UnscaledTime;
+		silenceSnapshot.TransitionTo(audioTransitionTime);
+	}
+	public void UnFadeSnapshot()
+	{
+		mixer.updateMode = AudioMixerUpdateMode.UnscaledTime;
+		defaultSnapshot.TransitionTo(audioTransitionTime);
+	}
 
 	public bool InCutscene { get => inCutscene; set
 		{
 			inCutscene = value;
 		}
 	}
+
+	private void OnEnable()
+	{
+		defaultSnapshot.TransitionTo(0);
+	}
+	private void OnDisable()
+	{
+		//defaultSnapshot.TransitionTo(0);
+	}
+
 	void Awake()
     {
 		if (instance)
@@ -116,12 +141,10 @@ public class GameManager : MonoBehaviour
 		if (finalCutscene)
 			finalCutscene.onEndCutscene.AddListener(OnExitToMenu);
 	}
-
 	public void OnExitToMenu()
 	{
-		SaveManager.saveDataToFile = false;
-		SaveManager.DeleteAllData();
 		StartCoroutine(GUI.OpenWinMenu());
+		defaultSnapshot.TransitionTo(audioTransitionTime);
 	}
 	public void OnPlayerDeath()
 	{
@@ -153,6 +176,10 @@ public class GameManager : MonoBehaviour
 	public void SetSceneFromSavedData()
 	{
 		SaveManager.ResetScene();
+		if (portalRenderer)
+		{
+			portalRenderer.ResetPortals();
+		}
 		var checkpoint = SaveManager.GetCurrentCheckpoint();
 		if (checkpoint != null)
 		{
@@ -221,8 +248,14 @@ public class GameManager : MonoBehaviour
 
 		if (currentDissolverCount <= 0) OnWin();
 	}
+
 	public void OnGooDissolve()
 	{
+		if (!InCutscene && dissolveSource && audioData.chime.CanBePlayed() && audioData.lastBreath.CanBePlayed())
+		{
+			//dissolveSource.PlayOneShot(audioData.chime.GetRandom(), 0.1f);
+			dissolveSource.PlayOneShot(audioData.lastBreath.GetRandom(), 0.3f);
+		}
 		CalculateCurrentDissolverCount();
 	}
 	public void OnWin()
@@ -282,8 +315,11 @@ public class GameManager : MonoBehaviour
 	public void InitiateFinalCutscene()
 	{
 		GUI.InputIsEnabled = false;
+		cutsceneSnapshot.TransitionTo(audioTransitionTime);
 		StartCoroutine(GUI.StartCutscene(finalCutscene));
-		
+		SaveManager.DeleteAllData();
+		SaveManager.saveDataToFile = false;
+
 	}
 
 	public void InitiateInitialCutscene()

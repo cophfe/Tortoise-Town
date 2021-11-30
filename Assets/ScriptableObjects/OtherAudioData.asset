@@ -18,3 +18,9 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3d9f289bc77ee874b9f4333896a30d6e, type: 3}
     - {fileID: 8300000, guid: a03cacfa4bbb6d9408f557cf3326be30, type: 3}
     - {fileID: 8300000, guid: de86351a521099f468d146645c34943b, type: 3}
+  lastBreath:
+    clips:
+    - {fileID: 8300000, guid: 6bda241c73c47d246b1978fa0ed52a04, type: 3}
+  chime:
+    clips:
+    - {fileID: 8300000, guid: 500de08f8ba6b174f9be58088e4a6784, type: 3}

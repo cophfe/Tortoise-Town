@@ -23,19 +23,38 @@ public class Checkpoint : MonoBehaviour
 		{
 			if (GameManager.Instance.SaveManager.SetCurrentCheckpoint(this))
 			{
-				onActivate?.Play();
-				saveSoundSource?.Play();
-				passive?.Play();
-				StartCoroutine(LightEyes());
+				if (onActivate != null)
+					onActivate.Play();
+				if (saveSoundSource != null)
+					saveSoundSource.Play();
+				if (passive != null)
+					passive.Play();
+				if (Mat != null)
+					StartCoroutine(LightEyes());
 			}
 			
+		}
+	}
+
+	public void SetAsCurrent()
+	{
+		if (GameManager.Instance.SaveManager.SetCurrentCheckpoint(this))
+		{
+			if (onActivate != null)
+				onActivate.Play();
+			if (saveSoundSource != null)
+				saveSoundSource.Play();
+			if (passive != null)
+				passive.Play();
+			if (Mat != null)
+				StartCoroutine(LightEyes());
 		}
 	}
 
 	IEnumerator LightEyes()
 	{
 		yield return new WaitForSecondsRealtime(0.2f);
-		Mat?.EnableKeyword("_EMISSION");
+		Mat.EnableKeyword("_EMISSION");
 	}
 	public Vector3 GetSpawnPosition()
 	{

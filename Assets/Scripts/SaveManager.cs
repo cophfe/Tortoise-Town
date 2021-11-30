@@ -304,10 +304,6 @@ public class SaveManager
 		{
 			savedHealths[i].ResetTo(saveData.savedHealths[i]);
 		}
-		for (int i = 0; i < saveables.Count; i++)
-		{
-			saveables[i].SetToState(saveData.saveableStates[i]);
-		}
 		GameManager.Instance.CalculateCurrentDissolverCount();
 		checkpointIndex = saveData.checkpointIndex;
 		if (checkpointIndex != -1)
@@ -324,7 +320,12 @@ public class SaveManager
 		}
 		
 		if (onResetScene != null)
-			onResetScene.Invoke(); 
+			onResetScene.Invoke();
+
+		for (int i = 0; i < saveables.Count; i++)
+		{
+			saveables[i].SetToState(saveData.saveableStates[i]);
+		}
 	}
 	
 	public bool CheckIfTutorialCompleted()
@@ -389,10 +390,7 @@ public class SaveManager
 	{
 		if (File.Exists(Application.persistentDataPath + "/save.tt"))
 		{
-			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))
-			{
-				fs.SetLength(0);
-			}
+			File.WriteAllText(Application.persistentDataPath + "/save.tt", "");
 		}
 	}
 

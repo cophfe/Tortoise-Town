@@ -13,7 +13,7 @@ public class GooShooter : MonoBehaviour
 	public Transform arrowTransformPosition;
 	bool attackPlayer = false;
 	float shootTimer = 0;
-	float turnSpeed = 30;
+	float turnSpeed = 10;
 	ObjectPool arrowPool;
 	Arrow currentArrow;
 	public Animator animator;
@@ -23,11 +23,12 @@ public class GooShooter : MonoBehaviour
 	protected void Start()
     {
 		arrowPool = new ObjectPool(arrowCount, 1, gooShotPrefab, transform);
-		shootTimer = shootIntervel;
 		attachedAudio = GetComponent<AudioSource>();
+		shootTimer = shootIntervel * UnityEngine.Random.Range(0.0f, 0.5f);
+
 	}
 
-    void Update()
+	void Update()
     {
 		if (!dead && attackPlayer)
 		{
@@ -35,7 +36,7 @@ public class GooShooter : MonoBehaviour
 			shootTimer -= Time.deltaTime;
 			if (shootTimer < 0)
 			{
-				shootTimer = shootIntervel;
+				shootTimer = shootIntervel * UnityEngine.Random.Range(0.4f, 1.0f);
 				if (currentArrow == null)
 				{
 					currentArrow = (Arrow)arrowPool.GetPooledObject(arrowTransformPosition);

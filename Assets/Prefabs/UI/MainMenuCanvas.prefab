@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplaySceneName: Main
-  tutorialSceneName: Tutorial_Level
+  tutorialSceneName: Joshs_Tutorial_Level_1.0
   panel: {fileID: 236242121638424975}
   loadingManager: {fileID: 7899034648897405625}
   fadeTime: 1
@@ -252,6 +252,9 @@ MonoBehaviour:
   playTutorialButton: {fileID: 3881801545108254647}
   optionsMenu: {fileID: 5880477746518000909}
   optionsWindow: {fileID: 6063746543098107899}
+  defaultSnapshot: {fileID: 24500006, guid: c6dcb8f38aeb45f4e9a69706655abe3b, type: 2}
+  fadeOutSnapshot: {fileID: 485589953726752263, guid: c6dcb8f38aeb45f4e9a69706655abe3b, type: 2}
+  buttonSound: {fileID: 0}
 --- !u!114 &458299083196779237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,15 +852,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 30510523902850509, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 249.66788
+      value: 205.33577
       objectReference: {fileID: 0}
     - target: {fileID: 30510523902850509, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -235.78197
+      value: -221.17021
       objectReference: {fileID: 0}
     - target: {fileID: 30510523902850509, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 499.33575
+      value: 410.67154
       objectReference: {fileID: 0}
     - target: {fileID: 1089049398731135623, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_Name
@@ -989,15 +992,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5867828753365724034, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 249.66788
+      value: 205.33577
       objectReference: {fileID: 0}
     - target: {fileID: 5867828753365724034, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -435.3105
+      value: -434.05634
       objectReference: {fileID: 0}
     - target: {fileID: 5867828753365724034, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 499.33575
+      value: 410.67154
       objectReference: {fileID: 0}
     - target: {fileID: 6697190058235282141, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1049,15 +1052,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6697190058235282141, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 6697190058235282141, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 500
+      value: 411.3358
       objectReference: {fileID: 0}
     - target: {fileID: 6697190058235282141, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 500
+      value: 467
       objectReference: {fileID: 0}
     - target: {fileID: 6697190058235282141, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1094,6 +1097,10 @@ PrefabInstance:
     - target: {fileID: 7880721340145493435, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_SizeDelta.x
       value: -21.979229
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143936198713449712, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
+      propertyPath: m_Size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8901488050026200550, guid: a15462c9e30463346a3ba1a886331eac, type: 3}
       propertyPath: m_AnchorMin.y

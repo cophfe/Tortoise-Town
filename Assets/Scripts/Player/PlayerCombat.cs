@@ -165,7 +165,7 @@ public class PlayerCombat : MonoBehaviour
 		Transform cam = playerController.MainCamera.transform;
 		//first add camera shake
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
-		playerController.PlayAudioOnce(playerController.AudioData.arrowShoot);
+
 		if (!bowShotSource.isPlaying && playerController.AudioData.arrowShoot.CanBePlayed())
 		{
 			bowShotSource.clip = playerController.AudioData.arrowShoot.GetRandom();
@@ -247,7 +247,7 @@ public class PlayerCombat : MonoBehaviour
 		playerController.Animator.AnimateEquip(true);
 		charging = true;
 		cameraChanged = true;
-		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
+
 		if (!bowDrawSource.isPlaying && playerController.AudioData.arrowCharge.CanBePlayed())
 		{
 			bowDrawSource.clip = playerController.AudioData.arrowCharge.GetRandom();
@@ -269,6 +269,10 @@ public class PlayerCombat : MonoBehaviour
 	{
 		if (equipped == equip) return;
 
+		if (chargeUpPercent <= 0 && !equip)
+		{
+			playerController.Animator.AnimateEquip(equip);
+		}
 		equipped = equip;
 		if (equip)
 		{
