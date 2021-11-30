@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4094540539251230632}
   - component: {fileID: 1116155452804990989}
   - component: {fileID: 2925534572644826311}
+  - component: {fileID: -5926576848007769127}
   m_Layer: 0
   m_Name: foliage_tree_large_004
   m_TagString: Untagged
@@ -82,3 +83,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-5926576848007769127
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3718119797497650450}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5386889098701397442, guid: d551d287049d4504ea111c535df021a9, type: 3}

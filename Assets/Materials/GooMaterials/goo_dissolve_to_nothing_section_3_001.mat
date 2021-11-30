@@ -59,7 +59,7 @@ Material:
     - _CutoffHeight: 1000
     - _EdgeWidth: 0.05
     - _Metallic: 1
-    - _MoveStength: 0.5
+    - _MoveStength: 1
     - _NoiseScale: 25
     - _NoiseStrength: 1
     - _NormalStrength: 1
