@@ -128,7 +128,7 @@ public class IsosurfaceGeneratorEditor : Editor
 				var shapes = generator.GetComponentsInChildren<IsoShape>();
 				for (int i = 0; i < shapes.Length; i++)
 				{
-					Undo.DestroyObjectImmediate(shapes[i]);
+					Undo.DestroyObjectImmediate(shapes[i].gameObject);
 				}
 				Undo.DestroyObjectImmediate(generator);
 

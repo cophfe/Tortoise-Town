@@ -13,6 +13,7 @@ public class GooShooter : MonoBehaviour
 	public Transform arrowTransformPosition;
 	bool attackPlayer = false;
 	float shootTimer = 0;
+	float turnSpeed = 10;
 	ObjectPool arrowPool;
 	Arrow currentArrow;
 	public Animator animator;
@@ -22,11 +23,12 @@ public class GooShooter : MonoBehaviour
 	protected void Start()
     {
 		arrowPool = new ObjectPool(arrowCount, 1, gooShotPrefab, transform);
-		shootTimer = shootIntervel;
 		attachedAudio = GetComponent<AudioSource>();
+		shootTimer = shootIntervel * UnityEngine.Random.Range(0.0f, 0.5f);
+
 	}
 
-    void Update()
+	void Update()
     {
 		if (!dead && attackPlayer)
 		{
@@ -34,7 +36,7 @@ public class GooShooter : MonoBehaviour
 			shootTimer -= Time.deltaTime;
 			if (shootTimer < 0)
 			{
-				shootTimer = shootIntervel;
+				shootTimer = shootIntervel * UnityEngine.Random.Range(0.4f, 1.0f);
 				if (currentArrow == null)
 				{
 					currentArrow = (Arrow)arrowPool.GetPooledObject(arrowTransformPosition);
@@ -55,7 +57,7 @@ public class GooShooter : MonoBehaviour
 			attachedAudio.Play();
 		float initialSpeed = gooShotInfo.maxInitialSpeed;
 		Vector3 velocity = Vector3.zero;
-		Vector3 arrowAimPoint = GameManager.Instance.Player.Interpolator.transform.position;
+		Vector3 arrowAimPoint = PredictShotPosition(arrowTransformPosition.position);// GameManager.Instance.Player.Interpolator.transform.position;
 
 		//convert 3d problem into 2d problem like this:
 		//calculate x axis
@@ -109,7 +111,8 @@ public class GooShooter : MonoBehaviour
 	{
 		Vector3 pos = GameManager.Instance.Player.Interpolator.transform.position;
 		pos.y = transform.position.y;
-		transform.LookAt(pos);
+		Quaternion target = Quaternion.LookRotation(pos - transform.position, Vector3.up);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, target, Quaternion.Angle(target, transform.rotation) * turnSpeed * Time.deltaTime);
 	}
 
 	public void Kill()
@@ -136,5 +139,18 @@ public class GooShooter : MonoBehaviour
 		{
 			attackPlayer = false;
 		}
+	}
+
+	public Vector3 PredictShotPosition(Vector3 startPosition)
+	{
+		var player = GameManager.Instance.Player;
+		Vector3 endPoint = player.Interpolator.transform.position;
+		Vector3 delta = endPoint - startPosition;
+		
+
+		float time = delta.magnitude / gooShotInfo.maxInitialSpeed;
+		endPoint += player.Motor.TotalVelocity * time;
+		
+		return endPoint;
 	}
 }

@@ -602,8 +602,9 @@ MonoBehaviour:
   damageTimeout: 0.5
   startToRegenerateTime: 3
   regenerateSpeed: 0.7
-  vignetteDamageColor: {r: 0.41509432, g: 0, b: 0, a: 1}
-  vignetteMagnitudeMultiplier: 1.3
+  vignetteDamageColor: {r: 0.7264151, g: 0.058250275, b: 0.058250275, a: 1}
+  vignetteMagnitudeMultiplier: 2.5
+  vignetteSmoothnessMultiplier: 2
 --- !u!54 &6578186051642721078
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -65,6 +65,7 @@ public class OptionsMenu : MonoBehaviour
 	int resolutionIndex = 0;
 	bool isChanged = false;
 	List<Keybinding> bindings;
+	bool isInitiating = false;
 
 	bool IsChanged
 	{
@@ -81,6 +82,7 @@ public class OptionsMenu : MonoBehaviour
 
 	public void Initiate()
 	{
+		isInitiating = true;
 		//START RESOLUTIONS
 		Resolution currentRes = Screen.currentResolution;
 		resolutionIndex = 0;
@@ -184,6 +186,8 @@ public class OptionsMenu : MonoBehaviour
 		//END KEYBINDINGS
 
 		IsChanged = false;
+		isInitiating = false;
+
 	}
 
 	void ValidateDefaults()
@@ -407,6 +411,8 @@ public class OptionsMenu : MonoBehaviour
 
 	public void OnAudioChanged()
 	{
+		if (isInitiating) return;
+
 		OptionsData options = GetOptionsData();
 		options.masterVolume = masterVolume.value;
 		options.sfxVolume = sFXVolume.value;
