@@ -29,7 +29,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98903d0994d8ead49aeac84de76eb11b, type: 3}
   m_Name: NewSSAO
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings:
     renderPassEvent: 450
     material: {fileID: 2100000, guid: 2de178adc44124b41aab0d348d6173ae, type: 2}
