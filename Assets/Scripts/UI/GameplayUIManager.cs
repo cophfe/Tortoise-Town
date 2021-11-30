@@ -250,6 +250,11 @@ public class GameplayUIManager : MonoBehaviour
 		cutscene.Switch(true);
 	}
 
+	public void OnTutorialWin()
+	{
+		WindowManager.AddToQueue(winMenu);
+		PlayerPrefs.SetInt("TutorialCompleted", 1);
+	}
 	public IEnumerator EndCutscene(CutsceneManager cutscene)
 	{
 		if (cutscene == GameManager.Instance.initialCutscene)

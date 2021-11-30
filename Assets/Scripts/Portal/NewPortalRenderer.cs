@@ -31,6 +31,8 @@ public class NewPortalRenderer : BooleanSwitch
 		portalCamera = GetComponent<Camera>();
 		portalCameraData = GetComponent<UniversalAdditionalCameraData>();
 		portalCamera.enabled = false;
+		if (GameManager.Instance.IsTutorial)
+			GameManager.Instance.RegisterWinSwitch(this);
 
 		lastScreenSize.x = Screen.width;
 		lastScreenSize.y = Screen.height;
@@ -87,11 +89,6 @@ public class NewPortalRenderer : BooleanSwitch
 		travelledThisFrame = portals[cameraPortalIndex].Renderer.isVisible;
 		if (travelledThisFrame)
 		{
-			if (portalCamera.useOcclusionCulling)
-				portalCamera.useOcclusionCulling = false;
-			if (mainCamera.useOcclusionCulling)
-				mainCamera.useOcclusionCulling = false;
-
 			NewPortal p1 = portals[playerPortalIndex];
 			NewPortal p2 = portals[1 - playerPortalIndex];
 
@@ -146,13 +143,6 @@ public class NewPortalRenderer : BooleanSwitch
 				//do a final temp travel that will be reverted later
 				p1.TempTravelStart();
 			}
-		}
-		else
-		{
-			if (!portalCamera.useOcclusionCulling)
-				portalCamera.useOcclusionCulling = true;
-			if (!mainCamera.useOcclusionCulling)
-				mainCamera.useOcclusionCulling = true;
 		}
 
 		
