@@ -13,6 +13,7 @@ public class GooShooter : MonoBehaviour
 	public Transform arrowTransformPosition;
 	bool attackPlayer = false;
 	float shootTimer = 0;
+	float turnSpeed = 30;
 	ObjectPool arrowPool;
 	Arrow currentArrow;
 	public Animator animator;
@@ -55,7 +56,7 @@ public class GooShooter : MonoBehaviour
 			attachedAudio.Play();
 		float initialSpeed = gooShotInfo.maxInitialSpeed;
 		Vector3 velocity = Vector3.zero;
-		Vector3 arrowAimPoint = GameManager.Instance.Player.Interpolator.transform.position;
+		Vector3 arrowAimPoint = PredictShotPosition(arrowTransformPosition.position);// GameManager.Instance.Player.Interpolator.transform.position;
 
 		//convert 3d problem into 2d problem like this:
 		//calculate x axis
@@ -109,7 +110,8 @@ public class GooShooter : MonoBehaviour
 	{
 		Vector3 pos = GameManager.Instance.Player.Interpolator.transform.position;
 		pos.y = transform.position.y;
-		transform.LookAt(pos);
+		Quaternion target = Quaternion.LookRotation(pos - transform.position, Vector3.up);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, target, Quaternion.Angle(target, transform.rotation) * turnSpeed * Time.deltaTime);
 	}
 
 	public void Kill()
@@ -136,5 +138,18 @@ public class GooShooter : MonoBehaviour
 		{
 			attackPlayer = false;
 		}
+	}
+
+	public Vector3 PredictShotPosition(Vector3 startPosition)
+	{
+		var player = GameManager.Instance.Player;
+		Vector3 endPoint = player.Interpolator.transform.position;
+		Vector3 delta = endPoint - startPosition;
+		
+
+		float time = delta.magnitude / gooShotInfo.maxInitialSpeed;
+		endPoint += player.Motor.TotalVelocity * time;
+		
+		return endPoint;
 	}
 }

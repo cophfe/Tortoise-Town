@@ -16,7 +16,7 @@ public class NewPortalRenderer : BooleanSwitch
 	public UniversalAdditionalCameraData portalCameraData;
 	public UniversalAdditionalCameraData mainCameraData;
 	bool fogValue;
-	//public GameObject[] manualOcclusion;
+	public GameObject[] manualOcclusion;
 
 	RenderTexture portalTexture;
 

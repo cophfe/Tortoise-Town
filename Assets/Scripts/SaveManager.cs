@@ -83,7 +83,8 @@ public class SaveManager
 			var current = GetCurrentCheckpoint();
 			if (current != null)
 			{
-				current.passive?.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+				if (current.passive != null)
+					current.passive.Stop(false, ParticleSystemStopBehavior.StopEmitting);
 				current.Mat?.DisableKeyword("_EMISSION");
 			}
 			for (int i = 0; i < checkpoints.Count; i++)
@@ -317,7 +318,8 @@ public class SaveManager
 					checkpoint.passive.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
 				checkpoint.Mat?.DisableKeyword("_EMISSION");
 			}
-			checkpoints[checkpointIndex].passive.Play();
+			if (checkpoints[checkpointIndex].passive)
+				checkpoints[checkpointIndex].passive.Play();
 			checkpoints[checkpointIndex].Mat?.EnableKeyword("_EMISSION");
 		}
 		
@@ -380,10 +382,6 @@ public class SaveManager
 					fs.SetLength(0);
 				}
 			}
-		}
-		else
-		{
-			File.Create(GetPath());
 		}
 	}
 

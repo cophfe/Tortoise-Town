@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-1)]
@@ -26,6 +27,10 @@ public class GameManager : MonoBehaviour
 
 	[Header("Audio")]
 	[SerializeField] OtherAudioData audioData = null;
+	[SerializeField] AudioMixer mixer = null;
+	[SerializeField] AudioMixerSnapshot defaultSnapshot = null;
+	[SerializeField] AudioMixerSnapshot deadSnapshot = null;
+	public float audioTransitionTime = 2;
 
 	[Header("Debug Settings")]
 	[SerializeField] bool enableCursorRestriction = false;
@@ -122,6 +127,8 @@ public class GameManager : MonoBehaviour
 	{
 		player.InputIsEnabled = false;
 		player.Animator.AnimateDeath(true);
+		deadSnapshot.TransitionTo(audioTransitionTime);
+
 		if (player.Motor.IsRolling)
 		{
 			player.Motor.CancelRoll();
@@ -134,6 +141,7 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSeconds(deathTime);
 		GUI.Fade(true);
 		yield return new WaitForSeconds(GUI.fadeTime);
+		defaultSnapshot.TransitionTo(audioTransitionTime);
 		SetSceneFromSavedData();
 	}
 

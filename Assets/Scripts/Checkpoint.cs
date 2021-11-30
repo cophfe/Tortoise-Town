@@ -12,7 +12,7 @@ public class Checkpoint : MonoBehaviour
 	public Material Mat { get; private set; }
 	private void Awake()
 	{
-		Mat = GetComponentInChildren<MeshRenderer>().material;
+		Mat = GetComponentInChildren<MeshRenderer>()?.material;
 		GameManager.Instance.SaveManager.RegisterCheckpoint(this);
 		saveSoundSource = GetComponent<AudioSource>();
 	}
