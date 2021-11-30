@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(GameWindowManager))]
 public class GameplayUIManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class GameplayUIManager : MonoBehaviour
 	public TextMeshProUGUI cutsceneNotifyText;
 	public Animator cutsceneNotify;
 	public AudioSource buttonSound;
+	public LoadingBar loadingBar;
 
 	public delegate void VoidEvent();
 	public event VoidEvent onCutsceneSkipped;
@@ -168,13 +170,14 @@ public class GameplayUIManager : MonoBehaviour
 		GameManager.Instance.FadeSnapshot();
 		if (reloadSceneCompletely)
 		{
-			StartCoroutine(RestartGame(reloadSceneCompletely));
+			if (loadingBar)
+				StartCoroutine(loadingBar.RestartLevel(SceneManager.GetActiveScene().name));
+			else
+				StartCoroutine(RestartGame(reloadSceneCompletely));
 		}
 		else
 		{
 			StartCoroutine(RestartGame(reloadSceneCompletely));
-			GameManager.Instance.UnFadeSnapshot();
-
 		}
 	}
 
@@ -196,6 +199,7 @@ public class GameplayUIManager : MonoBehaviour
 			Time.timeScale = 1;
 			GameManager.Instance.SetSceneFromSavedData();
 			GameManager.Instance.Player.Animator.ResetPlayerAnimation();
+			GameManager.Instance.UnFadeSnapshot();
 		}
 	}
 
@@ -211,7 +215,10 @@ public class GameplayUIManager : MonoBehaviour
 		PlayerPrefs.SetInt("TutorialCompleted", 1);
 		GameManager.Instance.FadeSnapshot();
 
-		StartCoroutine(ContinueToMain());
+		if (loadingBar)
+			StartCoroutine(loadingBar.LoadLevel(GameManager.Instance.mainSceneName));
+		else
+			StartCoroutine(ContinueToMain());
 	}
 
 	public enum AreYouSureState
