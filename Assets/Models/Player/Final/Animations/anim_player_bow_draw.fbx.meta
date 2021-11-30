@@ -58,7 +58,7 @@ ModelImporter:
       firstFrame: 0
       lastFrame: 35
       wrapMode: 0
-      orientationOffsetY: 0
+      orientationOffsetY: -16.89
       level: 0
       cycleOffset: 0
       loop: 0
@@ -68,7 +68,7 @@ ModelImporter:
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -87,17 +87,17 @@ ModelImporter:
       firstFrame: 20
       lastFrame: 22
       wrapMode: 0
-      orientationOffsetY: 0
+      orientationOffsetY: -16.89
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -113,20 +113,20 @@ ModelImporter:
       name: Final_EndDraw
       takeName: Take 001
       internalID: 0
-      firstFrame: 33
-      lastFrame: 35
+      firstFrame: 26
+      lastFrame: 28
       wrapMode: 0
-      orientationOffsetY: 0
+      orientationOffsetY: -16.89
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0

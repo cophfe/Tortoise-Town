@@ -638,6 +638,14 @@ PlayableDirector:
     value: {fileID: 329594770983524864}
   - key: {fileID: 4247495092544603287, guid: 156218449a1c8b947b6f3642451a1697, type: 2}
     value: {fileID: 329594771077088221}
+  - key: {fileID: -5825894702493864811, guid: 156218449a1c8b947b6f3642451a1697, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7741477835717157418, guid: 156218449a1c8b947b6f3642451a1697, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7181767583776038605, guid: 156218449a1c8b947b6f3642451a1697, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4683913996849663415, guid: 156218449a1c8b947b6f3642451a1697, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &329594772243889709
@@ -674,9 +682,13 @@ MonoBehaviour:
       m_Calls: []
   cutsceneCamera: {fileID: 329594770865768699}
   goBackOnStop: 0
+  onStartCutscene:
+    m_PersistentCalls:
+      m_Calls: []
   onEndCutscene:
     m_PersistentCalls:
       m_Calls: []
+  timedEvents: []
 --- !u!1 &3896213935661776871
 GameObject:
   m_ObjectHideFlags: 0

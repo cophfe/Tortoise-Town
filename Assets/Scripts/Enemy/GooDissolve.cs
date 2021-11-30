@@ -55,6 +55,8 @@ public class GooDissolve : MonoBehaviour
 
 		if (targets.Length > 0)
 			GameManager.Instance.SaveManager.onResetScene += OnResetScene;
+		else
+			requiredForWin = false;
 	}
 
 	private void Start()

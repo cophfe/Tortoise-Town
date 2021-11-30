@@ -14,6 +14,8 @@ public class PlayerCombat : MonoBehaviour
 	public ArrowData arrowData;
 	public Transform arrowPosRest;
 	public Transform arrowPosCharged;
+	public AudioSource bowShotSource;
+	public AudioSource bowDrawSource;
 	public float rangedCooldownTime = 0.5f;
 	public float rangedCameraShakeMagnitude = 2;
 	[Header("Aiming")]
@@ -163,7 +165,13 @@ public class PlayerCombat : MonoBehaviour
 		Transform cam = playerController.MainCamera.transform;
 		//first add camera shake
 		playerController.MainCamera.AddCameraShake(rangedCameraShakeMagnitude * cam.forward);
-		playerController.PlayAudioOnce(playerController.AudioData.arrowShoot);
+
+		if (!bowShotSource.isPlaying && playerController.AudioData.arrowShoot.CanBePlayed())
+		{
+			bowShotSource.clip = playerController.AudioData.arrowShoot.GetRandom();
+			bowShotSource.Play();
+		}
+
 		//THIS CALCULATES THE DIRECTION TO SHOOT THAT WILL MAKE THE ARROW LAND IN THE RIGHT PLACE 
 		//THE INITIAL VELOCITY WILL ALWAYS BE THE SAME
 
@@ -191,7 +199,7 @@ public class PlayerCombat : MonoBehaviour
 		{
 			//find closest valid point that gives a 0 'possibleNeg' value
 			//this is technically wrong sometimes, but not when possibleNeg is less than 0
-			//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses one)
+			//(it is wrong because it uses the cubic formula, which gives multiple results, but it only uses the result that is mostly correct)
 			//here is a visualisation: https://www.desmos.com/calculator/olszi1qcpd
 
 			//this should fix for floating point error by looking not for 0 neg value, but errorfix neg value
@@ -239,14 +247,19 @@ public class PlayerCombat : MonoBehaviour
 		playerController.Animator.AnimateEquip(true);
 		charging = true;
 		cameraChanged = true;
-		playerController.PlayAudioOnce(playerController.AudioData.arrowCharge);
 
+		if (!bowDrawSource.isPlaying && playerController.AudioData.arrowCharge.CanBePlayed())
+		{
+			bowDrawSource.clip = playerController.AudioData.arrowCharge.GetRandom();
+			bowDrawSource.Play();
+		}
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(true);
 	}
 
 	public void EndChargeUp()
 	{
+		bowDrawSource.Stop();
 		charging = false;
 		if (GameManager.Instance.GUI)
 			GameManager.Instance.GUI.EnableCrossHair(false);
@@ -256,6 +269,10 @@ public class PlayerCombat : MonoBehaviour
 	{
 		if (equipped == equip) return;
 
+		if (chargeUpPercent <= 0 && !equip)
+		{
+			playerController.Animator.AnimateEquip(equip);
+		}
 		equipped = equip;
 		if (equip)
 		{

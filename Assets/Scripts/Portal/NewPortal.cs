@@ -51,7 +51,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 	{
 		var traveller = other.GetComponent<NewPortalTraveller>();
 
-		if (traveller && traveller.enabled && !travelling.Contains(traveller))
+		if (on && traveller && traveller.enabled && !travelling.Contains(traveller))
 		{
 			traveller.OnEnter(this, OtherPortal);
 			travelling.Add(traveller);
@@ -157,6 +157,10 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 					Renderer.enabled = true;
 					Open = true;
 				}
+				else
+				{
+					ClearPortal();
+				}
 
 				on = value;
 				collider.enabled = on;
@@ -187,6 +191,12 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 					Renderer.enabled = false;
 					transitioning = false;
 					Open = false;
+					foreach (var traveller in travelling)
+					{
+						traveller.OnEnter(null, null);
+					}
+					travelling.Clear();
+					GameManager.Instance.portalRenderer.SetOcclusion(true);
 				}
 
 			}
@@ -225,6 +235,7 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 			transform.localScale = Vector3.one * 0.0001f;
 			t = 0;
 			Renderer.enabled = false;
+			Open = false;
 		}
 	}
 
@@ -241,5 +252,14 @@ public class NewPortal : BooleanSwitch, IBooleanSaveable
 	public void SetToState(bool state)
 	{
 		ResetSwitchTo(state);
+	}
+
+	public void ClearPortal()
+	{
+		foreach (var traveller in travelling)
+		{
+			traveller.OnEnter(null, null);
+		}
+		travelling.Clear();
 	}
 }

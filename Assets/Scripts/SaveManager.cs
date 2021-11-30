@@ -80,6 +80,13 @@ public class SaveManager
 		}
 		else
 		{
+			var current = GetCurrentCheckpoint();
+			if (current != null)
+			{
+				if (current.passive != null)
+					current.passive.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+				current.Mat?.DisableKeyword("_EMISSION");
+			}
 			for (int i = 0; i < checkpoints.Count; i++)
 			{
 				if (checkpoint == checkpoints[i])
@@ -119,6 +126,8 @@ public class SaveManager
 	{
 		if (!saveDataToFile)
 			return;
+
+		if (saveData == null || saveData.checkpointIndex == -1) return;
 
 		//idk how to do serialization so we'll do it the old fashioned way
 		//on the bright side this is way faster
@@ -295,15 +304,28 @@ public class SaveManager
 		{
 			savedHealths[i].ResetTo(saveData.savedHealths[i]);
 		}
+		GameManager.Instance.CalculateCurrentDissolverCount();
+		checkpointIndex = saveData.checkpointIndex;
+		if (checkpointIndex != -1)
+		{
+			foreach (var checkpoint in checkpoints)
+			{
+				if (checkpoint.passive != null && !checkpoint.passive.isStopped)
+					checkpoint.passive.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
+				checkpoint.Mat?.DisableKeyword("_EMISSION");
+			}
+			if (checkpoints[checkpointIndex].passive)
+				checkpoints[checkpointIndex].passive.Play();
+			checkpoints[checkpointIndex].Mat?.EnableKeyword("_EMISSION");
+		}
+		
+		if (onResetScene != null)
+			onResetScene.Invoke();
+
 		for (int i = 0; i < saveables.Count; i++)
 		{
 			saveables[i].SetToState(saveData.saveableStates[i]);
 		}
-		GameManager.Instance.CalculateCurrentDissolverCount();
-		checkpointIndex = saveData.checkpointIndex;
-		
-		if (onResetScene != null)
-			onResetScene.Invoke(); 
 	}
 	
 	public bool CheckIfTutorialCompleted()
@@ -362,20 +384,13 @@ public class SaveManager
 				}
 			}
 		}
-		else
-		{
-			File.Create(GetPath());
-		}
 	}
 
 	public void DeleteAllData()
 	{
 		if (File.Exists(Application.persistentDataPath + "/save.tt"))
 		{
-			using (FileStream fs = new FileStream(Application.persistentDataPath + "/save.tt", FileMode.Open))
-			{
-				fs.SetLength(0);
-			}
+			File.WriteAllText(Application.persistentDataPath + "/save.tt", "");
 		}
 	}
 

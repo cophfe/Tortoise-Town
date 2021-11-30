@@ -55,4 +55,15 @@ public class InterpolateChild : MonoBehaviour
 		end = target.TransformPoint(initialLocalPosition);
 		start += end;
 	}
+
+	public void TransformStartAndEndByPortal(NewPortal inPortal)
+	{
+		start = inPortal.TransformPositionToOtherPortal(start);
+		end = inPortal.TransformPositionToOtherPortal(end);
+	}
+
+	public Vector3 GetTargetPosition()
+	{
+		return target.TransformPoint(initialLocalPosition);
+	}
 }

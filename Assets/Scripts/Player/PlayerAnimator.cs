@@ -156,12 +156,18 @@ public class PlayerAnimator : MonoBehaviour
 		}
     }
 
+	void Footstep()
+	{
+		if (currentSpeed > 0.1f && !playerController.Motor.IsRolling && !playerController.Motor.IsDashing && playerController.Motor.State == PlayerMotor.MovementState.GROUNDED)
+		playerController.PlayFootstep(currentSpeed);
+	}
+
 	//Called for animator inverse kinematics
 	private void OnAnimatorIK(int layerIndex)
 	{
 		if (!playerController.Motor.IsRolling)
 		{
-			if (enableLookIK)
+			if (enableLookIK && !playerController.Health.IsDead)
 			{
 				//look toward camera
 				animator.SetLookAtWeight(1, lookBodyWeight, lookHeadWeight, 0, turnPercent);

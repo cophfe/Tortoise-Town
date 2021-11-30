@@ -13,7 +13,11 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public Camera mainCamera;
 	public Camera portalCamera;
-
+	public UniversalAdditionalCameraData portalCameraData;
+	public UniversalAdditionalCameraData mainCameraData;
+	bool fogValue;
+	public GameObject[] manualOcclusion;
+	public Checkpoint portalCheckpoint;
 	RenderTexture portalTexture;
 
 	int cameraPortalIndex = 0;
@@ -26,18 +30,22 @@ public class NewPortalRenderer : BooleanSwitch
 	bool travelledThisFrame = false;
 	private void Awake()
 	{
-		GameManager.Instance.RegisterWinSwitch(this);
-
 		portalCamera = GetComponent<Camera>();
+		portalCameraData = GetComponent<UniversalAdditionalCameraData>();
 		portalCamera.enabled = false;
+		if (GameManager.Instance.IsTutorial)
+			GameManager.Instance.RegisterWinSwitch(this);
 
+		fogValue = RenderSettings.fog;
 		lastScreenSize.x = Screen.width;
 		lastScreenSize.y = Screen.height;
 		
 	}
 	protected override void Start()
 	{
+		GameManager.Instance.portalRenderer = this;
 		mainCamera = GameManager.Instance.Player.MainCamera.GetComponent<Camera>();
+		mainCameraData = mainCamera.GetComponent<UniversalAdditionalCameraData>();
 		SetRenderTextures();
 		defaultMatrix = mainCamera.projectionMatrix;
 
@@ -59,17 +67,22 @@ public class NewPortalRenderer : BooleanSwitch
 		RenderPipelineManager.beginCameraRendering -= RenderPipelineManager_beginCameraRendering;
 
 	}
+
+	bool overwriteFog = false;
+
 	private void RenderPipelineManager_beginCameraRendering(ScriptableRenderContext arg1, Camera camera)
 	{
-		if (!portals[0].Open || !portals[1].Open) return;
+		if (!portals[0].Open || !portals[1].Open || GameManager.Instance.InCutscene) return;
 		//update camera
 		if (cameraPortalIndex == playerPortalIndex)
 		{
 			if (CameraRayIntersectsPortal(portals[playerPortalIndex]))
 			{
 				cameraPortalIndex = 1 - playerPortalIndex;
-
+				RenderSettings.fog = false;
+				overwriteFog = true;
 				UpdateCamera();
+				travelledThisFrame = true;
 			}
 		}
 		else
@@ -77,14 +90,17 @@ public class NewPortalRenderer : BooleanSwitch
 			if (!CameraRayIntersectsPortal(portals[playerPortalIndex]))
 			{
 				cameraPortalIndex = playerPortalIndex;
-
+				overwriteFog = true;
 				UpdateCamera();
+				travelledThisFrame = true;
 			}
 		}
 
-		travelledThisFrame = portals[cameraPortalIndex].Renderer.isVisible;
+		travelledThisFrame |= portals[cameraPortalIndex].Renderer.isVisible;
 		if (travelledThisFrame)
 		{
+			SetOcclusion(false);
+
 			NewPortal p1 = portals[playerPortalIndex];
 			NewPortal p2 = portals[1 - playerPortalIndex];
 
@@ -97,7 +113,7 @@ public class NewPortalRenderer : BooleanSwitch
 			if (cameraPortalIndex == playerPortalIndex)
 			{
 				SetFrustram(mainCamera, portalCamera);
-
+				
 				float sign = Mathf.Sign(Vector3.Dot(mainCamera.transform.position - p1.transform.position, p1.transform.forward));
 				Transform rB = p1.GetRenderBox();
 				Vector3 rBPos = rB.localPosition;
@@ -110,7 +126,9 @@ public class NewPortalRenderer : BooleanSwitch
 
 				portalCamera.targetTexture = portalTexture;
 				p1.TempTravelStart();
+				RenderSettings.fog = false;
 				UniversalRenderPipeline.RenderSingleCamera(arg1, portalCamera);
+				RenderSettings.fog = fogValue;
 				p1.TempTravelEnd();
 				
 				//do a final temp travel that will be reverted later
@@ -133,20 +151,34 @@ public class NewPortalRenderer : BooleanSwitch
 				mainCamera.targetTexture = portalTexture;
 
 				p2.TempTravelStart();
+				RenderSettings.fog = false;
 				UniversalRenderPipeline.RenderSingleCamera(arg1, mainCamera);
+				RenderSettings.fog = fogValue;
 				p2.TempTravelEnd();
 
 				//do a final temp travel that will be reverted later
 				p1.TempTravelStart();
 			}
-		}
 
-		
+			if (overwriteFog)
+				RenderSettings.fog = false;
+
+		}
+		else
+		{
+			SetOcclusion(true);
+		}
 	}
 	private void RenderPipelineManager_endCameraRendering(ScriptableRenderContext arg1, Camera arg2)
 	{
 		if (travelledThisFrame)
 		{
+			if (overwriteFog)
+			{
+				RenderSettings.fog = fogValue;
+				overwriteFog = false;
+			}
+
 			if (cameraPortalIndex == playerPortalIndex)
 			{
 				portals[1 - playerPortalIndex].TempTravelEnd();
@@ -219,42 +251,77 @@ public class NewPortalRenderer : BooleanSwitch
 
 	public void OnPlayerThroughPortal(NewPortal inPortal)
 	{
-		CalculatePlayerPortal();
-		//playerPortalIndex = inPortal == portals[0] ? 1 : 0;
+		//CalculatePlayerPortal();
+		playerPortalIndex = inPortal == portals[0] ? 1 : 0;
 
 		UpdateCamera();
 	}
 
 	private void FixedUpdate()
 	{
-		if (portals[0].Open && portals[1].Open)
-			CalculatePlayerPortal();
+		if (cameraPortalIndex == 1 && playerPortalIndex == 1 && on && !checking)
+		{
+			StartCoroutine(CheckInPortal());
+		}
+	}
+
+	//workaround as is due tommorow
+	// I think problem may be due to the fact camera is checking if ray intersects portal with interpolater value
+	bool checking = false;
+	IEnumerator CheckInPortal()
+	{
+		checking = true;
+		var wait = new WaitForEndOfFrame();
+		yield return wait;
+		yield return wait;
+		if (on && cameraPortalIndex == 1 && playerPortalIndex == 1)
+		{
+			Switch(false);
+			if (portalCheckpoint)
+			{
+				portalCheckpoint.SetAsCurrent();
+			}
+		}
+		checking = false;
 	}
 
 	public void UpdateCamera()
 	{
 		if (cameraPortalIndex == playerPortalIndex)
 		{
-			mainCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
-			portalCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+			mainCameraData.renderPostProcessing = true;
+			portalCameraData.renderPostProcessing = false;
+			mainCameraData.SetRenderer(0);
+			portalCameraData.SetRenderer(1);
 			mainCamera.enabled = true;
 			portalCamera.enabled = false;
 			mainCamera.targetTexture = null;
-			portalCamera.cullingMask = ~portalLayer;
 			mainCamera.ResetProjectionMatrix();
+			portalCamera.cullingMask = ~portalLayer;
 			mainCamera.cullingMask = 0xFFFF;
 		}
 		else
 		{
-			mainCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
-			portalCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
+			mainCameraData.renderPostProcessing = false;
+			portalCameraData.renderPostProcessing = true;
+			mainCameraData.SetRenderer(1);
+			portalCameraData.SetRenderer(0);
 			mainCamera.enabled = false;
 			portalCamera.enabled = true;
 			portalCamera.targetTexture = null;
 			portalCamera.ResetProjectionMatrix();
 			portalCamera.cullingMask = 0xFFFF;
 			mainCamera.cullingMask = ~portalLayer;
+
+			//StartCoroutine(WaitFrame(mainCamera));
 		}
+	}
+
+	IEnumerator WaitFrame(Camera cam)
+	{
+		yield return new WaitForEndOfFrame();
+		mainCamera.cullingMask = ~portalLayer;
+
 	}
 
 	public override bool SwitchValue { get => base.SwitchValue; protected set 
@@ -295,6 +362,32 @@ public class NewPortalRenderer : BooleanSwitch
 				UpdateCamera();
 			}
 		}
+	}
+
+	bool isOccluding = true;
+	public void SetOcclusion(bool val)
+	{
+		if (isOccluding == val)
+		{
+			return;
+		}
+
+		isOccluding = val;
+		foreach(var gO in manualOcclusion)
+		{
+			gO.SetActive(val);
+		}
+		mainCamera.useOcclusionCulling = val;
+		portalCamera.useOcclusionCulling = val;
+	}
+
+	public void ResetPortals()
+	{
+		SetOcclusion(true);
+		portals[0].ClearPortal();
+		portals[1].ClearPortal();
+		cameraPortalIndex = playerPortalIndex;
+		UpdateCamera();
 	}
 
 }

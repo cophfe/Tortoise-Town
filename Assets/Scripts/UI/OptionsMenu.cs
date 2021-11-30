@@ -65,6 +65,7 @@ public class OptionsMenu : MonoBehaviour
 	int resolutionIndex = 0;
 	bool isChanged = false;
 	List<Keybinding> bindings;
+	bool isInitiating = false;
 
 	bool IsChanged
 	{
@@ -81,6 +82,7 @@ public class OptionsMenu : MonoBehaviour
 
 	public void Initiate()
 	{
+		isInitiating = true;
 		//START RESOLUTIONS
 		Resolution currentRes = Screen.currentResolution;
 		resolutionIndex = 0;
@@ -184,6 +186,8 @@ public class OptionsMenu : MonoBehaviour
 		//END KEYBINDINGS
 
 		IsChanged = false;
+		isInitiating = false;
+
 	}
 
 	void ValidateDefaults()
@@ -231,20 +235,20 @@ public class OptionsMenu : MonoBehaviour
 			{
 				string saved = File.ReadAllText(GetOptionsPath());
 				options = (OptionsData)JsonUtility.FromJson(saved, typeof(OptionsData));
-				ApplyDataToUI(options);
+				ApplyDataToUI(options, true);
 			}
 			catch (Exception e)
 			{
 				Debug.LogWarning("Failed to load options data:\n" + e.Message + "\nSetting to default instead.");
 				File.Delete(GetOptionsPath());
-				ApplyDataToUI(defaultOptions);
+				ApplyDataToUI(defaultOptions, true);
 				return;
 			}
 		}
 		else
 		{
 			Debug.LogWarning("Options data does not exist on device. Setting to default.");
-			ApplyDataToUI(defaultOptions);
+			ApplyDataToUI(defaultOptions, true);
 		}
 	}
 
@@ -270,7 +274,7 @@ public class OptionsMenu : MonoBehaviour
 		return options;
 	}
 
-	void ApplyDataToUI(OptionsData options)
+	void ApplyDataToUI(OptionsData options, bool setAudio)
 	{
 		//first apply the changes to the UI
 		fov.value = options.fov;
@@ -284,9 +288,12 @@ public class OptionsMenu : MonoBehaviour
 		vSyncMode.value = options.vSyncMode;
 		graphicsQuality.value = options.graphicsQuality;
 
-		masterVolume.value = options.masterVolume;
-		sFXVolume.value = options.sfxVolume;
-		musicVolume.value = options.musicVolume;
+		if (setAudio)
+		{
+			masterVolume.value = options.masterVolume;
+			sFXVolume.value = options.sfxVolume;
+			musicVolume.value = options.musicVolume;
+		}
 	}
 
 	void ApplyUIToGame()
@@ -320,6 +327,9 @@ public class OptionsMenu : MonoBehaviour
 		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolume.value));
 		mixer.SetFloat(musicParameterName, LinearToDecibels(musicVolume.value));
 		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
+		defaultOptions.masterVolume = masterVolume.value;
+		defaultOptions.sfxVolume = sFXVolume.value;
+		defaultOptions.musicVolume = musicVolume.value;
 	}
 
 	public void Save(OptionsData options = null)
@@ -401,6 +411,8 @@ public class OptionsMenu : MonoBehaviour
 
 	public void OnAudioChanged()
 	{
+		if (isInitiating) return;
+
 		OptionsData options = GetOptionsData();
 		options.masterVolume = masterVolume.value;
 		options.sfxVolume = sFXVolume.value;
@@ -409,6 +421,9 @@ public class OptionsMenu : MonoBehaviour
 		mixer.SetFloat(masterParameterName, LinearToDecibels(masterVolume.value));
 		mixer.SetFloat(musicParameterName, LinearToDecibels(musicVolume.value));
 		mixer.SetFloat(sfxParameterName, LinearToDecibels(sFXVolume.value));
+		defaultOptions.masterVolume = masterVolume.value;
+		defaultOptions.sfxVolume = sFXVolume.value;
+		defaultOptions.musicVolume = musicVolume.value;
 		//save to file
 		Save(options);
 	}
@@ -463,7 +478,7 @@ public class OptionsMenu : MonoBehaviour
 	}
 	public void ApplyDefault()
 	{
-		ApplyDataToUI(defaultOptions);
+		ApplyDataToUI(defaultOptions, false);
 		windowManager.RemoveFromQueue();
 	}
 	public void DeleteSave()

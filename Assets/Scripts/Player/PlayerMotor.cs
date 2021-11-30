@@ -660,7 +660,7 @@ public class PlayerMotor : MonoBehaviour
 
 			if (state == MovementState.GROUNDED)
 			{
-				playerController.PlayAudioOnce(playerController.AudioData.jumpSounds);
+				playerController.PlayAudioOnce(playerController.AudioData.jumpSounds, false, 0.3f);
 				OnJump();
 				OnLeaveGround();
 			}
@@ -728,18 +728,17 @@ public class PlayerMotor : MonoBehaviour
 
 	void OnRoll()
 	{
-		playerController.FootstepAudio.clip = playerController.AudioData.ballRoll.GetRandom();
+		//playerController.FootstepAudio.clip = playerController.AudioData.ballRoll.GetRandom();
 		rollCooldownTimer = rollCooldownTime;
 		isRolling = true;
 		onChangeRoll.Invoke();
 		targetRotation = Quaternion.identity;
-		playerController.PlayAudioOnce(playerController.AudioData.rollTuck);
+		if (!dashing)
+			playerController.PlayAudioOnce(playerController.AudioData.rollTuck, false, 0.1f);
 	}
 
 	void OnLeaveRoll(bool fromJump = false)
 	{
-		playerController.FootstepAudio.clip = null;
-
 		rollCooldownTimer = rollCooldownTime;
 		isRolling = false;
 		onChangeRoll.Invoke();
@@ -752,11 +751,11 @@ public class PlayerMotor : MonoBehaviour
 		targetRotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(lastNonZeroInputVelocity, Vector3.up), Vector3.up);
 
 		if (fromJump)
-			playerController.PlayAudioOnce(playerController.AudioData.jumpRollPop);
+			playerController.PlayAudioOnce(playerController.AudioData.jumpRollPop, false, 0.1f);
 		else if (InputVelocity.sqrMagnitude > 9)
-			playerController.PlayAudioOnce(playerController.AudioData.rollPop);
+			playerController.PlayAudioOnce(playerController.AudioData.rollPop, false, 0.1f);
 		else
-			playerController.PlayAudioOnce(playerController.AudioData.rollPopNotMoving);
+			playerController.PlayAudioOnce(playerController.AudioData.rollPopNotMoving, false, 0.1f);
 	}
 
 	public void CancelRoll()
@@ -797,7 +796,7 @@ public class PlayerMotor : MonoBehaviour
 		currentDashVelocity = dashSpeed;
 		currentDashDuration = dashDuration;
 		currentDashCurve = dashCurve;
-		playerController.PlayAudioOnce(playerController.AudioData.dash);
+		playerController.PlayAudioOnce(playerController.AudioData.dash, false, 0.3f);
 
 		if (state != MovementState.GROUNDED)
 		{
@@ -1098,7 +1097,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 InputVelocity { get { return inputVelocity; } set { inputVelocity = value; } }
 	public Vector3 ForcesVelocity { get { return forcesVelocity; } set { forcesVelocity = value; } }
 	public Vector3 GroundNormal { get { return groundNormal; } }
-	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; } }
+	public Vector3 DashDirection { get { return currentDashDirection; } set { currentDashDirection = value; dashParticles.transform.forward = -currentDashDirection; } }
 	public Quaternion TargetRotation { get { return targetRotation; } set { targetRotation = value; } }
 	public bool IsRolling { get { return isRolling; } }
 	public bool IsDashing { get { return dashing; } }

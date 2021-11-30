@@ -13,7 +13,9 @@ public class PlayerHealth : Health
 	[SerializeField] float regenerateSpeed = 1;
 	[SerializeField] Color vignetteDamageColor = Color.red;
 	[SerializeField] float vignetteMagnitudeMultiplier = 2;
+	[SerializeField] float vignetteSmoothnessMultiplier = 2;
 	float oldVignetteMagnitude;
+	float oldVignetteSmoothness;
 
 	float cooldownTimer = 0;
 	float regenerateTimer = 0;
@@ -32,6 +34,7 @@ public class PlayerHealth : Health
 		if (volume && volume.profile.TryGet<Vignette>(out vignette))
 		{
 			oldVignetteMagnitude = vignette.intensity.value;
+			oldVignetteSmoothness = vignette.smoothness.value;
 		}
 	}
 
@@ -103,5 +106,6 @@ public class PlayerHealth : Health
 		float t = 1 - CurrentHealth / maxHealth;
 		vignette.color.value = Color.Lerp(Color.black, vignetteDamageColor, t);
 		vignette.intensity.value = Mathf.Lerp(oldVignetteMagnitude, oldVignetteMagnitude * vignetteMagnitudeMultiplier, t) + (t * oldVignetteMagnitude * 0.05f * Mathf.Sin(Time.time * 3));
+		vignette.smoothness.value = Mathf.Lerp(oldVignetteSmoothness, oldVignetteSmoothness * vignetteSmoothnessMultiplier, t) + (t * oldVignetteSmoothness * 0.05f * Mathf.Sin(Time.time * 3));
 	}
 }

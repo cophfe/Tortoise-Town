@@ -106,14 +106,11 @@ public class IsosurfaceGeneratorEditor : Editor
 
 
 
-		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Save Mesh To File"))
 		{
 			GenerateAsset(true);
 		}
-		GUILayout.Space(15);
 		EditorGUILayout.PropertyField(saveAsAsset, new GUIContent("Save Mesh On Generate"));
-		GUILayout.EndHorizontal();
 
 		var before = GUI.backgroundColor;
 		GUI.backgroundColor = new Color(0.9f,0.7f,0.7f);
@@ -131,7 +128,7 @@ public class IsosurfaceGeneratorEditor : Editor
 				var shapes = generator.GetComponentsInChildren<IsoShape>();
 				for (int i = 0; i < shapes.Length; i++)
 				{
-					Undo.DestroyObjectImmediate(shapes[i]);
+					Undo.DestroyObjectImmediate(shapes[i].gameObject);
 				}
 				Undo.DestroyObjectImmediate(generator);
 

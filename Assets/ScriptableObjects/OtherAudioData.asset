@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35bddd1d38694f54f9458149cd45101b, type: 3}
+  m_Name: OtherAudioData
+  m_EditorClassIdentifier: 
+  targetPopSounds:
+    clips:
+    - {fileID: 8300000, guid: 454465c8d58ea9a4ba567891936f05b8, type: 3}
+    - {fileID: 8300000, guid: 3d9f289bc77ee874b9f4333896a30d6e, type: 3}
+    - {fileID: 8300000, guid: a03cacfa4bbb6d9408f557cf3326be30, type: 3}
+    - {fileID: 8300000, guid: de86351a521099f468d146645c34943b, type: 3}
+  lastBreath:
+    clips:
+    - {fileID: 8300000, guid: 6bda241c73c47d246b1978fa0ed52a04, type: 3}
+  chime:
+    clips:
+    - {fileID: 8300000, guid: 500de08f8ba6b174f9be58088e4a6784, type: 3}
