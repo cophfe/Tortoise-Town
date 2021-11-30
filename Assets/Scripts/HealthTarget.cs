@@ -8,8 +8,11 @@ public class HealthTarget : Health
 
 	public delegate void DeathDelegate();
 	public DeathDelegate deathlegate;
+	AudioSource popSoundSource;
+
 	private void Awake()
 	{
+		popSoundSource = GetComponent<AudioSource>();
 		GameManager.Instance.SaveManager.RegisterHealth(this);
 	}
 	protected override void OnDeath()
@@ -19,6 +22,10 @@ public class HealthTarget : Health
 		if (deathParticles != null)
 			deathParticles.Play(true);
 
+		if (popSoundSource && GameManager.Instance.AudioData.targetPopSounds.CanBePlayed())
+		{
+			popSoundSource.PlayOneShot(GameManager.Instance.AudioData.targetPopSounds.GetRandom());
+		}
 		var arrow = GetComponentInChildren<Arrow>();
 		if (arrow)
 		{
