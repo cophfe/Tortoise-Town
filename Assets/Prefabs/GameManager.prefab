@@ -3839,6 +3839,7 @@ MonoBehaviour:
   finalCutscene: {fileID: 2479611412501088298}
   player: {fileID: 0}
   gUI: {fileID: 0}
+  audioData: {fileID: 11400000, guid: 406b400a83fcf5645bb31fc6ebbc57de, type: 2}
   enableCursorRestriction: 1
   targetFrameRate: -1
   arrowPrefab: {fileID: 5496907085034195303, guid: f4033c1e1448ef143b0ff24c4fc51d5c, type: 3}

@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
 		{
 			cameraController.EnableInput = value;
 			inputIsEnabled = value;
+			if (value) inputVector = Vector3.zero;
 		}
 	}
 	bool inputIsEnabled = true;
