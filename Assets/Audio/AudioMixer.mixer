@@ -65,7 +65,7 @@ AudioMixerController:
   m_StartSnapshot: {fileID: 24500006}
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ExposedParameters:
   - guid: fdc597e943a4ba24b882e7307313fa75
     name: Master Volume
@@ -80,7 +80,7 @@ AudioMixerController:
     - 5ff58d4e0b0a54c4ab551cd75312c1d1
     name: View
   m_CurrentViewIndex: 0
-  m_TargetSnapshot: {fileID: 43929122510218274}
+  m_TargetSnapshot: {fileID: 24500006}
 --- !u!243 &24300002
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -139,6 +139,7 @@ AudioMixerSnapshotController:
   m_FloatValues:
     86a925a0559c23e4aa185d4cf92ab73e: -80
     763666e715d5e9f44a43cd750f5aa90f: 0.01
+    75b2b1383453b314084bee686a96a08b: 0.01
     f4d8d4c9d0592144cbddc717656e760c: -80
     fdc597e943a4ba24b882e7307313fa75: -80
   m_TransitionOverrides: {}
