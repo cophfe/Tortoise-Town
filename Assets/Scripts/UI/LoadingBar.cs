@@ -16,21 +16,25 @@ public class LoadingBar : MonoBehaviour
 		if (loadAnimation == null)
 			yield break;
 
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.GUI.InputIsEnabled = false;
+		}
+
 		loadAnimation.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(loadFadeTime);
-		SceneManager.LoadScene(name);
+		yield return new WaitForSecondsRealtime(loadFadeTime);
+		//SceneManager.LoadScene(name);
 
-		//loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
-		//loadAnimation.SetTrigger("Load");
-		//loadingStuff.SetActive(true);
-		//AsyncOperation operation = SceneManager.LoadSceneAsync(name);
-		////operation.allowSceneActivation = false;
+		loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
+		loadAnimation.SetTrigger("Load");
+		loadingStuff.SetActive(true);
+		AsyncOperation operation = SceneManager.LoadSceneAsync(name);
 
-		//while (!operation.isDone)
-		//{
-		//	Debug.Log(operation.progress);
-		//	yield return null;
-		//}
+		while (!operation.isDone)
+		{
+			//Debug.Log(operation.progress);
+			yield return null;
+		}
 	}
 
 	public IEnumerator RestartLevel(string name)
@@ -38,24 +42,27 @@ public class LoadingBar : MonoBehaviour
 		if (loadAnimation == null)
 			yield break;
 
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.GUI.InputIsEnabled = false;
+		}
 		loadAnimation.SetBool("FadeIn", true);
-		yield return new WaitForSeconds(loadFadeTime);
+		yield return new WaitForSecondsRealtime(loadFadeTime);
 		Time.timeScale = 1;
 		GameManager.Instance.SaveManager.ClearSaveData();
-		GameManager.Instance.ReloadScene();
-		SceneManager.LoadScene(name);
+		//GameManager.Instance.ReloadScene();
+		//SceneManager.LoadScene(name);
 
-		//loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
-		//loadAnimation.SetTrigger("Load");
-		//loadingStuff.SetActive(true);
-		//AsyncOperation operation = SceneManager.LoadSceneAsync(name);
-		////operation.allowSceneActivation = false;
+		loadAnimation.updateMode = AnimatorUpdateMode.UnscaledTime;
+		loadAnimation.SetTrigger("Load");
+		loadingStuff.SetActive(true);
+		AsyncOperation operation = SceneManager.LoadSceneAsync(name);
 
-		//while (!operation.isDone)
-		//{
-		//	Debug.Log(operation.progress);
-		//	yield return null;
-		//}
+		while (!operation.isDone)
+		{
+			//Debug.Log(operation.progress);
+			yield return null;
+		}
 
 
 	}
